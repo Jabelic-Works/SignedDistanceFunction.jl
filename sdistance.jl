@@ -1,39 +1,53 @@
 # using CSV:length
 # using Plots:length
 # using DataFrames:Matrix
-
-# Pkg.add("CSV")
-# using CSV, DataFrames, Plots, DelimitedFiles, Luxor # , GeometricalPredicates
 using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
 
+# 定義上のある点に対して全てのganma曲線上との距離を算出
 function distance(px, py, gem) # TODO: 型
-    cand = 10000.0
+    min_distance = 10000.0 # 初期値は大きく
     for i = 1:length(gem[:,1])
         distnow = sqrt((gem[i,1] - px)^2 + (gem[i,2] - py)^2)
-        if (distnow < cand)
-            cand = distnow
+        if (distnow < min_distance)
+            min_distance = distnow
         end
     end
-    return cand
+    return min_distance
 end
 
 function draw(_x, _y, _phi)
+    # s = mesh3d(_x, _y, _phi)
+    s = plot(_x, _y, _phi, st=:wireframe)
     p = contour(_x, _y, _phi)
     # q = plot(_x, _y,_phi, st=:surface)
     q = surface(_x, _y, _phi)
     r = plot(_x, _y, _phi, st=:heatmap)
-    plot(p, q, r, layout=(3, 1), size=(400, 900))
+    plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
 #     plot(p, q, r, layout=(1,3), size=(900,160))
     savefig("signed_distance.png")
 end
 
-function judge_(_x, _y, _gem)
+# ジョルダン曲線: ねじれのない閉曲線のこと.
+function is_ganma_Jordan_curve(_ganma, x_array, y_array)
+    # 始点と終点が離れているだけではダメ？
+    # 始点と終点が中途半端なところにあって、明らかにある点と点が離れているのに閉曲線と見なされてしまうケース
+    # 点の間隔を定義？制限？
+    # 一部分だけ離れていれば十分それは欠損。
+    # オメガ上(定義された領域)で点が離れているならただの開曲線
+    # 一方、オメガが広がれば閉曲線になるであろうタイプの線はどうするか
+      # e.g. アンパンマンのほっぺ
+end
+
+
+
+function judge_(_x, _y, _ganma)
     x_length = length(_x[:,1])
     return_value = zeros(Float64, x_length, x_length)
     for indexI = 1:length(_y)
         for indexJ = 1:length(_x)
-            sdist = 1.0 * distance(_x[indexJ], _y[indexI], _gem)
-            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_gem[i,1], _gem[i,2]) for i = 1:length(_gem[:,1])])
+            sdist = 1.0 * distance(_x[indexJ], _y[indexI], _ganma)
+            # ganmaが閉曲線でないと成立しない。
+            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
                 sdist = (-1) * sdist
             end
             return_value[indexI,indexJ] = sdist
@@ -42,13 +56,13 @@ function judge_(_x, _y, _gem)
     return return_value
 end
 
-function judge_para(_x, _y, _gem)
+function judge_para(_x, _y, _ganma)
     x_length = length(_x[:,1])
     return_value = zeros(Float64, x_length, x_length)
     Threads.@threads for indexI = 1:length(_y)
         for indexJ = 1:length(_x)
-            sdist = 1.0 * distance(_x[indexJ], _y[indexI], _gem)
-            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_gem[i,1], _gem[i,2]) for i = 1:length(_gem[:,1])])
+            sdist = 1.0 * distance(_x[indexJ], _y[indexI], _ganma)
+            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
                 sdist = (-1) * sdist
             end
             return_value[indexI,indexJ] = sdist
@@ -69,9 +83,10 @@ function complement_p(array)
         return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
     end
     return_value[x * 2 - 1, :] = array[x, :]
-    return_value[x * 2, :] = array[1, :]# Note: _gem += _gem's head line coz boundary condition. size: (N+1,2)
+    return_value[x * 2, :] = array[1, :]# Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
     return return_value
 end
+
 # function complement(array::Array{Float64,2}, times::UInt64)
 function complement(array, times)
         tmp = []
@@ -83,33 +98,33 @@ function complement(array, times)
 end
 
 function main(N=1000, para_or_serialize_process=1)
-    # create the computational domain
+# create the computational domain
     L = 1.5
     _phi = zeros(Float64, N + 1, N + 1)
     println("Thread数: ", Threads.nthreads())
-    # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
-    # https://qiita.com/HiroyukiTachikawa/items/e01917ade931031ec6a1
-    _gem = readdlm("./interface.csv", ',', Float64)
-    
-    _gem = complement(_gem, 2)
-    println("_gen size", size(_gem))
+# ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
+# https://qiita.com/HiroyukiTachikawa/items/e01917ade931031ec6a1
+    _ganma = readdlm("./interface.csv", ',', Float64)
+
+    _ganma = complement(_ganma, 3)
+    println("_gen size", size(_ganma))
     _x = [i for i = -L:2 * L / N:L] # len:N+1 
     _y = [i for i = -L:2 * L / N:L] # len:N+1
-    
+
     runtime_ave = 0
     exetimes = 4
 
     for i = 1:exetimes
         if para_or_serialize_process == 1
-            _phi, runtime = @timed judge_para(_x, _y, _gem) # parallel processing
+            _phi, runtime = @timed judge_para(_x, _y, _ganma) # parallel processing
         else
-            _phi, runtime = @timed judge_(_x, _y, _gem) # serialize processing
+            _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
         end
         runtime_ave += runtime
     end
     println(runtime_ave / exetimes)
 
-    # draw(_x, _y, _phi)
+draw(_x, _y, _phi)
 end
 
 main(parse(Int, ARGS[1]), parse(Int, ARGS[2]))
