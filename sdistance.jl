@@ -1,8 +1,5 @@
-# using CSV:length
-# using Plots:length
-# using DataFrames:Matrix
+module Sdistance
 using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
-
 # 定義上のある点に対して全てのganma曲線上との距離を算出
 function distance(px, py, gem) # TODO: 型
     min_distance = 10000.0 # 初期値は大きく
@@ -16,14 +13,11 @@ function distance(px, py, gem) # TODO: 型
 end
 
 function draw(_x, _y, _phi)
-    # s = mesh3d(_x, _y, _phi)
     s = plot(_x, _y, _phi, st=:wireframe)
     p = contour(_x, _y, _phi)
-    # q = plot(_x, _y,_phi, st=:surface)
     q = surface(_x, _y, _phi)
     r = plot(_x, _y, _phi, st=:heatmap)
     plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-#     plot(p, q, r, layout=(1,3), size=(900,160))
     savefig("signed_distance.png")
 end
 
@@ -89,7 +83,7 @@ end
 
 # function complement(array::Array{Float64,2}, times::UInt64)
 function complement(array, times)
-        tmp = []
+    tmp = [] 
     for i = 1:times
         tmp = complement_p(array)
         array = tmp
@@ -97,14 +91,14 @@ function complement(array, times)
     return tmp
 end
 
-function main(N=1000, para_or_serialize_process=1)
+function main(N=1000, para_or_serialize_process=1, _csv_datafile="./interface.csv")
 # create the computational domain
     L = 1.5
     _phi = zeros(Float64, N + 1, N + 1)
     println("Thread数: ", Threads.nthreads())
 # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
 # https://qiita.com/HiroyukiTachikawa/items/e01917ade931031ec6a1
-    _ganma = readdlm("./interface.csv", ',', Float64)
+    _ganma = readdlm(_csv_datafile, ',', Float64)
 
     _ganma = complement(_ganma, 3)
     println("_gen size", size(_ganma))
@@ -123,8 +117,9 @@ function main(N=1000, para_or_serialize_process=1)
         runtime_ave += runtime
     end
     println(runtime_ave / exetimes)
-
-draw(_x, _y, _phi)
+    draw(_x, _y, _phi)
+end
+export main
 end
 
-main(parse(Int, ARGS[1]), parse(Int, ARGS[2]))
+# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./interface.csv")
