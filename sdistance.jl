@@ -1,7 +1,7 @@
 module Sdistance
 using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
 # 定義上のある点に対して全てのganma曲線上との距離を算出
-function distance(px, py, gem) # TODO: 型
+function distance(px::Float64, py::Float64, gem::Array) # TODO: 型
     min_distance = 10000.0 # 初期値は大きく
     for i = 1:length(gem[:,1])
         distnow = sqrt((gem[i,1] - px)^2 + (gem[i,2] - py)^2)
@@ -12,7 +12,8 @@ function distance(px, py, gem) # TODO: 型
     return min_distance
 end
 
-function draw(_x, _y, _phi)
+
+function draw(_x::Array, _y::Array, _phi::Array)
     s = plot(_x, _y, _phi, st=:wireframe)
     p = contour(_x, _y, _phi)
     q = surface(_x, _y, _phi)
@@ -21,7 +22,11 @@ function draw(_x, _y, _phi)
     savefig("signed_distance.png")
 end
 
+
 # ジョルダン曲線: ねじれのない閉曲線のこと.
+"""
+    ジョルダン閉曲線であるかどうか
+"""
 function is_ganma_Jordan_curve(_ganma, x_array, y_array)
     # 始点と終点が離れているだけではダメ？
     # 始点と終点が中途半端なところにあって、明らかにある点と点が離れているのに閉曲線と見なされてしまうケース
@@ -30,11 +35,17 @@ function is_ganma_Jordan_curve(_ganma, x_array, y_array)
     # オメガ上(定義された領域)で点が離れているならただの開曲線
     # 一方、オメガが広がれば閉曲線になるであろうタイプの線はどうするか
       # e.g. アンパンマンのほっぺ
+    progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
+    ave_distance = sum(progression_of_differences) / length(progression_of_differences)
+    if ave_distance * 2 < abs(_ganma[1,1] - _ganma[length(_ganma[:,1]),1])
+        return true
+    else
+        return false
+    end
 end
 
 
-
-function judge_(_x, _y, _ganma)
+function judge_(_x::Array, _y::Array, _ganma::Array)
     x_length = length(_x[:,1])
     return_value = zeros(Float64, x_length, x_length)
     for indexI = 1:length(_y)
@@ -50,7 +61,7 @@ function judge_(_x, _y, _ganma)
     return return_value
 end
 
-function judge_para(_x, _y, _ganma)
+function judge_para(_x::Array, _y::Array, _ganma::Array)
     x_length = length(_x[:,1])
     return_value = zeros(Float64, x_length, x_length)
     Threads.@threads for indexI = 1:length(_y)
@@ -68,13 +79,13 @@ end
 
 # FIXME: 倍々ではなく, linearに補完数を指定できるように。
 
-"n行目とn+1行目の間のデータを補完,境界条件を付与 (50, 2)->(100, 2)"
-function complement_p(array)
+"n行目とn+1行目の間のデータを補完,境界条件を付与 (x, 2)->(x*2-1, 2)"
+function complement_p(array::Array)
     (x, y) = size(array)
     return_value = zeros(Float64, 2 * x, y)
     for i = 1:x - 1
         return_value[i * 2 - 1, :] = array[i, :]
-        return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
+    return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
     end
     return_value[x * 2 - 1, :] = array[x, :]
     return_value[x * 2, :] = array[1, :]# Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
@@ -82,7 +93,10 @@ function complement_p(array)
 end
 
 # function complement(array::Array{Float64,2}, times::UInt64)
-function complement(array, times)
+"""
+    times回, 倍の数だけデータを補完する
+"""
+function complement(array::Array, times::Int)
     tmp = [] 
     for i = 1:times
         tmp = complement_p(array)
@@ -91,19 +105,22 @@ function complement(array, times)
     return tmp
 end
 
-function main(N=1000, para_or_serialize_process=1, _csv_datafile="./interface.csv")
+
+function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv")
 # create the computational domain
     L = 1.5
     _phi = zeros(Float64, N + 1, N + 1)
     println("Thread数: ", Threads.nthreads())
 # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
 # https://qiita.com/HiroyukiTachikawa/items/e01917ade931031ec6a1
+
     _ganma = readdlm(_csv_datafile, ',', Float64)
+    _x = [i for i = -L:2 * L / N:L] # len:N+1 
+    _y = [i for i = -L:2 * L / N:L] # len:N+1
+    is_ganma_Jordan_curve(_ganma, _x, _y)
 
     _ganma = complement(_ganma, 3)
     println("_gen size", size(_ganma))
-    _x = [i for i = -L:2 * L / N:L] # len:N+1 
-    _y = [i for i = -L:2 * L / N:L] # len:N+1
 
     runtime_ave = 0
     exetimes = 4
@@ -115,9 +132,9 @@ function main(N=1000, para_or_serialize_process=1, _csv_datafile="./interface.cs
             _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
         end
         runtime_ave += runtime
-    end
+end
     println(runtime_ave / exetimes)
-    draw(_x, _y, _phi)
+    # draw(_x, _y, _phi)
 end
 export main
 end
