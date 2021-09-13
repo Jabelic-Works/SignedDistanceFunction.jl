@@ -52,11 +52,14 @@ function judge_(_x::Array, _y::Array, _ganma::Array)
         for indexJ = 1:length(_x)
             sdist = 1.0 * distance(_x[indexJ], _y[indexI], _ganma)
             # ganmaが閉曲線でないと成立しない。
-            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
+            # omegaとの境界線上はErrorになる
+            if Point(_x[indexJ], _y[indexI]) in [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])]
+                sdist = 0
+            elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
                 sdist = (-1) * sdist
             end
             return_value[indexI,indexJ] = sdist
-        end
+end
     end
     return return_value
 end
@@ -67,11 +70,13 @@ function judge_para(_x::Array, _y::Array, _ganma::Array)
     Threads.@threads for indexI = 1:length(_y)
         for indexJ = 1:length(_x)
             sdist = 1.0 * distance(_x[indexJ], _y[indexI], _ganma)
-            if isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
+            if Point(_x[indexJ], _y[indexI]) in [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])]
+                sdist = 0
+            elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
                 sdist = (-1) * sdist
             end
             return_value[indexI,indexJ] = sdist
-        end
+end
     end
     return return_value
 end
@@ -97,7 +102,7 @@ end
     times回, 倍の数だけデータを補完する
 """
 function complement(array::Array, times::Int)
-    tmp = [] 
+    tmp = []
     for i = 1:times
         tmp = complement_p(array)
         array = tmp
@@ -132,9 +137,9 @@ function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::Stri
             _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
         end
         runtime_ave += runtime
-end
+    end
     println(runtime_ave / exetimes)
-    # draw(_x, _y, _phi)
+    draw(_x, _y, _phi)
 end
 export main
 end

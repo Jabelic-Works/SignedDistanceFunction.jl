@@ -1,4 +1,4 @@
-# module Generate
+module Generate
 L = 1.5
 """
     generate_array(len, rev)
@@ -57,11 +57,6 @@ function get_mock_data(L::Float64=1.5, N::Int=100)
     data_length = 50
     data_x = append!(generate_array(50), generate_array(50, true))
     data_y = append!(generate_circle_y(data_x[1:data_length], "pos"), generate_circle_y(data_x[data_length + 1:data_length * 2], "neg"))
-    # println(typeof(Vector(data_x)))
-    # println(reduce(append!, (data_x, data_y), init=Float64[]))
-
-    # println(tmp)
-    # tmp = Matrix(data_length * 2, 2)
     tmp = zeros(Float64, data_length * 2, 2)
     for i = 1:data_length * 2
         tmp[i, 1] = data_x[i]
@@ -69,6 +64,6 @@ function get_mock_data(L::Float64=1.5, N::Int=100)
     end
     return tmp
 end
-println(get_mock_data(1.5, 100))
-# generate_array(100)
-# end
+# get_mock_data(1.5, 100)
+export get_mock_data
+end
