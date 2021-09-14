@@ -52,7 +52,6 @@ function generate_circle_y(ary::Array, str)
     return tmp
 end
 
-using LinearAlgebra
 function get_mock_data(L::Float64=1.5, N::Int=100)
     data_length = N % 2 == 0 ? Int(N / 2) : Int((N - 1) / 2) 
     data_x = append!(generate_array(data_length, false), generate_array(data_length, true))
@@ -61,7 +60,7 @@ function get_mock_data(L::Float64=1.5, N::Int=100)
     for i = 1:data_length * 2
         tmp[i, 1] = data_x[i]
         tmp[i, 2] = data_y[i]
-        
+
     end
     return tmp
 end
