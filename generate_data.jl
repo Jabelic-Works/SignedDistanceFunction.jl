@@ -54,13 +54,14 @@ end
 
 using LinearAlgebra
 function get_mock_data(L::Float64=1.5, N::Int=100)
-    data_length = Int(N / 2)
+    data_length = N % 2 == 0 ? Int(N / 2) : Int((N - 1) / 2) 
     data_x = append!(generate_array(data_length, false), generate_array(data_length, true))
     data_y = append!(generate_circle_y(data_x[1:data_length], "pos"), generate_circle_y(data_x[data_length + 1:data_length * 2], "neg"))
     tmp = zeros(Float64, data_length * 2, 2)
     for i = 1:data_length * 2
         tmp[i, 1] = data_x[i]
         tmp[i, 2] = data_y[i]
+        
     end
     return tmp
 end
