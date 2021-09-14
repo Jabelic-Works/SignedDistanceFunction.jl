@@ -8,18 +8,19 @@ L = 1.5
 """
 function generate_array(len::Int=100, rev::Bool=false)
     tmp_length = len * 3
-
     # tmp = sort(append!([0.0], [rand() for i = 1:tmp_length])) # for debug
     
     if rev
-        tmp = sort([rand() * 1.5 for i = 1:tmp_length], rev=true)
+        tmp = sort([rand() * L for i = 1:tmp_length], rev=true)
     else
-        tmp = sort([rand() * 1.5 for i = 1:tmp_length])
+        tmp = sort([rand() * L for i = 1:tmp_length])
     end
     # cutout element > len
 
     indexs::Array = sort([rand((1:tmp_length)) for j = 1:len])
     tmp = [tmp[indexs[i]] for i = 1:len]
+    
+    #  xが0と接する関数の時のみ実行
     if !(0.0 in tmp)
         popat!(tmp, rand(1:len))
         if rev 
@@ -28,6 +29,7 @@ function generate_array(len::Int=100, rev::Bool=false)
             tmp = pushfirst!(tmp, 0.0)
         end
     end
+    #  xがLに接する関数の時のみ実行
     if !(L in tmp)
         popat!(tmp, rand(2:len))
         if rev 
@@ -52,10 +54,8 @@ end
 
 using LinearAlgebra
 function get_mock_data(L::Float64=1.5, N::Int=100)
-    area_x = [i for i = -L:2 * L / N:L] # len:N+1 
-    area_y = [i for i = -L:2 * L / N:L] # len:N+1
-    data_length = 50
-    data_x = append!(generate_array(50), generate_array(50, true))
+    data_length = Int(N / 2)
+    data_x = append!(generate_array(data_length, false), generate_array(data_length, true))
     data_y = append!(generate_circle_y(data_x[1:data_length], "pos"), generate_circle_y(data_x[data_length + 1:data_length * 2], "neg"))
     tmp = zeros(Float64, data_length * 2, 2)
     for i = 1:data_length * 2
@@ -64,6 +64,6 @@ function get_mock_data(L::Float64=1.5, N::Int=100)
     end
     return tmp
 end
-# get_mock_data(1.5, 100)
+get_mock_data(1.5, 100)
 export get_mock_data
 end

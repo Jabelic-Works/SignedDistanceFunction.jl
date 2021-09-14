@@ -7,6 +7,10 @@
     # $ source ~/.zshrc
     # terminalを新たに起動して
     # $ julia hogehuga.jl
+
+    # ないしは
+    # $ julia hoge.jl arg1 arg2 -t auto
+    # これでもよし(req: Julia 1.5~)
 #
 
 assert(){
@@ -15,7 +19,7 @@ assert(){
     input3="$3"
     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
     # julia sdistance.jl $input1 $input2
-    julia main.jl $input1 $input2 
+    julia main.jl $input1 $input2 -t auto
     actual="$?"
 
     if [ "$input2" = 1 ]; then
@@ -27,7 +31,6 @@ assert(){
 
 # assert 100 1
 # assert 100 2
-assert 100 2
 assert 100 1
 # assert 1000 1
 # assert 1000 2
