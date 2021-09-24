@@ -139,7 +139,7 @@ function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::Stri
         runtime_ave += runtime
     end
     println(runtime_ave / exetimes)
-    draw(_x, _y, _phi)
+    # draw(_x, _y, _phi)
     end
 export main
 end

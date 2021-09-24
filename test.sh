@@ -7,7 +7,12 @@
     # $ source ~/.zshrc
     # terminalを新たに起動して
     # $ julia hogehuga.jl
-#
+
+# WSLでのこのPJの実行方法
+  # docker-compose up -d
+  # docker-compose exec lab bash
+  # echo "export JULIA_NUM_THREADS=8" >> ~/.bashrc
+  # make test
 
 assert(){
     input1="$1"
