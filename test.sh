@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 # mac(catalina~)
     # terminalからの実行でマルチスレッド処理を行うには
