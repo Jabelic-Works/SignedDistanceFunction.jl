@@ -7,10 +7,6 @@
     # $ source ~/.zshrc
     # terminalを新たに起動して
     # $ julia hogehuga.jl
-
-    # ないしは
-    # $ julia hoge.jl arg1 arg2 -t auto
-    # これでもよし(req: Julia 1.5~)
 #
 
 assert(){

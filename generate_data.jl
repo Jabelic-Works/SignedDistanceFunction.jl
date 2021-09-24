@@ -60,7 +60,6 @@ function get_mock_data(L::Float64=1.5, N::Int=100)
     for i = 1:data_length * 2
         tmp[i, 1] = data_x[i]
         tmp[i, 2] = data_y[i]
-
     end
     return tmp
 end
