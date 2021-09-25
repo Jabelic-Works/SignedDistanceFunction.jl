@@ -34,3 +34,4 @@ assert 100 1
 assert 100 2
 # assert 1000 1
 # assert 1000 2
+# docker-compose down --rmi local --volumes --remove-orphans
