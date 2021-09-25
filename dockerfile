@@ -9,5 +9,4 @@ RUN apt-get -yq install git make
 # $ fgrep 'processor' /proc/cpuinfo | wc -l
 # shellに移動？ 環境(docker, mac, ...)を調べて, dockerなら以下をecho.
 WORKDIR /workdir
-RUN echo "export JULIA_NUM_THREADS=8" >> ~/.bashrc
 RUN julia -e 'using Pkg; Pkg.add("PackageCompiler")'
