@@ -18,4 +18,4 @@ and restart.
 
 if u abandon the container and image when container is up.
 
-`$ docker-compose down --rmi all --volumes --remove-orphans`
+`$ docker-compose down --rmi local --volumes --remove-orphans`
