@@ -122,7 +122,7 @@ function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::Stri
     _ganma = readdlm(_csv_datafile, ',', Float64)
     _x = [i for i = -L:2 * L / N:L] # len:N+1 
     _y = [i for i = -L:2 * L / N:L] # len:N+1
-    is_ganma_Jordan_curve(_ganma, _x, _y)
+    is_ganma_Jordan_curve(_ganma, _x, _y) # TODO: 丁寧なError messageを付与
 
     _ganma = complement(_ganma, 3)
     println("_gen size", size(_ganma))
