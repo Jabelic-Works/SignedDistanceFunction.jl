@@ -13,4 +13,3 @@ main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./interface.csv")
 # main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./circle.csv")
 
 # parformance_graphs()
-
