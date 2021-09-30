@@ -19,3 +19,16 @@ and restart.
 if u abandon the container and image when container is up.
 
 `$ docker-compose down --rmi local --volumes --remove-orphans`
+
+
+## dev
+
+
+Test both Parallel and normal processing
+
+`$ make test`
+
+Benchmarks both Parallel and normal processing
+
+`$ make bench ARG=YOUR_LOVE_NUM`
+
