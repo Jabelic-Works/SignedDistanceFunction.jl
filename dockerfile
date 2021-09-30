@@ -1,7 +1,8 @@
 FROM julia:1.5.3
 
 RUN apt-get update
-RUN apt-get -yq install git make
+# PackageCompiler needs gcc
+RUN apt-get -yq install git make gcc
 
 # 論理プロセッサ数
 WORKDIR /workdir
