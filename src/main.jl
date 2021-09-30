@@ -11,5 +11,3 @@ import .Draw:parformance_graphs
 # CSV.write("./src/circle.csv", df, writeheader=false)
 main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
 # main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/circle.csv")
-
-# parformance_graphs()

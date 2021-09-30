@@ -1,4 +1,6 @@
 module Sdistance
+    include("./draw.jl")
+    import .Draw:draw
     using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
     # 定義上のある点に対して全てのganma曲線上との距離を算出
     function distance(px::Float64, py::Float64, gem::Array) # TODO: 型
@@ -13,14 +15,14 @@ module Sdistance
     end
 
 
-    function draw(_x::Array, _y::Array, _phi::Array)
-        s = plot(_x, _y, _phi, st=:wireframe)
-        p = contour(_x, _y, _phi)
-        q = surface(_x, _y, _phi)
-        r = plot(_x, _y, _phi, st=:heatmap)
-        plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-        savefig("signed_distance.png")
-    end
+    # function draw(_x::Array, _y::Array, _phi::Array)
+    #     s = plot(_x, _y, _phi, st=:wireframe)
+    #     p = contour(_x, _y, _phi)
+    #     q = surface(_x, _y, _phi)
+    #     r = plot(_x, _y, _phi, st=:heatmap)
+    #     plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
+    #     savefig("signed_distance00.png")
+    # end
 
 
     # ジョルダン曲線: ねじれのない閉曲線のこと.
@@ -28,13 +30,6 @@ module Sdistance
         ジョルダン閉曲線であるかどうか
     """
     function is_ganma_Jordan_curve(_ganma, x_array, y_array)
-        # 始点と終点が離れているだけではダメ？
-        # 始点と終点が中途半端なところにあって、明らかにある点と点が離れているのに閉曲線と見なされてしまうケース
-        # 点の間隔を定義？制限？
-        # 一部分だけ離れていれば十分それは欠損。
-        # オメガ上(定義された領域)で点が離れているならただの開曲線
-        # 一方、オメガが広がれば閉曲線になるであろうタイプの線はどうするか
-        # e.g. アンパンマンのほっぺ
         progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
         ave_distance = sum(progression_of_differences) / length(progression_of_differences)
         if ave_distance * 2 < abs(_ganma[1,1] - _ganma[length(_ganma[:,1]),1])
@@ -138,8 +133,8 @@ module Sdistance
             runtime_ave += runtime
         end
         println("実行時間: ",runtime_ave / exetimes)
+        draw(_x, _y, _phi)
         return (runtime_ave / exetimes)
-        # draw(_x, _y, _phi)
     end
     export main
 end
