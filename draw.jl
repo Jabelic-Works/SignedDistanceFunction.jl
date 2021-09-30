@@ -1,5 +1,5 @@
 module Draw
-    using Plot
+    using Plots
 
     function draw(_x::Array, _y::Array, _phi::Array)
         s = plot(_x, _y, _phi, st=:wireframe)
