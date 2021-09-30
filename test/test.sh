@@ -20,7 +20,7 @@ assert(){
     input3="$3"
     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
     # julia sdistance.jl $input1 $input2
-    julia ../src/main.jl $input1 $input2 -t auto
+    julia src/main.jl $input1 $input2 -t auto
     actual="$?"
 
     if [ "$input2" = 1 ]; then

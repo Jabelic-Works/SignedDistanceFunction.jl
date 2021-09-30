@@ -10,8 +10,10 @@ module Draw
         savefig("signed_distance.png")
     end
 
-    function parformance_graphs(exe_num::Array, N::Array)
-        plot(N, exe_num)
+    function parformance_graphs(N::Array, exe_num::Array, )
+        plot!(N, exe_num[:,1])
+        plot!(N, exe_num[:,2])
         savefig("performance.png")
     end
+    export draw,parformance_graphs
 end
