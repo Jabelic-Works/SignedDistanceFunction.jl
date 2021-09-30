@@ -8,7 +8,6 @@ import .Draw:parformance_graphs
 
 function _exe()
     # _execute_times = ARGS[1] ? parse(Int, ARGS[1]) : 3
-    println(typeof(ARGS[1]))
     _execute_times = parse(Int, ARGS[1])
 
     runtime = zeros(_execute_times+1, 2)

@@ -11,7 +11,7 @@ module Draw
     end
 
     function parformance_graphs(N::Array, exe_num::Array)
-        plot(N, exe_num[:,1],title = "Benchmarks", label = "Parallel processing")
+        plot(N, exe_num[:,1],title = "Benchmarks", label = "Parallel processing", legend = :topleft)
         plot!(N, exe_num[:,2], label = "Normal processing")
         xlabel!("Splits of fields")
         ylabel!("Processing time")
