@@ -8,9 +8,6 @@ import .Draw:parformance_graphs
 
 # tmp = get_mock_data(1.5, 100)
 # df = DataFrame(x=tmp[:,1], y=tmp[:,2])
-# CSV.write("circle.csv", df, writeheader=false)
-main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./interface.csv")
-# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./circle.csv")
-
-# parformance_graphs()
-
+# CSV.write("./src/circle.csv", df, writeheader=false)
+main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
+# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/circle.csv")
