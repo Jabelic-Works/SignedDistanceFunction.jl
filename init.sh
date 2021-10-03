@@ -6,7 +6,8 @@ init(){
     echo "export JULIA_NUM_THREADS=$THREADS" >> ~/.bashrc 
     # macなら
     # "export JULIA_NUM_THREADS="を有ればoverwrite, なければechoで追記
-    julia src/settings.jl
+    # echo "export JULIA_NUM_THREADS=`sysctl -n hw.logicalcpu`" >> ~/.zshrc
+    julia src/settings.jl -t auto
 }
 
 init
