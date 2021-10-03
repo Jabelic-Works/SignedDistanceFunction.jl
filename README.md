@@ -2,6 +2,12 @@
 
 ## setup
 
+### macOS
+
+`$ make initial mac`
+
+### docker
+
 `$ docker-compose up -d`
 
 `$ docker-compose exec lab bash`

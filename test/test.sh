@@ -2,17 +2,16 @@
 
 # mac(catalina~)
     # terminalからの実行でマルチスレッド処理を行うには
-    # $ vi ~/.zshrc
-    # export JULIA_NUM_THREADS=`sysctl -n hw.logicalcpu` を書き加える
     # $ source ~/.zshrc
     # terminalを新たに起動して
     # $ julia hogehuga.jl
 
 # WSLでのこのPJの実行方法
-  # docker-compose up -d
-  # docker-compose exec lab bash
-  # echo "export JULIA_NUM_THREADS=8" >> ~/.bashrc
-  # make test
+    #
+    # docker-compose up -d
+    # docker-compose exec lab bash
+    # echo "export JULIA_NUM_THREADS=8" >> ~/.bashrc
+    # make test
 
 assert(){
     input1="$1"

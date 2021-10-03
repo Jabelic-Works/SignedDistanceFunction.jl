@@ -1,2 +1,3 @@
 *.ipynb*
 *.virtual_documents
+.DS_Store
