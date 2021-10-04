@@ -21,7 +21,7 @@ assert(){
     input2="$2"
     input3="$3"
     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
-    julia src/main.jl $input1 $input2 -t auto
+    julia -JSysimage.so src/main.jl $input1 $input2 -t auto
     actual="$?"
 
     if [ "$input2" = 1 ]; then

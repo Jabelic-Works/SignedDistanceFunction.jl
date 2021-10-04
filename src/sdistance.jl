@@ -1,6 +1,7 @@
 module Sdistance
     include("./draw.jl")
     import .Draw:draw
+    import  CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
     using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
     # 定義上のある点に対して全てのganma曲線上との距離を算出
     function distance(px::Float64, py::Float64, gem::Array) # TODO: 型
@@ -13,16 +14,6 @@ module Sdistance
         end
         return min_distance
     end
-
-
-    # function draw(_x::Array, _y::Array, _phi::Array)
-    #     s = plot(_x, _y, _phi, st=:wireframe)
-    #     p = contour(_x, _y, _phi)
-    #     q = surface(_x, _y, _phi)
-    #     r = plot(_x, _y, _phi, st=:heatmap)
-    #     plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-    #     savefig("signed_distance00.png")
-    # end
 
 
     # ジョルダン曲線: ねじれのない閉曲線のこと.
