@@ -1,0 +1,11 @@
+version: "3"
+services:
+  lab:
+    container_name: julia-lab
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workdir
+    tty: true
+    command: /bin/sh

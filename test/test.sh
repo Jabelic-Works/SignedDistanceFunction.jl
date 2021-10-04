@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# mac(catalina~)でのCLIからの実行でマルチスレッド処理を行うには
+    # $ echo "export JULIA_NUM_THREADS=`sysctl -n hw.logicalcpu`" >> ~/.zshrc
+    # $ source ~/.zshrc
+    # terminalを新たに起動して
+    # $ julia hogehuga.jl
+
+# WSLでのこのPJの実行方法
+    # make initial
+    # make test
+
+# docker-composeを使うなら
+    # docker-compose up -d
+    # docker-compose exec lab bash
+    # make initial
+    # make test
+
+assert(){
+    input1="$1"
+    input2="$2"
+    input3="$3"
+    # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
+    julia -Jsystem/Sysimage.so src/main.jl $input1 $input2 -t auto
+    actual="$?"
+
+    if [ "$input2" = 1 ]; then
+        echo "並列処理：分割数N=$input1 \n"
+    else
+        echo "直列処理：分割数N=$input1 \n"
+    fi
+}
+
+assert 100 1
+assert 100 2
+# assert 1000 1
+# assert 1000 2
