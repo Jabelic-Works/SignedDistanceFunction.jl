@@ -4,7 +4,7 @@
 
 ### macOS
 
-`$ make initial mac`
+`$ make initial`
 
 ### docker
 
