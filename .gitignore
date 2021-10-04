@@ -1,3 +1,5 @@
 *.ipynb*
 *.virtual_documents
 .DS_Store
+Sysimage.so
+*.so
