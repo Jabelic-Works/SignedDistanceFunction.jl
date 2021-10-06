@@ -1,4 +1,5 @@
 module Draw
+    import Plots
     using Plots
 
     function draw(_x::Array, _y::Array, _phi::Array)

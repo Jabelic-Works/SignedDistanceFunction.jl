@@ -20,7 +20,7 @@ module Sdistance
     """
         ジョルダン閉曲線であるかどうか
     """
-    function is_ganma_Jordan_curve(_ganma, x_array, y_array)
+    function is_ganma_Jordan_curve(_ganma)
         progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
         ave_distance = sum(progression_of_differences) / length(progression_of_differences)
         if ave_distance * 2 < abs(_ganma[1,1] - _ganma[length(_ganma[:,1]),1])
@@ -76,18 +76,17 @@ module Sdistance
         return_value = zeros(Float64, 2 * x, y)
         for i = 1:x - 1
             return_value[i * 2 - 1, :] = array[i, :]
-        return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
+            return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
         end
         return_value[x * 2 - 1, :] = array[x, :]
         return_value[x * 2, :] = array[1, :]# Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
         return return_value
     end
 
-    # function complement(array::Array{Float64,2}, times::UInt64)
     """
         times回, 倍の数だけデータを補完する
     """
-    function complement(array::Array, times::Int)
+    function interpolation(array::Array, times::Int)
         tmp = []
         for i = 1:times
             tmp = complement_p(array)
@@ -107,9 +106,9 @@ module Sdistance
         _ganma = readdlm(_csv_datafile, ',', Float64)
         _x = [i for i = -L:2 * L / N:L] # len:N+1 
         _y = [i for i = -L:2 * L / N:L] # len:N+1
-        is_ganma_Jordan_curve(_ganma, _x, _y) # TODO: 丁寧なError messageを付与
+        is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
 
-        _ganma = complement(_ganma, 3)
+        _ganma = interpolation(_ganma, 3)
         println("_gen size", size(_ganma))
 
         runtime_ave = 0
@@ -124,7 +123,7 @@ module Sdistance
             runtime_ave += runtime
         end
         println("実行時間: ",runtime_ave / exetimes)
-        draw(_x, _y, _phi)
+        # draw(_x, _y, _phi)
         return (runtime_ave / exetimes)
     end
     export main
