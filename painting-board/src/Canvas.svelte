@@ -50,9 +50,11 @@
     y /= 200;
     coordinates.push([x, y]);
   };
+  //   https://www.delftstack.com/ja/howto/javascript/export-javascript-csv/
   const coordinatesToCSV = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
     coordinates.forEach((rowArray) => {
+      // FIXME: use map.
       let row = rowArray.join(",");
       csvContent += row + "\r\n";
     });
