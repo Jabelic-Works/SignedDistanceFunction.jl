@@ -123,7 +123,7 @@ module Sdistance
             runtime_ave += runtime
         end
         println("実行時間: ",runtime_ave / exetimes)
-        # draw(_x, _y, _phi)
+        draw(_x, _y, _phi)
         return (runtime_ave / exetimes)
     end
     export main

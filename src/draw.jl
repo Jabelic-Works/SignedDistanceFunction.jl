@@ -8,7 +8,7 @@ module Draw
         q = surface(_x, _y, _phi)
         r = plot(_x, _y, _phi, st=:heatmap)
         plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-        savefig("signed_distance.png")
+        savefig("tmp_signed_distance.png")
     end
 
     function parformance_graphs(N::Array, exe_num::Array)

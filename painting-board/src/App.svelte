@@ -4,7 +4,7 @@
 </script>
 
 <main>
-  <h1>Data generator</h1>
+  <h1 class="rainbow_font">Data Generator</h1>
   <Canvas />
 </main>
 
@@ -17,12 +17,12 @@
   }
 
   h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
+    /* color: #ff3e00; */
+    color: #999333;
+    /* text-transform: uppercase; */
     font-size: 4em;
     font-weight: 100;
   }
-
   @media (min-width: 640px) {
     main {
       max-width: none;
