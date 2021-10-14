@@ -21,8 +21,9 @@ import .Draw:parformance_graphs
 
 # === memory size === 
 
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
-p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/infinity_shaped.csv")
+p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/infinity_shaped.csv")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/double_circle.csv")
 println("memory size: ",p, )
 
 # main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/circle.csv")

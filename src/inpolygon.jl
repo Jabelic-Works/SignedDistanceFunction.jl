@@ -1,4 +1,4 @@
-module inpolygon
+module Inpolygon
     import DataFrames,DelimitedFiles, Luxor, BenchmarkTools
     using DataFrames, DelimitedFiles, Luxor, BenchmarkTools
     # 定義上のある点に対して全てのganma曲線上との距離を算出
