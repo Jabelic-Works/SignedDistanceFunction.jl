@@ -1,14 +1,16 @@
 module Sdistance
     include("./draw.jl")
     include("./inpolygon.jl")
+    include("./floodfill.jl")
     import .Draw:draw
-    import .Inpolygon:judge_para,judge_
-    import  CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
+    import .Inpolygon:judge_para,judge_,distanceToCurve 
+    import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
     using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
 
     # ジョルダン曲線: ねじれのない閉曲線のこと.
     """
         ジョルダン閉曲線であるかどうか
+        TODO: circleが複数ある場合はスルーして欲しい
     """
     function is_ganma_Jordan_curve(_ganma)
         progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
@@ -48,36 +50,73 @@ module Sdistance
         return tmp
     end
 
-
-    function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv")
-    # create the computational domain
-        L = 1.5
-        _phi = zeros(Float64, N + 1, N + 1)
-        println("Thread数: ", Threads.nthreads())
-        
-        # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
-        _ganma = readdlm(_csv_datafile, ',', Float64)
-        _x = [i for i = -L:2 * L / N:L] # len:N+1 
-        _y = [i for i = -L:2 * L / N:L] # len:N+1
-        is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
-
-        _ganma = interpolation(_ganma, 3)
-        println("_gen size", size(_ganma))
-
-        runtime_ave = 0
-        exetimes = 4
-
-        for i = 1:exetimes
-            if para_or_serialize_process == 1
-                _phi, runtime = @timed judge_para(_x, _y, _ganma) # parallel processing
-            else
-                _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
+    # Multi processing, multi jordan curves.
+    function makeSignedDistance(_x::Array, _y::Array, _ganma::Array)
+        x_length = length(_x[:,1])
+        return_value = zeros(Float64, x_length, x_length)
+        Threads.@threads for indexI = 1:length(_y)
+            for indexJ = 1:length(_x)
+                return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
             end
-            runtime_ave += runtime
         end
-        println("実行時間: ",runtime_ave / exetimes)
-        # draw(_x, _y, _phi)
-        return (runtime_ave / exetimes)
+        return return_value
+    end
+
+
+    function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::String = "None") # FIXME: types
+        #===  case: double circle ===#
+        if circle_n=="double"
+            # create the computational domain
+            L = 1.5
+            _phi = zeros(Float64, N + 1, N + 1)
+            println("Thread数: ", Threads.nthreads())
+            # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
+            _ganma = readdlm(_csv_datafile, ',', Float64)
+            _x = [i for i = -L:2 * L / N:L] # len:N+1 
+            _y = [i for i = -L:2 * L / N:L] # len:N+1
+            println("_gen size", size(_ganma))
+            runtime_ave = 0
+            exetimes = 4
+
+            for i = 1:exetimes
+                _phi, runtime = @timed makeSignedDistance(_x, _y, _ganma)
+                runtime_ave += runtime
+            end
+            println("実行時間: ",runtime_ave / exetimes)
+            draw(_x, _y, _phi, "double_circle_signed_distance")
+            return (runtime_ave / exetimes)
+        #=== case: simple circle ===#
+        else
+            # create the computational domain
+            L = 1.5
+            _phi = zeros(Float64, N + 1, N + 1)
+            println("Thread数: ", Threads.nthreads())
+            
+            # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
+            _ganma = readdlm(_csv_datafile, ',', Float64)
+            _x = [i for i = -L:2 * L / N:L] # len:N+1 
+            _y = [i for i = -L:2 * L / N:L] # len:N+1
+            
+            is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
+
+            _ganma = interpolation(_ganma, 3)
+            println("_gen size", size(_ganma))
+
+            runtime_ave = 0
+            exetimes = 4
+
+            for i = 1:exetimes
+                if para_or_serialize_process == 1
+                    _phi, runtime = @timed judge_para(_x, _y, _ganma) # parallel processing
+                else
+                    _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
+                end
+                runtime_ave += runtime
+            end
+            println("実行時間: ",runtime_ave / exetimes)
+            draw(_x, _y, _phi, "infty_shaped_signed_distance")
+            return (runtime_ave / exetimes)
+        end
     end
     export main
 end

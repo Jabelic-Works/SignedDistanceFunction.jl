@@ -2,13 +2,18 @@ module Draw
     import Plots
     using Plots
 
-    function draw(_x::Array, _y::Array, _phi::Array)
+    function draw(_x::Array, _y::Array, _phi::Array, fig_name="None")
         s = plot(_x, _y, _phi, st=:wireframe)
         p = contour(_x, _y, _phi)
         q = surface(_x, _y, _phi)
         r = plot(_x, _y, _phi, st=:heatmap)
         plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-        savefig("tmp_signed_distance.png")
+        if fig_name != "None"
+            savefig(fig_name*".png")
+        else
+           savefig("tmp_signed_distance.png")
+        end
+
     end
 
     function parformance_graphs(N::Array, exe_num::Array)
