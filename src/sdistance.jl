@@ -4,6 +4,7 @@ module Sdistance
     include("./floodfill.jl")
     import .Draw:draw
     import .Inpolygon:judge_para,judge_,distanceToCurve 
+    import .Floodfill:signining_field
     import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
     using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools
 
@@ -74,12 +75,14 @@ module Sdistance
             _ganma = readdlm(_csv_datafile, ',', Float64)
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
+            # _ganma = interpolation(_ganma, 2)
             println("_gen size", size(_ganma))
             runtime_ave = 0
-            exetimes = 4
+            exetimes = 1
 
             for i = 1:exetimes
                 _phi, runtime = @timed makeSignedDistance(_x, _y, _ganma)
+                signining_field(_phi, N+1, L)
                 runtime_ave += runtime
             end
             println("実行時間: ",runtime_ave / exetimes)
