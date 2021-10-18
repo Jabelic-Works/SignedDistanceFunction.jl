@@ -15,33 +15,29 @@ module Floodfill
             7. Continue looping until Q is exhausted.
             8. Return.
         ===#
-    function floodfill(_phi::Array,N,L, indexI, indexJ, filled)
-        # N  the splits of fields
-        # 各要素の判定範囲(0近傍の定義)
-        # L*2/N より大きい0近傍はない
-        # n < L*2/N then, n == 0 かな?
-
-        # この中身の処理をflood fill methodとして、exportするmethodはsigning_fieldみたいな名前の方が良い?
+    function floodfill(_phi::Array,N,L, filled, beginx, beginy,indexI=nothing)
         println(size(_phi))
         # 始点は平面全体の縁を一周すべき
         # -> 閉曲線が2箇所で境界に接していたりすると、その領域のみで色塗り(符合つけ)が終わってしまうから。
-        # indexI = 1
-        # indexJ = 1
-        # Indexs = Dict( "indexI" => 1
-        #                 "indexJ" => 1)
-        ind_que = [(1,1)]
-        # filled = []
-        # bouse errorを考慮していない...
-        # println(ind_que[1][1])
+        ind_que = [(beginx, beginy)]
         tmp = 1
         closed_zero = L*2*1.414/N
+        println("sdfsdf",size(_phi),  ind_que, "  ")
+        if indexI != nothing
+            bounse_x = size(_phi[:, 1])[1]+1
+            bounse_min_x = 0
+        else
+            bounse_x = N+1
+            bounse_min_x = 0
+        end
+        bounse_y = size(_phi)[2]+1
+        println(bounse_min_x," ",bounse_x," ", bounse_y)
         while length(ind_que)>0 #&& tmp < 102
-            # println(ind_que, filled)
             flag = false
-            # 左
-            if ind_que[1][1]-1 > 0 && abs(_phi[ind_que[1][1]-1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]-1, ind_que[1][2]) in filled)
+            # 下
+            if bounse_min_x < ind_que[1][1]-1 < bounse_x && abs(_phi[ind_que[1][1]-1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]-1, ind_que[1][2]) in filled)
                 append!(filled,[ind_que[1]])
-                if !((ind_que[1][1]-1, ind_que[1][2]) in ind_que)
+                if !((ind_que[1][1]-1, ind_que[1][2]) in ind_que)# && (ind_que[1][1]-1 < size(_phi)[1] && ind_que[1][2]< size(_phi)[2]) )
                     append!(ind_que,[(ind_que[1][1]-1, ind_que[1][2])])
                 end
                 if _phi[ind_que[1][1], ind_que[1][2]] < 0
@@ -50,9 +46,9 @@ module Floodfill
                 popfirst!(ind_que)
                 flag = true
             end
-            # 下
-            if ind_que[1][2]-1 > 0 && abs(_phi[ind_que[1][1], ind_que[1][2]-1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]-1) in filled)
-                if !((ind_que[1][1], ind_que[1][2]-1) in ind_que)
+            # 左
+            if 0 < ind_que[1][2]-1 < bounse_y && abs(_phi[ind_que[1][1], ind_que[1][2]-1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]-1) in filled)
+                if !((ind_que[1][1], ind_que[1][2]-1) in ind_que )#&& (ind_que[1][1]< size(_phi)[1] && ind_que[1][2] - 1< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1], ind_que[1][2]-1)])
                 end
                 if !flag
@@ -64,9 +60,9 @@ module Floodfill
                     flag = true
                 end
             end
-            # 右
-            if ind_que[1][1]+1 < N+1 && abs(_phi[ind_que[1][1]+1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]+1, ind_que[1][2]) in filled)
-                if !((ind_que[1][1]+1, ind_que[1][2]) in ind_que)
+            # 上
+            if bounse_min_x < ind_que[1][1]+1 < bounse_x && abs(_phi[ind_que[1][1]+1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]+1, ind_que[1][2]) in filled)
+                if !((ind_que[1][1]+1, ind_que[1][2]) in ind_que)# && (ind_que[1][1]+1 < size(_phi)[1] && ind_que[1][2]< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1]+1, ind_que[1][2])])
                 end
                 if !flag
@@ -78,9 +74,9 @@ module Floodfill
                     flag = true
                 end
             end
-            # 上
-            if ind_que[1][2]+1 < N+1 && abs(_phi[ind_que[1][1], ind_que[1][2]+1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]+1) in filled)
-                if !((ind_que[1][1], ind_que[1][2]+1) in ind_que)
+            # 右
+            if ind_que[1][2]+1 < bounse_y && abs(_phi[ind_que[1][1], ind_que[1][2]+1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]+1) in filled)
+                if !((ind_que[1][1], ind_que[1][2]+1) in ind_que)# && (ind_que[1][1] < size(_phi)[1] && ind_que[1][2] + 1< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1], ind_que[1][2]+1)])
                 end
                 if !flag
@@ -101,45 +97,31 @@ module Floodfill
             end
             tmp += 1
         end
-        # for i = 1:N
-        #     println(_phi[i ,:])
         # end
-        return _phi, filled
+        return _phi#, filled
     end
     function signining_field(_phi::Array,N,L )
         _phi .*= (-1)
-        filled = []
-        for i = 1:10:N
-            indexI = i
-            indexJ = 1
-            if !([indexI, indexJ] in filled)
-                _phi, filled = floodfill(_phi::Array,N,L, indexI, indexJ, filled)
-            end
-        end
-        for i = 1:10:N
-            indexI = 1
-            indexJ = i
-            if !([indexI, indexJ] in filled)
-                _phi, filled = floodfill(_phi::Array,N,L, indexI, indexJ, filled)
-            end
-        end
-        for i = 1:10:N
-            indexI = i
-            indexJ = N
-            if !([indexI, indexJ] in filled)
-                _phi, filled = floodfill(_phi::Array,N,L, indexI, indexJ, filled)
-            end
-        end
-        for i = 1:10:N
-            indexI = N
-            indexJ = i
-            if !([indexI, indexJ] in filled)
-                _phi, filled = floodfill(_phi::Array,N,L, indexI, indexJ, filled)
-            end
-        end
-        # indexI = 1
-        # indexJ = N
-        # _phi = floodfill(_phi::Array,N,L, indexI, indexJ)
+        # indexJ = 1
+        # interval = 20
+        # for indexI = 1:interval:N-1
+        #     println(indexI)
+        #         for i = 1:2
+        #             if i == 1
+        #                 beginx = 1;beginy = 1
+        #             else
+        #                 beginx = 1;beginy = 101
+        #             end
+        #             # beginx = 1;beginy=i
+        #             filled = []
+        #             if !([indexI, indexJ] in filled)　# 始点
+        #                 _phi[indexI:indexI+interval, :] = floodfill(_phi[indexI:indexI+interval, :], N, L,filled,  beginx, beginy,indexI)
+        #             end
+        #         end
+        # end
+        indexI = 1;filled = []
+        beginx = 1;beginy = 1
+        _phi= floodfill(_phi, N, L,filled,  beginx, beginy,indexI)
         return _phi
     end
     export signining_field
