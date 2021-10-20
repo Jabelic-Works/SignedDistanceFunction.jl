@@ -21,8 +21,8 @@ module Floodfill
         # -> 閉曲線が2箇所で境界に接していたりすると、その領域のみで色塗り(符合つけ)が終わってしまうから。
         ind_que = [(beginx, beginy)]
         tmp = 1
-        closed_zero = L*2*1.414/N
-        println("sdfsdf",size(_phi),  ind_que, "  ")
+        closed_zero = L*2*1.4/N
+        println("Lattice size: ",size(_phi), " the beginning point: ", ind_que)
         if indexI != nothing
             bounse_x = size(_phi[:, 1])[1]+1
             bounse_min_x = 0
@@ -31,7 +31,7 @@ module Floodfill
             bounse_min_x = 0
         end
         bounse_y = size(_phi)[2]+1
-        println(bounse_min_x," ",bounse_x," ", bounse_y)
+        # println(bounse_min_x," ",bounse_x," ", bounse_y)
         while length(ind_que)>0 #&& tmp < 102
             flag = false
             # 下
@@ -102,26 +102,12 @@ module Floodfill
     end
     function signining_field(_phi::Array,N,L )
         _phi .*= (-1)
-        # indexJ = 1
-        # interval = 20
-        # for indexI = 1:interval:N-1
-        #     println(indexI)
-        #         for i = 1:2
-        #             if i == 1
-        #                 beginx = 1;beginy = 1
-        #             else
-        #                 beginx = 1;beginy = 101
-        #             end
-        #             # beginx = 1;beginy=i
-        #             filled = []
-        #             if !([indexI, indexJ] in filled)　# 始点
-        #                 _phi[indexI:indexI+interval, :] = floodfill(_phi[indexI:indexI+interval, :], N, L,filled,  beginx, beginy,indexI)
-        #             end
-        #         end
-        # end
-        indexI = 1;filled = []
-        beginx = 1;beginy = 1
-        _phi= floodfill(_phi, N, L,filled,  beginx, beginy,indexI)
+        # indexI = 1;
+        filled = []
+        for i = 1:10:N-1
+            beginx = 1;beginy = i
+            _phi= floodfill(_phi, N, L,filled,  beginx, beginy)
+        end
         return _phi
     end
     export signining_field

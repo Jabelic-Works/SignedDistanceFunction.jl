@@ -80,6 +80,8 @@ module Sdistance
             runtime_ave = 0
             exetimes = 1
 
+            # https://m3g.github.io/JuliaNotes.jl/stable/memory/
+            # about timeit.
             for i = 1:exetimes
                 # _phi, runtime = @timed makeSignedDistance(_x, _y, _ganma)
                 _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma)
