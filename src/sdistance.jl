@@ -28,25 +28,47 @@ module Sdistance
     # FIXME: 倍々ではなく, linearに補完数を指定できるように。
 
     "n行目とn+1行目の間のデータを補完,境界条件を付与 (x, 2)->(x*2-1, 2)"
-    function complement_p(array::Array)
+    function complement_p(array::Array, multiple)
         (x, y) = size(array)
-        return_value = zeros(Float64, 2 * x, y)
-        for i = 1:x - 1
-            return_value[i * 2 - 1, :] = array[i, :]
-            return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
+        return_value = Array{Float64}(undef,2 * x, y)
+        if multiple
+            point_space = 0
+            _index = 0
+            for i = 1:x - 1
+                tmp = sqrt(sum((array[i, :] .- array[i + 1, :]).^2))
+                # 点の間隔が平均以下なので、補間する -> 同一の曲線とみなす
+                if tmp < point_space/_index
+                    point_space += tmp
+                    _index += 1
+                    return_value[i * 2 - 1, :] = array[i, :]
+                    return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
+                # 点の間隔が離れているので違う曲線とみる
+                else
+                    return_value[i * 2 - 1, :] = array[i, :]
+                    return_value[i * 2, :] = array[i, :]
+                end
+            end
+            return_value[x * 2 - 1, :] = array[x, :]
+            return_value[x * 2, :] = array[x, :]
+        else
+            for i = 1:x - 1
+                # 点の間隔が平均以下なので、補間する -> 同一の曲線とみなす
+                return_value[i * 2 - 1, :] = array[i, :]
+                return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
+            end
+            return_value[x * 2 - 1, :] = array[x, :]
+            return_value[x * 2, :] = array[1, :]# Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
         end
-        return_value[x * 2 - 1, :] = array[x, :]
-        return_value[x * 2, :] = array[1, :]# Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
         return return_value
     end
 
     """
         times回, 倍の数だけデータを補完する
     """
-    function interpolation(array::Array, times::Int)
+    function interpolation(array::Array, times::Int, multiple=false)
         tmp = []
-        for i = 1:times
-            tmp = complement_p(array)
+        for _ = 1:times
+            tmp = complement_p(array,multiple)
             array = tmp
         end
         return tmp
@@ -74,6 +96,11 @@ module Sdistance
             println("Thread数: ", Threads.nthreads())
             # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
             _ganma = readdlm(_csv_datafile, ',', Float64)
+            # println("======", size(_ganma), "\n", _ganma[:, 1])
+            _ganma = interpolation(_ganma, 2,true)
+
+            scatter(_ganma[:,1], _ganma[:,2])
+            savefig("image/the_data.png")
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             println("_gen size", size(_ganma))
@@ -106,7 +133,7 @@ module Sdistance
             
             is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
 
-            _ganma = interpolation(_ganma, 3)
+            _ganma = interpolation(_ganma, 3, false)
             println("_gen size", size(_ganma))
 
             runtime_ave = 0

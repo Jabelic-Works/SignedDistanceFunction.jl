@@ -9,9 +9,9 @@ module Draw
         r = plot(_x, _y, _phi, st=:heatmap)
         plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
         if fig_name != "None"
-            savefig(fig_name*".png")
+            savefig("image/"*fig_name*".png")
         else
-           savefig("tmp_signed_distance.png")
+           savefig("image/tmp_signed_distance.png")
         end
 
     end
@@ -21,7 +21,7 @@ module Draw
         plot!(N, exe_num[:,2], label = "Normal processing")
         xlabel!("Splits of fields")
         ylabel!("Processing time(sec.)")
-        savefig("performance.png")
+        savefig("image/performance.png")
     end
     export draw,parformance_graphs
 end
