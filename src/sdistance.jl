@@ -28,18 +28,19 @@ module Sdistance
     # FIXME: 倍々ではなく, linearに補完数を指定できるように。
 
     "n行目とn+1行目の間のデータを補完,境界条件を付与 (x, 2)->(x*2-1, 2)"
-    function complement_p(array::Array, multiple)
+    function complement_p(array::Array, multiple,point_space)
         (x, y) = size(array)
         return_value = Array{Float64}(undef,2 * x, y)
         if multiple
-            point_space = 0
-            _index = 0
+            # point_space = 0
+            # _index = 0
             for i = 1:x - 1
-                tmp = sqrt(sum((array[i, :] .- array[i + 1, :]).^2))
+                # tmp = sqrt(sum((array[i, :] .- array[i + 1, :]).^2))
                 # 点の間隔が平均以下なので、補間する -> 同一の曲線とみなす
-                if tmp < point_space/_index
-                    point_space += tmp
-                    _index += 1
+                # if tmp < point_space*10/_index
+                if sqrt(sum((array[i, :] .- array[i + 1, :]).^2)) < point_space*5 # ここの加減が難しい. Nに依存?
+                    # point_space += tmp
+                    # _index += 1
                     return_value[i * 2 - 1, :] = array[i, :]
                     return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
                 # 点の間隔が離れているので違う曲線とみる
@@ -67,8 +68,10 @@ module Sdistance
     """
     function interpolation(array::Array, times::Int, multiple=false)
         tmp = []
+        (x, y) = size(array)
+        point_space = sum([sqrt(sum((array[i, :] .- array[i + 1, :]).^2)) for i =1:x-1])/x
         for _ = 1:times
-            tmp = complement_p(array,multiple)
+            tmp = complement_p(array,multiple, point_space)
             array = tmp
         end
         return tmp
@@ -93,13 +96,13 @@ module Sdistance
             # create the computational domain
             L = 1.5
             _phi = zeros(Float64, N + 1, N + 1)
-            println("Thread数: ", Threads.nthreads())
-            # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
+            println("The number of threads started: ", Threads.nthreads())
+            
+            # ganma曲線 のデータの読み込み
             _ganma = readdlm(_csv_datafile, ',', Float64)
-            # println("======", size(_ganma), "\n", _ganma[:, 1])
-            _ganma = interpolation(_ganma, 2,true)
+            _ganma = interpolation(_ganma, 3,true)
 
-            scatter(_ganma[:,1], _ganma[:,2])
+            scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
             savefig("image/the_data.png")
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
@@ -107,15 +110,11 @@ module Sdistance
             runtime_ave = 0
             exetimes = 1
 
-            # https://m3g.github.io/JuliaNotes.jl/stable/memory/
-            # about timeit.
+            # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
             for i = 1:exetimes
-                # _phi, runtime = @timed makeSignedDistance(_x, _y, _ganma)
                 _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma)
                 @timeit tmr "signining_field" signining_field(_phi, N+1, L)
-                # runtime_ave += runtime
             end
-            # println("実行時間: ",runtime_ave / exetimes)
             show(tmr)
             draw(_x, _y, _phi, "double_circle_signed_distance")
             return (runtime_ave / exetimes)
@@ -124,9 +123,9 @@ module Sdistance
             # create the computational domain
             L = 1.5
             _phi = zeros(Float64, N + 1, N + 1)
-            println("Thread数: ", Threads.nthreads())
+            println("The number of threads started: ", Threads.nthreads())
             
-            # ganma曲線 data 読み込みちょっと遅いかも. (50 x 2)
+            # ganma曲線 のデータの読み込み
             _ganma = readdlm(_csv_datafile, ',', Float64)
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
@@ -135,6 +134,8 @@ module Sdistance
 
             _ganma = interpolation(_ganma, 3, false)
             println("_gen size", size(_ganma))
+            scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
+            savefig("image/the_data.png")
 
             runtime_ave = 0
             exetimes = 4

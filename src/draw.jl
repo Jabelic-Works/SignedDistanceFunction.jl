@@ -2,14 +2,15 @@ module Draw
     import Plots
     using Plots
 
-    function draw(_x::Array, _y::Array, _phi::Array, fig_name="None")
+    function draw(_x::Array, _y::Array, _phi::Array, fig_name=nothing)
         s = plot(_x, _y, _phi, st=:wireframe)
         p = contour(_x, _y, _phi)
         q = surface(_x, _y, _phi)
         r = plot(_x, _y, _phi, st=:heatmap)
         plot(s, p, q, r, layout=(4, 1), size=(500, 1200))
-        if fig_name != "None"
+        if fig_name !== nothing
             savefig("image/"*fig_name*".png")
+            # savefig("image/double_circle_signed_distance.png")
         else
            savefig("image/tmp_signed_distance.png")
         end
