@@ -15,6 +15,7 @@ module Floodfill
             7. Continue looping until Q is exhausted.
             8. Return.
         ===#
+    # function 
     function floodfill(_phi::Array,N,L, filled, beginx, beginy,indexI=nothing)
         println(size(_phi))
         # 始点は平面全体の縁を一周すべき
@@ -31,11 +32,11 @@ module Floodfill
             bounse_min_x = 0
         end
         bounse_y = size(_phi)[2]+1
-        # println(bounse_min_x," ",bounse_x," ", bounse_y)
         while length(ind_que)>0 #&& tmp < 102
             flag = false
+            # TODO: ind_queをいちいち参照するのは無駄なので先に取得する
             # 下
-            if bounse_min_x < ind_que[1][1]-1 < bounse_x && abs(_phi[ind_que[1][1]-1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]-1, ind_que[1][2]) in filled)
+            if bounse_min_x < ind_que[1][1]-1 < bounse_x && !((ind_que[1][1]-1, ind_que[1][2]) in filled) && abs(_phi[ind_que[1][1]-1, ind_que[1][2]]) > closed_zero
                 append!(filled,[ind_que[1]])
                 if !((ind_que[1][1]-1, ind_que[1][2]) in ind_que)# && (ind_que[1][1]-1 < size(_phi)[1] && ind_que[1][2]< size(_phi)[2]) )
                     append!(ind_que,[(ind_que[1][1]-1, ind_que[1][2])])
@@ -47,7 +48,7 @@ module Floodfill
                 flag = true
             end
             # 左
-            if 0 < ind_que[1][2]-1 < bounse_y && abs(_phi[ind_que[1][1], ind_que[1][2]-1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]-1) in filled)
+            if 0 < ind_que[1][2]-1 < bounse_y && !((ind_que[1][1], ind_que[1][2]-1) in filled) && abs(_phi[ind_que[1][1], ind_que[1][2]-1]) > closed_zero
                 if !((ind_que[1][1], ind_que[1][2]-1) in ind_que )#&& (ind_que[1][1]< size(_phi)[1] && ind_que[1][2] - 1< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1], ind_que[1][2]-1)])
                 end
@@ -61,7 +62,7 @@ module Floodfill
                 end
             end
             # 上
-            if bounse_min_x < ind_que[1][1]+1 < bounse_x && abs(_phi[ind_que[1][1]+1, ind_que[1][2]]) > closed_zero && !((ind_que[1][1]+1, ind_que[1][2]) in filled)
+            if bounse_min_x < ind_que[1][1]+1 < bounse_x && !((ind_que[1][1]+1, ind_que[1][2]) in filled) && abs(_phi[ind_que[1][1]+1, ind_que[1][2]]) > closed_zero
                 if !((ind_que[1][1]+1, ind_que[1][2]) in ind_que)# && (ind_que[1][1]+1 < size(_phi)[1] && ind_que[1][2]< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1]+1, ind_que[1][2])])
                 end
@@ -75,7 +76,7 @@ module Floodfill
                 end
             end
             # 右
-            if ind_que[1][2]+1 < bounse_y && abs(_phi[ind_que[1][1], ind_que[1][2]+1]) > closed_zero && !((ind_que[1][1], ind_que[1][2]+1) in filled)
+            if ind_que[1][2]+1 < bounse_y && !((ind_que[1][1], ind_que[1][2]+1) in filled) && abs(_phi[ind_que[1][1], ind_que[1][2]+1]) > closed_zero
                 if !((ind_que[1][1], ind_que[1][2]+1) in ind_que)# && (ind_que[1][1] < size(_phi)[1] && ind_que[1][2] + 1< size(_phi)[2]))
                     append!(ind_que,[(ind_que[1][1], ind_que[1][2]+1)])
                 end

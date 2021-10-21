@@ -16,7 +16,7 @@ module Inpolygon
     end
 
     # Normal processing, a jordan curve.
-    function judge_(_x::Array, _y::Array, _ganma::Array)
+    function create_signed_distance(_x::Array, _y::Array, _ganma::Array)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         for indexI = 1:length(_y)
@@ -36,7 +36,7 @@ module Inpolygon
     end
 
     # Multi processing, a jordan curve.
-    function judge_para(_x::Array, _y::Array, _ganma::Array)
+    function create_signed_distance_multiprocess(_x::Array, _y::Array, _ganma::Array)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         Threads.@threads for indexI = 1:length(_y)
@@ -52,5 +52,5 @@ module Inpolygon
         end
         return return_value
     end
-    export judge_para,judge_,distanceToCurve
+    export create_signed_distance_multiprocess,create_signed_distance,distanceToCurve
 end

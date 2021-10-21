@@ -3,7 +3,7 @@ module Sdistance
     include("./inpolygon.jl")
     include("./floodfill.jl")
     import .Draw:draw
-    import .Inpolygon:judge_para,judge_,distanceToCurve 
+    import .Inpolygon:create_signed_distance_multiprocess,create_signed_distance,distanceToCurve
     import .Floodfill:signining_field
     import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools,TimerOutputs
     using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools,TimerOutputs
@@ -114,9 +114,9 @@ module Sdistance
 
             for i = 1:exetimes
                 if para_or_serialize_process == 1
-                    _phi, runtime = @timed judge_para(_x, _y, _ganma) # parallel processing
+                    _phi, runtime = @timed create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
                 else
-                    _phi, runtime = @timed judge_(_x, _y, _ganma) # serialize processing
+                    _phi, runtime = @timed create_signed_distance(_x, _y, _ganma) # serialize processing
                 end
                 runtime_ave += runtime
             end
