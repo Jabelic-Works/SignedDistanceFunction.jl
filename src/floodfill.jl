@@ -15,7 +15,7 @@ module Floodfill
             7. Continue looping until Q is exhausted.
             8. Return.
         ===#
-    # function 
+    # TODO: Queueの実装
     function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index, indexI=nothing)
         println(size(_phi))
         # 始点は平面全体の縁を一周すべき
@@ -23,7 +23,7 @@ module Floodfill
         point_que = [(beginx, beginy)]
         closed_zero = L*2*1.42/N
         println("Lattice size: ",size(_phi), " the beginning point: ", point_que)
-        if indexI != nothing
+        if indexI !== nothing
             bounse_x = size(_phi[:, 1])[1]+1
             bounse_min_x = 0
         else

@@ -9,11 +9,11 @@ import .Draw:parformance_graphs
 
 # tmp = get_mock_data(1.5, 100)
 # df = DataFrame(x=tmp[:,1], y=tmp[:,2])
-# CSV.write("./src/circle.csv", df, writeheader=false)
+# CSV.write("./mock_csv_data/circle.csv", df, writeheader=false)
 
 # === profiling ===
 
-# @profile main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
+# @profile main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/interface.csv")
 # Profile.print()
 # open("prof.txt", "w") do s
 #     Profile.print(IOContext(s, :displaysize => (24, 500)))
@@ -21,9 +21,10 @@ import .Draw:parformance_graphs
 
 # === memory size === 
 
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/interface.csv")
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/infinity_shaped.csv")
-p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/double_circle.csv", "double")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/interface.csv")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/infinity_shaped.csv", "multi")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/double_circle.csv", "multi")
+p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/multiple_curves.csv", "multi")
 println("\nmemory size: ",p/(1024*1024), " MB")
 
-# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./src/circle.csv")
+# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/circle.csv")

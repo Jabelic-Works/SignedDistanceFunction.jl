@@ -32,15 +32,9 @@ module Sdistance
         (x, y) = size(array)
         return_value = Array{Float64}(undef,2 * x, y)
         if multiple
-            # point_space = 0
-            # _index = 0
             for i = 1:x - 1
-                # tmp = sqrt(sum((array[i, :] .- array[i + 1, :]).^2))
                 # 点の間隔が平均以下なので、補間する -> 同一の曲線とみなす
-                # if tmp < point_space*10/_index
-                if sqrt(sum((array[i, :] .- array[i + 1, :]).^2)) < point_space*5 # ここの加減が難しい. Nに依存?
-                    # point_space += tmp
-                    # _index += 1
+                if sqrt(sum((array[i, :] .- array[i + 1, :]).^2)) < point_space*5 # NOTE: ここの加減が難しい. Nに依存?
                     return_value[i * 2 - 1, :] = array[i, :]
                     return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
                 # 点の間隔が離れているので違う曲線とみる
@@ -89,10 +83,19 @@ module Sdistance
         return return_value
     end
 
-
-    function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::String = "None") # FIXME: types
+    
+    """
+        N: field splits
+        para_or_serialize_process: starting threads numeric
+        _csv_datafile: CSV Data files
+        
+    """
+    function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing) # FIXME: types
+        csvfile_name = match(r"\./mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
-        if circle_n=="double"
+        if circle_n=="multi"
+            # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
+
             # create the computational domain
             L = 1.5
             _phi = zeros(Float64, N + 1, N + 1)
@@ -100,24 +103,26 @@ module Sdistance
             
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(_csv_datafile, ',', Float64)
-            _ganma = interpolation(_ganma, 3,true)
+            _ganma = interpolation(_ganma, 3, true)
 
             scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
             savefig("image/the_data.png")
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
-            println("_gen size", size(_ganma))
-            runtime_ave = 0
-            exetimes = 1
+            println("csv data size: ", size(_ganma))
+            # runtime_ave = 0
+            # exetimes = 1
 
             # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
-            for i = 1:exetimes
+            # for i = 1:exetimes
                 _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma)
                 @timeit tmr "signining_field" signining_field(_phi, N+1, L)
-            end
-            show(tmr)
-            draw(_x, _y, _phi, "double_circle_signed_distance")
-            return (runtime_ave / exetimes)
+            # end
+            show(tmr) # the @timeit information on CLI
+            draw(_x, _y, _phi,csvfile_name[1])
+            # return (runtime_ave / exetimes)
+            return _phi
+        
         #=== case: simple circle ===#
         else
             # create the computational domain
@@ -132,25 +137,25 @@ module Sdistance
             
             is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
 
-            _ganma = interpolation(_ganma, 3, false)
-            println("_gen size", size(_ganma))
+            _ganma = interpolation(_ganma, 2, false)
+            println("csv data size: ", size(_ganma))
             scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
             savefig("image/the_data.png")
 
-            runtime_ave = 0
-            exetimes = 4
+            # runtime_ave = 0
+            # exetimes = 4
 
-            for i = 1:exetimes
+            # for i = 1:exetimes
                 if para_or_serialize_process == 1
-                    _phi, runtime = @timed create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+                    _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
                 else
-                    _phi, runtime = @timed create_signed_distance(_x, _y, _ganma) # serialize processing
+                    _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _ganma) # serialize processing
                 end
-                runtime_ave += runtime
-            end
-            println("実行時間: ",runtime_ave / exetimes)
-            draw(_x, _y, _phi, "infty_shaped_signed_distance")
-            return (runtime_ave / exetimes)
+            # end
+            show(tmr) # the @timeit information on CLI
+            draw(_x, _y, _phi, csvfile_name[1])
+            # return (runtime_ave / exetimes)
+            return _phi
         end
     end
     export main
