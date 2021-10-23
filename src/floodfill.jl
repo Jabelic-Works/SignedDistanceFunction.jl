@@ -73,6 +73,8 @@ module Floodfill
         # end
         return _phi, filled_index#, filled
     end
+    precompile(floodfill, (Array, Int, Int, Array, Float64, Float64, Array, Int))
+
     function signining_field(_phi::Array,N,L )
         _phi .*= (-1)
         filled = Array{Tuple{Int64,Int64}}(undef,N*N) # N=100だと12倍速! N=200だと60倍速!
@@ -84,5 +86,6 @@ module Floodfill
         end
         return _phi
     end
+    precompile(signining_field, (Array, Int, Int))
     export signining_field
 end

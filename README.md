@@ -12,7 +12,7 @@ Main features are:
 <!-- レベルセット法のためのレベルセット関数を計算する際に初期値として必要な付合付き距離関数を閉曲線データから提供する。 -->
 
 
-## Reference
+## Usage
 
 
 ## Development

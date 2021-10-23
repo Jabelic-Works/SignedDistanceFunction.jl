@@ -70,7 +70,8 @@ module Sdistance
         end
         return tmp
     end
-
+    precompile(interpolation, (Array, Int, Bool))
+    
     # Multi processing, multi jordan curves.
     function makeSignedDistance(_x::Array, _y::Array, _ganma::Array)
         x_length = length(_x[:,1])
@@ -82,6 +83,7 @@ module Sdistance
         end
         return return_value
     end
+    precompile(makeSignedDistance, (Array, Array, Array))
 
     
     """
@@ -158,7 +160,46 @@ module Sdistance
             return _phi
         end
     end
-    export main
-end
+    function signedDistance2D(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}="multi")
+        csvfile_name = match(r"\./test/mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
+        #===  case: double circle ===#
+        if circle_n=="multi"
+            L = 1.5
+            _phi = zeros(Float64, N + 1, N + 1)
 
-# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./interface.csv")
+            # ganma曲線 のデータの読み込み
+            _ganma = readdlm(_csv_datafile, ',', Float64)
+            _x = [i for i = -L:2 * L / N:L] # len:N+1 
+            _y = [i for i = -L:2 * L / N:L] # len:N+1
+            
+            is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
+            _ganma = interpolation(_ganma, 2, false)
+            
+            _phi = create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+            
+            
+            draw(_x, _y, _phi, csvfile_name[1])
+            return _phi
+        #=== case: simple circle ===#
+        else
+            # create the computational domain
+            L = 1.5
+            _phi = zeros(Float64, N + 1, N + 1)
+            
+            # ganma曲線 のデータの読み込み
+            _ganma = readdlm(_csv_datafile, ',', Float64)
+            _x = [i for i = -L:2 * L / N:L] # len:N+1 
+            _y = [i for i = -L:2 * L / N:L] # len:N+1
+            
+            is_ganma_Jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
+
+            _ganma = interpolation(_ganma, 2, false)
+            println("csv data size: ", size(_ganma))
+            _phi = create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+            draw(_x, _y, _phi, csvfile_name[1])
+            return _phi
+        end
+    end
+    precompile(signedDistance2D,(Union{String, DataFrame}, Int, Union{String, Nothing}))
+    export signedDistance2D ,main
+end
