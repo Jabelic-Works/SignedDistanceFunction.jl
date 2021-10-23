@@ -14,8 +14,8 @@ module Draw
         else
            savefig("image/tmp_signed_distance.png")
         end
-
     end
+    precompile(draw, (Array, Array, Array, Union{SubString{String}, Nothing}))
 
     function parformance_graphs(N::Array, exe_num::Array)
         plot(N, exe_num[:,1],title = "Benchmarks", label = "Parallel processing", legend = :topleft)
@@ -24,5 +24,6 @@ module Draw
         ylabel!("Processing time(sec.)")
         savefig("test/image/performance.png")
     end
+    precompile(parformance_graphs, (Array, Array))
     export draw,parformance_graphs
 end

@@ -14,6 +14,7 @@ module Inpolygon
         end
         return min_distance
     end
+    precompile(distanceToCurve, (Float64, Float64, Array))
 
     # Normal processing, a jordan curve.
     function create_signed_distance(_x::Array, _y::Array, _ganma::Array)
@@ -34,7 +35,8 @@ module Inpolygon
         end
         return return_value
     end
-
+    precompile(create_signed_distance, (Array, Array, Array))
+    
     # Multi processing, a jordan curve.
     function create_signed_distance_multiprocess(_x::Array, _y::Array, _ganma::Array)
         x_length = length(_x[:,1])
@@ -52,5 +54,7 @@ module Inpolygon
         end
         return return_value
     end
+    precompile(create_signed_distance_multiprocess, (Array, Array, Array))
+
     export create_signed_distance_multiprocess,create_signed_distance,distanceToCurve
 end
