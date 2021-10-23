@@ -12,8 +12,8 @@ function _exe()
 
     runtime = zeros(_execute_times+1, 2)
     for i = 0:_execute_times
-        runtime[i+1,1] = main(100 + 50*i, 1, "./src/interface.csv")
-        runtime[i+1,2] = main(100 + 50*i, 2, "./src/interface.csv")
+        runtime[i+1,1] = main(100 + 50*i, 1, "./test/mock_csv_data/interface.csv")
+        runtime[i+1,2] = main(100 + 50*i, 2, "./test/mock_csv_data/interface.csv")
     end
     N = [100 + 50*item for item = 0:_execute_times]
     # println(runtime, N)
