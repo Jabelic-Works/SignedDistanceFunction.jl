@@ -91,7 +91,7 @@ module Sdistance
         
     """
     function main(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing) # FIXME: types
-        csvfile_name = match(r"\./mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
+        csvfile_name = match(r"\./test/mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
         if circle_n=="multi"
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
@@ -106,7 +106,7 @@ module Sdistance
             _ganma = interpolation(_ganma, 3, true)
 
             scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
-            savefig("image/the_data.png")
+            savefig("test/image/the_data.png")
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             println("csv data size: ", size(_ganma))
@@ -140,7 +140,7 @@ module Sdistance
             _ganma = interpolation(_ganma, 2, false)
             println("csv data size: ", size(_ganma))
             scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
-            savefig("image/the_data.png")
+            savefig("test/image/the_data.png")
 
             # runtime_ave = 0
             # exetimes = 4

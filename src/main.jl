@@ -21,10 +21,10 @@ import .Draw:parformance_graphs
 
 # === memory size === 
 
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/interface.csv")
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/infinity_shaped.csv", "multi")
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/double_circle.csv", "multi")
-p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/multiple_curves.csv", "multi")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/interface.csv")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/infinity_shaped.csv", "multi")
+# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/double_circle.csv", "multi")
+p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/multiple_curves.csv", "multi")
 println("\nmemory size: ",p/(1024*1024), " MB")
 
-# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/circle.csv")
+# main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/circle.csv")
