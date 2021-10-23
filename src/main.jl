@@ -19,7 +19,7 @@ import .Draw:parformance_graphs
 # p = @allocated signedDistance2D("./test/mock_csv_data/interface.csv",parse(Int, ARGS[1]))
 # p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/infinity_shaped.csv", "multi")
 # p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/double_circle.csv", "multi")
-# p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/multiple_curves.csv", "multi")
-p = @allocated signedDistance2D( "./test/mock_csv_data/multiple_curves.csv",parse(Int, ARGS[1]), "multi")
+p = @allocated main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./test/mock_csv_data/multiple_curves.csv", "multi")
+# p = @allocated signedDistance2D( "./test/mock_csv_data/multiple_curves.csv",parse(Int, ARGS[1]), "multi")
 
 println("\nmemory size: ",p/(1024*1024), " MB")

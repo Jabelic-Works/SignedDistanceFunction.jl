@@ -2,7 +2,7 @@ module Draw
     import Plots
     using Plots
 
-    function draw(_x::Array, _y::Array, _phi::Array, fig_name=nothing)
+    function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String}, Nothing}=nothing)
         s = plot(_x, _y, _phi, st=:wireframe)
         p = contour(_x, _y, _phi)
         q = surface(_x, _y, _phi)
