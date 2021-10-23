@@ -27,7 +27,7 @@ module Sdistance
     # FIXME: 倍々ではなく, linearに補完数を指定できるように。
 
     "n行目とn+1行目の間のデータを補完,境界条件を付与 (x, 2)->(x*2-1, 2)"
-    function complement_p(array::Array, multiple, point_space)
+    function complement_p(array::Array, multiple::Bool, point_space::Float64)
         (x, y) = size(array)
         return_value = Array{Float64}(undef,2 * x, y)
         if multiple
@@ -141,7 +141,7 @@ module Sdistance
 
             _ganma = interpolation(_ganma, 2, false)
             println("csv data size: ", size(_ganma))
-            scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
+            scatter(_ganma[:,1], _ganma[:,2], markersize = 2)
             savefig("test/image/the_data.png")
 
             # runtime_ave = 0
@@ -161,7 +161,12 @@ module Sdistance
         end
     end
 
+    """
+        csv_datafile::Union{String, DataFrame}
+        N::Int
+        curves::Union{String, Nothing}
 
+    """
     function signedDistance2D(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}="multi")
         csvfile_name = match(r"\./test/mock_csv_data/(.*)",csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
