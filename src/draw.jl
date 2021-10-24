@@ -19,6 +19,7 @@ module Draw
 
     function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String, Nothing}=nothing, label_name::Union{Array, Nothing}=nothing)
         (row, col) = size(exe_num)
+        println(row, col)
         plot(N, exe_num[:,1],title = "Benchmarks", label = label_name[1], legend = :topleft)
         for i=2:col
             # plot(N, exe_num[:,i],title = "Benchmarks", label = label_name[1], legend = :topleft)

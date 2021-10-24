@@ -104,7 +104,7 @@ module Sdistance
             
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(_csv_datafile, ',', Float64)
-            _ganma = interpolation(_ganma, 3 + round(Int,N/100), true)
+            _ganma = interpolation(_ganma, 2 + round(Int,N/100), true)
 
             # scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
             # savefig("test/image/the_data.png")

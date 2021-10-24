@@ -10,21 +10,21 @@ function _exe()
     # _execute_times = ARGS[1] ? parse(Int, ARGS[1]) : 3
     _execute_times = parse(Int, ARGS[1])
     _phi = []
-    init_N = 100
-    increment_N = 20
-    runtime = zeros(_execute_times+1, 4)
+    init_N = 300
+    increment_N = 100
+    runtime = zeros(_execute_times+1, 2)
     for i = 0:_execute_times
-        # _phi, runtime[i+1,1] = @timed computing_bench(300 + 200*i, 1, "./test/mock_csv_data/interface.csv")
-        # _phi, runtime[i+1,2] = @timed computing_bench(300 + 200*i, 2, "./test/mock_csv_data/interface.csv")
-        # _phi, runtime[i+1,3] = @timed computing_bench(300 + 200*i, 1, "./test/mock_csv_data/interface.csv", "multi")
-        # _phi, runtime[i+1,4] = @timed computing_bench(300 + 200*i, 2, "./test/mock_csv_data/interface.csv", "multi")
-        _phi, runtime[i+1,1] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i)
-        _phi, runtime[i+1,2] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i, "multi")
+        _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/interface.csv")
+        _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv")
+        # _phi, runtime[i+1,3] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/interface.csv", "multi")
+        # _phi, runtime[i+1,4] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv", "multi")
+        # _phi, runtime[i+1,1] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i)
+        # _phi, runtime[i+1,2] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i, "multi")
     end
     N = [init_N + increment_N*item for item = 0:_execute_times]
     println(N, runtime)
-    # parformance_graphs(N, runtime, "interface", ["Parallel processing","Normal processing"])
-    parformance_graphs(N, runtime, "interface", ["the jordan curve","multi curves"])
+    parformance_graphs(N, runtime, "interface", ["Parallel processing","Normal processing"])
+    # parformance_graphs(N, runtime, "interface", ["the jordan curve","multi curves"])
 end
 
 _exe()
@@ -39,7 +39,7 @@ N2300:  300+200i, ARG = 10
  33.966169503 64.128344396; 40.489381557 75.419365612; 
  50.053971199 91.594363467]
 
-computing_bench, 300+200i, ARG = 3, interface single-thread, multi-thread
+computing_bench, 300+200i, ARG = 3, interface  multi-thread, single-thread
  [2.402844242 1.564786665; 2.415855251 4.372297246; 4.636160664 9.164722692; 7.243630318 11.635953353]
 signedDistance2D, 300+200i, ARG = 3, interface, multi-thread only. jordan_curve(using isinside), multi_curves(using floodfill)
  [2.126074484 13.096371426; 2.496373027 125.23088408; 5.242287246 596.261015286; 7.987274914 1743.300632586]
