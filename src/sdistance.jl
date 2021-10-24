@@ -12,7 +12,6 @@ module Sdistance
     # ジョルダン曲線: ねじれのない閉曲線のこと.
     """
         ジョルダン閉曲線であるかどうか
-        TODO: circleが複数ある場合はスルーして欲しい
     """
     function is_jordan_curve(_ganma::Array)
         progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
@@ -167,17 +166,17 @@ module Sdistance
         curves::Union{String, Nothing}
 
     """
-    function signedDistance2D(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}="multi")
+    function signedDistance2D(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}=nothing)
         #===  case: double circle ===#
         if curves=="multi"
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
             # create the computational domain
             L = 1.5
             _phi = zeros(Float64, N + 1, N + 1)
-            
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(csv_datafile, ',', Float64)
             _ganma = interpolation(_ganma, 3, true)
+            println("multi curves\ncsv data size: ", size(_ganma))
 
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
@@ -191,20 +190,18 @@ module Sdistance
             # create the computational domain
             L = 1.5
             _phi = zeros(Float64, N + 1, N + 1)
-            
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(csv_datafile, ',', Float64)
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             
             is_jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
-
             _ganma = interpolation(_ganma, 2, false)
-            println("csv data size: ", size(_ganma))
+            println("the jordan curve\ncsv data size: ", size(_ganma))
             _phi = create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
             return _phi
         end
     end
-    precompile(signedDistance2D,(Union{String, DataFrame}, Int, Union{String, Nothing}))
+    # precompile(signedDistance2D,(Union{String, DataFrame}, Int, Union{String, Nothing}))
     export signedDistance2D ,computing_bench
 end

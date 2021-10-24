@@ -17,12 +17,20 @@ module Draw
     end
     precompile(draw, (Array, Array, Array, Union{SubString{String}, Nothing}))
 
-    function parformance_graphs(N::Array, exe_num::Array)
-        plot(N, exe_num[:,1],title = "Benchmarks", label = "Parallel processing", legend = :topleft)
-        plot!(N, exe_num[:,2], label = "Normal processing")
+    function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String, Nothing}=nothing, label_name::Union{Array, Nothing}=nothing)
+        (row, col) = size(exe_num)
+        plot(N, exe_num[:,1],title = "Benchmarks", label = label_name[1], legend = :topleft)
+        for i=2:col
+            # plot(N, exe_num[:,i],title = "Benchmarks", label = label_name[1], legend = :topleft)
+            plot!(N, exe_num[:,i], label = label_name[i])
+        end
         xlabel!("Splits of fields")
         ylabel!("Processing time(sec.)")
-        savefig("test/image/performance.png")
+        if fig_name !== nothing
+            savefig("test/image/"*fig_name*"_performance.png")
+        else
+            savefig("test/image/performance.png")
+        end
     end
     precompile(parformance_graphs, (Array, Array))
     export draw,parformance_graphs
