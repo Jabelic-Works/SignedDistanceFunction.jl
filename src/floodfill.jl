@@ -73,7 +73,7 @@ module Floodfill
         # end
         return _phi, filled_index#, filled
     end
-    precompile(floodfill, (Array, Int, Int, Array, Float64, Float64, Array, Int))
+    precompile(floodfill, (Array, Int, Float64, Array, Int, Int, Int, Int))
 
     function signining_field(_phi::Array,N,L )
         _phi .*= (-1)
@@ -86,6 +86,6 @@ module Floodfill
         end
         return _phi
     end
-    precompile(signining_field, (Array, Int, Int))
+    precompile(signining_field, (Array, Int, Float64))
     export signining_field
 end
