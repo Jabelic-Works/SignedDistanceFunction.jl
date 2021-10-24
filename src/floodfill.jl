@@ -17,12 +17,11 @@ module Floodfill
         ===#
     # TODO: Queueの実装
     function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index, indexI=nothing)
-        println(size(_phi))
         # 始点は平面全体の縁を一周すべき
         # -> 閉曲線が2箇所で境界に接していたりすると、その領域のみで色塗り(符合つけ)が終わってしまうから。
         point_que = [(beginx, beginy)]
         closed_zero = L*2*1.42/N
-        println("Lattice size: ",size(_phi), " the beginning point: ", point_que)
+        # println("The lattice size: ",size(_phi), " the beginning point: ", point_que)
         if indexI !== nothing
             bounse_x = size(_phi[:, 1])[1]+1
             bounse_min_x = 0
@@ -73,6 +72,8 @@ module Floodfill
         # end
         return _phi, filled_index#, filled
     end
+    precompile(floodfill, (Array, Int, Float64, Array, Int, Int, Int, Int))
+
     function signining_field(_phi::Array,N,L )
         _phi .*= (-1)
         filled = Array{Tuple{Int64,Int64}}(undef,N*N) # N=100だと12倍速! N=200だと60倍速!
@@ -80,9 +81,10 @@ module Floodfill
         for i = 1:10:N-1
             beginx = 1;beginy = i
             _phi, filled_index= floodfill(_phi, N, L,filled,  beginx, beginy, filled_index)
-            println("filled_index : ",filled_index)
+            # println("filled_index : ",filled_index)
         end
         return _phi
     end
+    precompile(signining_field, (Array, Int, Float64))
     export signining_field
 end
