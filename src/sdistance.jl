@@ -104,7 +104,7 @@ module Sdistance
             
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(_csv_datafile, ',', Float64)
-            _ganma = interpolation(_ganma, 3, true)
+            _ganma = interpolation(_ganma, 3 + round(Int,N/100), true)
 
             # scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
             # savefig("test/image/the_data.png")
@@ -120,7 +120,7 @@ module Sdistance
                 @timeit tmr "signining_field" signining_field(_phi, N+1, L)
             # end
             show(tmr) # the @timeit information on CLI
-            # draw(_x, _y, _phi,csvfile_name[1])
+            draw(_x, _y, _phi,csvfile_name[1])
             # return (runtime_ave / exetimes)
             return _phi
         
@@ -154,7 +154,7 @@ module Sdistance
                 end
             # end
             show(tmr) # the @timeit information on CLI
-            # draw(_x, _y, _phi, csvfile_name[1])
+            draw(_x, _y, _phi, csvfile_name[1])
             # return (runtime_ave / exetimes)
             return _phi
         end

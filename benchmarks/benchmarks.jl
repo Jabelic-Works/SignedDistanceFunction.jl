@@ -10,8 +10,8 @@ function _exe()
     # _execute_times = ARGS[1] ? parse(Int, ARGS[1]) : 3
     _execute_times = parse(Int, ARGS[1])
     _phi = []
-    init_N = 300
-    increment_N = 200
+    init_N = 100
+    increment_N = 20
     runtime = zeros(_execute_times+1, 4)
     for i = 0:_execute_times
         # _phi, runtime[i+1,1] = @timed computing_bench(300 + 200*i, 1, "./test/mock_csv_data/interface.csv")
