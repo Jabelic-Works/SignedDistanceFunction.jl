@@ -3,8 +3,9 @@ using Pkg
 Pkg.add("PackageCompiler")
 Pkg.add("DelimitedFiles")
 Pkg.add("TimerOutputs")
+Pkg.add("Test")
 using PackageCompiler
 
-PackageCompiler.create_sysimage([:CSV, :DataFrames, :Plots, :Luxor, :BenchmarkTools, :TimerOutputs]; sysimage_path="Sysimage.so")
+PackageCompiler.create_sysimage([:CSV, :DataFrames, :Plots, :Luxor, :BenchmarkTools, :TimerOutputs, :Test]; sysimage_path="Sysimage.so")
 # then, >>  import and using
 # julia -JSysimage.so
