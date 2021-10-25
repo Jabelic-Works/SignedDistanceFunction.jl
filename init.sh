@@ -12,7 +12,7 @@ init(){
         echo "Your platform ($(uname -a)) is not supported."
         exit 1
     fi
-    julia src/settings.jl -t auto
+    julia --project src/settings.jl -t auto
 }
 
 init
