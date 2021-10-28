@@ -11,7 +11,8 @@ using .LevelSet
 
 # === profiling ===
 
-# @profile main(parse(Int, ARGS[1]), parse(Int, ARGS[2]), "./mock_csv_data/interface.csv")
+# @profile signedDistance2D("./test/mock_csv_data/interface.csv",parse(Int, ARGS[1])) 
+# @profile signedDistance2D("./test/mock_csv_data/interface.csv",parse(Int, ARGS[1]), "multi")
 # Profile.print()
 # open("prof.txt", "w") do s
 #     Profile.print(IOContext(s, :displaysize => (24, 500)))

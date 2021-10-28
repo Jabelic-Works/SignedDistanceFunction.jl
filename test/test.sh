@@ -24,10 +24,6 @@
 #     input3="$3"
 #     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
     
-#     # painting boardのtest
-#     cd painting-board; npm ci; cd ..
-#     # UnitTest
-#     julia -JSysimage.so --project -e 'using Pkg;Pkg.test()'
 #     # 実行
 #     julia -JSysimage.so src/main.jl $input1 $input2 -t auto
 #     actual="$?"
