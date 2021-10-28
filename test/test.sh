@@ -16,27 +16,42 @@
     # make initial
     # make test
 
-assert(){
-    input1="$1"
-    input2="$2"
-    input3="$3"
-    # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
+
+# # main.jlの呼び出し
+# assert(){
+#     input1="$1"
+#     input2="$2"
+#     input3="$3"
+#     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
     
+#     # painting boardのtest
+#     cd painting-board; npm ci; cd ..
+#     # UnitTest
+#     julia -JSysimage.so --project -e 'using Pkg;Pkg.test()'
+#     # 実行
+#     julia -JSysimage.so src/main.jl $input1 $input2 -t auto
+#     actual="$?"
+
+#     if [ "$input2" = 1 ]; then
+#         echo "並列処理：分割数N=$input1 \n"
+#     else
+#         echo "直列処理：分割数N=$input1 \n"
+#     fi
+# }
+
+# assert 100 1 # 並列処理
+# # assert 100 2
+# # assert 1000 1
+# # assert 1000 2
+
+
+# Unit Test
+runtest(){
     # painting boardのtest
     cd painting-board; npm ci; cd ..
-    
-    # 実行
-    julia -JSysimage.so src/main.jl $input1 $input2 -t auto
+    # UnitTest
+    julia -JSysimage.so --project -e 'using Pkg;Pkg.test()'
     actual="$?"
-
-    if [ "$input2" = 1 ]; then
-        echo "並列処理：分割数N=$input1 \n"
-    else
-        echo "直列処理：分割数N=$input1 \n"
-    fi
 }
 
-assert 300 1 # 並列処理
-# assert 100 2
-# assert 1000 1
-# assert 1000 2
+runtest 

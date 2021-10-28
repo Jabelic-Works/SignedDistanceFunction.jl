@@ -5,3 +5,7 @@ Sysimage.so
 *.so
 tmp
 painting-board*
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+/Manifest.toml

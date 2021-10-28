@@ -1,4 +1,9 @@
-# Signed distance for the level set function
+# The level set function
+
+[![Build Status](https://travis-ci.com/jabelic/LevelSet.jl.svg?branch=main)](https://travis-ci.com/jabelic/LevelSet.jl)
+[![Coverage](https://codecov.io/gh/jabelic/LevelSet.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/LevelSet.jl)
+[![Coverage](https://coveralls.io/repos/github/jabelic/LevelSet.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/LevelSet.jl?branch=main)
+
 
 <!-- TODO: set Package Name : LevelSet.jl-->
 <!--  LevelSet.jlはレベルセット関数に関する機能を提供するpackageである -->
@@ -14,10 +19,16 @@ Main features are:
 
 ## Usage
 
+The closed curve data must be 
 
-## Development
+`signedDistance2D("XXXXXX.csv", N)`
 
-### setup
+`signedDistance2D("XXXXXX.csv", N, "multi")`
+
+
+## Contribution
+
+### Setup
 #### macOS
 
 `$ make initial`
