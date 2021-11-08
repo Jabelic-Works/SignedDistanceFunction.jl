@@ -98,7 +98,7 @@ module Sdistance
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
 
             # create the computational domain
-            L = 1.5
+            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # println("\nThe number of threads started: ", Threads.nthreads())
             
@@ -121,13 +121,15 @@ module Sdistance
             # end
             show(tmr) # the @timeit information on CLI
             draw(_x, _y, _phi,csvfile_name[1])
-            # return (runtime_ave / exetimes)
+
+            # return (runtime_ave / exetimes
+            DataFrame(_phi, :auto) |> CSV.write("./test/result/hoge.csv", header=false)
             return _phi
         
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.5
+            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # println("\nThe number of threads started: ", Threads.nthreads())
             
@@ -171,7 +173,7 @@ module Sdistance
         if curves=="multi"
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
             # create the computational domain
-            L = 1.5
+            L = 1.0
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(csv_datafile, ',', Float64)
@@ -188,7 +190,7 @@ module Sdistance
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.5
+            L = 1.0
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _ganma = readdlm(csv_datafile, ',', Float64)

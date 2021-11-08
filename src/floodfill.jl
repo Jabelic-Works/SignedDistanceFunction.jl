@@ -30,32 +30,34 @@ module Floodfill
         end
         bounse_y = size(_phi)[2]+1
         bounse_min_y = 0
+
+        STEP=2^1
+        # STEP=1
         while length(point_que)>0
-            # TODO: point_queをいちいち参照するのは無駄なので先に取得する
             _x = copy(point_que[1][1])
             _y = copy(point_que[1][2])
             # 下
-            if bounse_min_x < _x-1 < bounse_x && !((_x-1, _y) in filled) && abs(_phi[_x-1, _y]) > closed_zero
-                if !((_x-1, _y) in point_que)
-                    append!(point_que,[(_x-1, _y)]) # 下側の格子点をqueueに積む
+            if bounse_min_x < _x-STEP < bounse_x && !((_x-STEP, _y) in filled) && abs(_phi[_x-STEP, _y]) > closed_zero
+                if !((_x-STEP, _y) in point_que)
+                    append!(point_que,[(_x-STEP, _y)]) # 下側の格子点をqueueに積む
                 end
             end
             # 左
-            if bounse_min_y < _y-1 < bounse_y && !((_x, _y-1) in filled) && abs(_phi[_x, _y-1]) > closed_zero
-                if !((_x, _y-1) in point_que )
-                    append!(point_que,[(_x, _y-1)]) # 左側の格子点をqueueに積む
+            if bounse_min_y < _y-STEP < bounse_y && !((_x, _y-STEP) in filled) && abs(_phi[_x, _y-STEP]) > closed_zero
+                if !((_x, _y-STEP) in point_que )
+                    append!(point_que,[(_x, _y-STEP)]) # 左側の格子点をqueueに積む
                 end
             end
             # 上
-            if bounse_min_x < _x+1 < bounse_x && !((_x+1, _y) in filled) && abs(_phi[_x+1, _y]) > closed_zero
-                if !((_x+1, _y) in point_que)
-                    append!(point_que,[(_x+1, _y)]) # 上側の格子点をqueueに積む
+            if bounse_min_x < _x+STEP < bounse_x && !((_x+STEP, _y) in filled) && abs(_phi[_x+STEP, _y]) > closed_zero
+                if !((_x+STEP, _y) in point_que)
+                    append!(point_que,[(_x+STEP, _y)]) # 上側の格子点をqueueに積む
                 end
             end
             # 右
-            if _y+1 < bounse_y && !((_x, _y+1) in filled) && abs(_phi[_x, _y+1]) > closed_zero
-                if !((_x, _y+1) in point_que)
-                    append!(point_que,[(_x, _y+1)]) # 右側の格子点をqueueに積む
+            if _y+STEP < bounse_y && !((_x, _y+STEP) in filled) && abs(_phi[_x, _y+STEP]) > closed_zero
+                if !((_x, _y+STEP) in point_que)
+                    append!(point_que,[(_x, _y+STEP)]) # 右側の格子点をqueueに積む
                 end
             end
 
@@ -69,11 +71,77 @@ module Floodfill
             filled_index += 1
         end
         # end
+        _phi = assign_signs(_phi, STEP, N, L)
         return _phi, filled_index#, filled
     end
     precompile(floodfill, (Array, Int, Float64, Array, Int, Int, Int, Int))
 
+    ## 今のところSTEP=2の場合のみ対応
+    function assign_signs(_phi, STEP, N, L)
+        # 閉曲線内部が「-」である。デフォが
+        # Int((N-1)/100) # 再帰回数
+        loops = Int(log2(STEP))
+        println(loops)
+        steps_signed_grid = STEP
+        steps_unsigned_grid = Int(STEP/2)
+        while loops > 0
+            if STEP == 1
+                println("assign_signs")
+            else
+                println("assign_signs__")
+                Threads.@threads for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
+                    for j = 1:steps_signed_grid:length(_phi[:, 1])
+                        # if j != length(_phi[:, 1]) # ケツでない
+                        if j+steps_signed_grid <= length(_phi[:, 1])&&j+steps_unsigned_grid <= length(_phi[:, 1])
+                            # 掛けたらマイナス->境界を示す. かつ 両方の距離を足したらgrid点の間の2倍の距離になる(数値誤差を考慮?できてる?)
+                            if _phi[i, j]*_phi[i, j+steps_signed_grid] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i, j+steps_signed_grid]) - 2*L/N) <= 0.01 # 境界
+                                if abs(_phi[i, j]) < abs(_phi[i, j+steps_signed_grid]) # jの方が近い
+                                    if _phi[i, j] < 0 # jが内
+                                        _phi[i, j+steps_unsigned_grid] *= (-1) # 外側にある
+                                    end
+                                else # j+2の方が近い
+                                    if _phi[i, j] > 0 # jが外
+                                        _phi[i, j+steps_unsigned_grid] *= (-1)
+                                    end
+                                end
+                            elseif _phi[i, j] > 0 && _phi[i, j+steps_signed_grid] > 0# 外側
+                                _phi[i, j+steps_unsigned_grid] *= (-1)
+                            end
+                        end
+                    end
+                end
+                Threads.@threads for j = 1:Int(steps_signed_grid/2):length(_phi[:, 1]) 
+                    for i = 1:steps_signed_grid:length(_phi[:, 1])
+                        # if i != length(_phi[:, 1]) # ケツでない
+                        if i+steps_signed_grid <= length(_phi[:, 1]) && i+steps_unsigned_grid <= length(_phi[:, 1])
+                            if _phi[i, j]*_phi[i+steps_signed_grid, j] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i+steps_signed_grid, j]) - 2*L/N) <= 0.01 # 境界
+                                if abs(_phi[i, j]) < abs(_phi[i+steps_signed_grid, j]) # jの方が近い
+                                    if _phi[i, j] < 0 # jが内
+                                        _phi[i+steps_unsigned_grid, j] *= (-1)
+                                    end
+                                else # j+2の方が近い
+                                    if _phi[i, j] > 0 # jが外
+                                        _phi[i+steps_unsigned_grid, j] *= (-1)
+                                    end
+                                end
+                            elseif _phi[i, j] > 0 && _phi[i+steps_signed_grid, j] > 0# 外側
+                                _phi[i+steps_unsigned_grid, j] *= (-1)
+                            end
+                        end
+                    end
+                end
+            end
+            steps_signed_grid = steps_signed_grid >= 4 ? deepcopy(Int(steps_signed_grid/2)) : undef
+            steps_unsigned_grid = steps_unsigned_grid >= 2 ? deepcopy(Int(steps_unsigned_grid/2)) : undef
+            loops -= 1
+        end
+        return _phi
+    end
+
+
+
     function signining_field(_phi::Array,N,L )
+        println("floodfill")
         _phi .*= (-1)
         filled = Array{Tuple{Int64,Int64}}(undef,N*N) # N=100だと12倍速! N=200だと60倍速!
         filled_index = 1

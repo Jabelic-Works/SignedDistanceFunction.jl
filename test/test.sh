@@ -18,24 +18,24 @@
 
 
 # # main.jlの呼び出し
-# assert(){
-#     input1="$1"
-#     input2="$2"
-#     input3="$3"
-#     # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
+assert(){
+    input1="$1"
+    input2="$2"
+    input3="$3"
+    # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
     
-#     # 実行
-#     julia -JSysimage.so src/main.jl $input1 $input2 -t auto
-#     actual="$?"
+    # 実行
+    julia -JSysimage.so src/main.jl $input1 $input2 -t auto
+    actual="$?"
 
-#     if [ "$input2" = 1 ]; then
-#         echo "並列処理：分割数N=$input1 \n"
-#     else
-#         echo "直列処理：分割数N=$input1 \n"
-#     fi
-# }
+    if [ "$input2" = 1 ]; then
+        echo "並列処理：分割数N=$input1 \n"
+    else
+        echo "直列処理：分割数N=$input1 \n"
+    fi
+}
 
-# assert 100 1 # 並列処理
+assert 200 1 # 並列処理
 # # assert 100 2
 # # assert 1000 1
 # # assert 1000 2
@@ -50,4 +50,4 @@ runtest(){
     actual="$?"
 }
 
-runtest 
+# runtest 
