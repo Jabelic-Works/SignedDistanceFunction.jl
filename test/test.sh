@@ -17,7 +17,7 @@
     # make test
 
 
-# # main.jlの呼び出し
+# # main.jlの呼び出し. For Debuging!
 assert(){
     input1="$1"
     input2="$2"
@@ -36,6 +36,7 @@ assert(){
 }
 
 assert 200 1 # 並列処理
+assert 200 2 # 並列処理
 # # assert 100 2
 # # assert 1000 1
 # # assert 1000 2

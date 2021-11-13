@@ -2,7 +2,7 @@ module Draw
     import Plots
     using Plots
 
-    function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String}, Nothing}=nothing)
+    function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String}, String,Nothing}=nothing)
         s = plot(_x, _y, _phi, st=:wireframe)
         p = contour(_x, _y, _phi)
         q = surface(_x, _y, _phi)
@@ -17,6 +17,9 @@ module Draw
     end
     precompile(draw, (Array, Array, Array, Union{SubString{String}, Nothing}))
 
+    """
+        
+    """
     function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String, Nothing}=nothing, label_name::Union{Array, Nothing}=nothing)
         (row, col) = size(exe_num)
         println(row, col)

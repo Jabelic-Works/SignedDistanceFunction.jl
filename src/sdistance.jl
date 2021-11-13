@@ -72,24 +72,38 @@ module Sdistance
     precompile(interpolation, (Array, Int, Bool))
     
     # Multi processing, multi jordan curves.
-    function makeSignedDistance(_x::Array, _y::Array, _ganma::Array)
+    function makeSignedDistance(_x::Array, _y::Array, _ganma::Array, multi_or_normal=1)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
-        Threads.@threads for indexI = 1:length(_y)
-            for indexJ = 1:length(_x)
-                return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+        if multi_or_normal==1
+            Threads.@threads for indexI = 1:length(_y)
+                for indexJ = 1:length(_x)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+                end
+            end
+        else
+            for indexI = 1:length(_y)
+                for indexJ = 1:length(_x)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+                end
             end
         end
         return return_value
     end
-    precompile(makeSignedDistance, (Array, Array, Array))
+    precompile(makeSignedDistance, (Array, Array, Array, Int))
 
-    
+    function P(_phi, _x, _y, N, L, _ganma, para_or_serialize_process)
+        _phi = makeSignedDistance(_x, _y, _ganma, para_or_serialize_process)
+        signining_field(_phi, N+1, L, para_or_serialize_process)
+        return _phi
+    end
+    precompile(P, (Array, Array, Array, Int, Float64, Array, Int))
+
     """
         N: field splits
         para_or_serialize_process: starting threads numeric
         _csv_datafile: CSV Data files
-        
+        完全に論文用、実行速度計測、描画
     """
     function computing_bench(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing) # FIXME: types
         csvfile_name = match(r"\./test/mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
@@ -111,20 +125,29 @@ module Sdistance
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             # println("csv data size: ", size(_ganma))
-            # runtime_ave = 0
-            # exetimes = 3
+            runtime = 0
+            exetimes = 3
 
             # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
-            # for i = 1:exetimes
-                _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma)
-                @timeit tmr "signining_field" signining_field(_phi, N+1, L)
+            for i = 1:exetimes
+                # _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma, para_or_serialize_process)
+                # @timeit tmr "signining_field" signining_field(_phi, N+1, L, para_or_serialize_process)
+                _phi, time = @timed P(_phi, _x, _y, N, L, _ganma, para_or_serialize_process)
+                runtime += time
+            end
+            # show(tmr) # the @timeit information on CLI
+            # tmpname = csvfile_name[1]
+            # if para_or_serialize_process ==1
+            #     filename = "$tmpname"*"_multicurves_multiprocess_"*"$(N)"
+            #     draw(_x, _y, _phi,filename)
+            # else
+            #     _filename = "$tmpname"*"_multicurves_normalprocess_"*"$(N)"
+            #     draw(_x, _y, _phi,_filename)
             # end
-            show(tmr) # the @timeit information on CLI
-            draw(_x, _y, _phi,csvfile_name[1])
 
-            # return (runtime_ave / exetimes
-            DataFrame(_phi, :auto) |> CSV.write("./test/result/hoge.csv", header=false)
-            return _phi
+            return (runtime / exetimes)
+            # DataFrame(_phi, :auto) |> CSV.write("./test/result/hoge.csv", header=false)
+            # return _phi
         
         #=== case: simple circle ===#
         else
@@ -145,20 +168,33 @@ module Sdistance
             # scatter(_ganma[:,1], _ganma[:,2], markersize = 2)
             # savefig("test/image/the_data.png")
 
-            # runtime_ave = 0
-            # exetimes = 3
+            runtime = 0
+            exetimes = 3
 
-            # for i = 1:exetimes
+            for i = 1:exetimes
                 if para_or_serialize_process == 1
-                    _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+                    # _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+                    _phi,time = @timed create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+                    runtime += time
                 else
-                    _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _ganma) # serialize processing
+                    # _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _ganma) # serialize processing
+                    _phi,time = @timed create_signed_distance(_x, _y, _ganma) # serialize processing
+                    runtime += time
                 end
+            end
+            # show(tmr) # the @timeit information on CLI
+            
+                # tmpname = csvfile_name[1]
+            # if para_or_serialize_process ==1
+            #     filename = "$tmpname"*"_jordancurve_multiprocess_"*"$(N)"
+            #     draw(_x, _y, _phi,filename)
+            # else
+            #     _filename = "$tmpname"*"_jordancurve_normalprocess_"*"$(N)"
+            #     draw(_x, _y, _phi,_filename)
             # end
-            show(tmr) # the @timeit information on CLI
-            draw(_x, _y, _phi, csvfile_name[1])
-            # return (runtime_ave / exetimes)
-            return _phi
+            # return _phi
+
+            return (runtime / exetimes)
         end
     end
 
