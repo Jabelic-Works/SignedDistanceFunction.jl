@@ -35,8 +35,8 @@ assert(){
     fi
 }
 
-assert 200 1 # 並列処理
-assert 200 2 # 並列処理
+assert 100 1 # 並列処理
+# assert 100 2 # 直列処理
 # # assert 100 2
 # # assert 1000 1
 # # assert 1000 2

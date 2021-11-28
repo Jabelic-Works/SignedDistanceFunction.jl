@@ -15,11 +15,11 @@ module Floodfill
             7. Continue looping until Q is exhausted.
             8. Return.
         ===#
-    function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index, indexI=nothing, multi_or_normal=1)
+    function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index,  multi_or_normal,indexI=nothing)
         # 始点は平面全体の縁を一周すべき
         # -> 閉曲線が2箇所で境界に接していたりすると、その領域のみで色塗り(符合つけ)が終わってしまうから。
         point_que = [(beginx, beginy)]
-        closed_zero = L*2*1.42/N
+        closed_zero = L*2*1.42/(N+1)
         # println("The lattice size: ",size(_phi), " the beginning point: ", point_que)
         if indexI !== nothing
             bounse_x = size(_phi[:, 1])[1]+1
@@ -71,25 +71,27 @@ module Floodfill
             filled_index += 1
         end
         # end
-        _phi = assign_signs(_phi, STEP, N, L, multi_or_normal)
+        if STEP == 2
+            _phi = assign_signs(_phi, STEP, N, L, multi_or_normal)
+        end
         return _phi, filled_index#, filled
     end
     precompile(floodfill, (Array, Int, Float64, Array, Int, Int, Int, Int, Int))
 
     ## 今のところSTEP=2の場合のみ対応
-    function assign_signs(_phi, STEP, N, L, multi_or_normal=1)
+    function assign_signs(_phi, STEP, N, L, multi_or_normal)
         # 閉曲線内部が「-」である。デフォが
         # Int((N-1)/100) # 再帰回数
         loops = Int(log2(STEP))
         println(loops)
         steps_signed_grid = STEP
         steps_unsigned_grid = Int(STEP/2)
-        while loops > 0
-            if STEP == 1
-                println("assign_signs")
-            else
-                println("assign_signs__")
-                if multi_or_normal==1
+        if multi_or_normal==1
+            while loops > 0
+                if STEP == 1
+                    println("assign_signs")
+                else
+                    println("assign_signs__")
                     Threads.@threads for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                         for j = 1:steps_signed_grid:length(_phi[:, 1])
                             # if j != length(_phi[:, 1]) # ケツでない
@@ -131,7 +133,17 @@ module Floodfill
                             end
                         end
                     end
+                end
+                steps_signed_grid = steps_signed_grid >= 4 ? deepcopy(Int(steps_signed_grid/2)) : undef
+                steps_unsigned_grid = steps_unsigned_grid >= 2 ? deepcopy(Int(steps_unsigned_grid/2)) : undef
+                loops -= 1
+            end
+        else
+            while loops > 0
+                if STEP == 1
+                    println("assign_signs")
                 else
+                    println("assign_signs__")
                     for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                         for j = 1:steps_signed_grid:length(_phi[:, 1])
                             # if j != length(_phi[:, 1]) # ケツでない
@@ -174,11 +186,12 @@ module Floodfill
                         end
                     end
                 end
-            end
             steps_signed_grid = steps_signed_grid >= 4 ? deepcopy(Int(steps_signed_grid/2)) : undef
             steps_unsigned_grid = steps_unsigned_grid >= 2 ? deepcopy(Int(steps_unsigned_grid/2)) : undef
             loops -= 1
+            end
         end
+
         return _phi
     end
 
@@ -194,7 +207,7 @@ module Floodfill
             beginx = 1;beginy = 1
             indexI = 1
             # _phi = floodfill(_phi, N, L,filled,  beginx, beginy)
-            _phi = floodfill(_phi,N,L, filled, beginx, beginy,filled_index, indexI, multi_or_normal)
+            _phi = floodfill(_phi,N,L, filled, beginx, beginy,filled_index,multi_or_normal, indexI)
             # println("filled_index : ",filled_index)
         # end
         return _phi

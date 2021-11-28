@@ -72,9 +72,9 @@ If you check the mock data(e.g. interface.csv in root)
 
 `$ julia `  
 
-`> _ganma = readdlm("src/infinity_shaped.csv", ',', Float64)`
+`> _gamma = readdlm("src/infinity_shaped.csv", ',', Float64)`
 
 `> using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools`  
 
-`> plot(_ganma[:, 1], _ganma[:, 2], st=:scatter, title="infty_shape", markersize=2)`
+`> plot(_gamma[:, 1], _gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)`
 

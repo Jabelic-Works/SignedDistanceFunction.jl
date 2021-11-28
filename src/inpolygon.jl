@@ -17,17 +17,17 @@ module Inpolygon
     precompile(distanceToCurve, (Float64, Float64, Array))
 
     # Normal processing, a jordan curve.
-    function create_signed_distance(_x::Array, _y::Array, _ganma::Array)
+    function create_signed_distance(_x::Array, _y::Array, _gamma::Array)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         for indexI = 1:length(_y)
             for indexJ = 1:length(_x)
-                sdist = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+                sdist = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
                 # ganmaが閉曲線でないと成立しない。
                 # omegaとの境界線上はErrorになる
-                if Point(_x[indexJ], _y[indexI]) in [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])]
+                if Point(_x[indexJ], _y[indexI]) in [Point(_gamma[i,1], _gamma[i,2]) for i = 1:length(_gamma[:,1])]
                     sdist = 0
-                elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
+                elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_gamma[i,1], _gamma[i,2]) for i = 1:length(_gamma[:,1])])
                     sdist = (-1) * sdist
                 end
                 return_value[indexI,indexJ] = sdist
@@ -38,15 +38,15 @@ module Inpolygon
     precompile(create_signed_distance, (Array, Array, Array))
     
     # Multi processing, a jordan curve.
-    function create_signed_distance_multiprocess(_x::Array, _y::Array, _ganma::Array)
+    function create_signed_distance_multiprocess(_x::Array, _y::Array, _gamma::Array)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         Threads.@threads for indexI = 1:length(_y)
             for indexJ = 1:length(_x)
-                sdist = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
-                if Point(_x[indexJ], _y[indexI]) in [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])]
+                sdist = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
+                if Point(_x[indexJ], _y[indexI]) in [Point(_gamma[i,1], _gamma[i,2]) for i = 1:length(_gamma[:,1])]
                     sdist = 0
-                elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_ganma[i,1], _ganma[i,2]) for i = 1:length(_ganma[:,1])])
+                elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_gamma[i,1], _gamma[i,2]) for i = 1:length(_gamma[:,1])])
                     sdist = (-1) * sdist
                 end
                 return_value[indexI,indexJ] = sdist

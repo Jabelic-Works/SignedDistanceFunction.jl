@@ -13,10 +13,10 @@ module Sdistance
     """
         ジョルダン閉曲線であるかどうか
     """
-    function is_jordan_curve(_ganma::Array)
-        progression_of_differences = [sqrt((_ganma[i,1] - _ganma[i + 1,1])^2 + (_ganma[i,2] - _ganma[i + 1,2])^2) for i = 1:(length(_ganma[:, 1]) - 1)]
+    function is_jordan_curve(_gamma::Array)
+        progression_of_differences = [sqrt((_gamma[i,1] - _gamma[i + 1,1])^2 + (_gamma[i,2] - _gamma[i + 1,2])^2) for i = 1:(length(_gamma[:, 1]) - 1)]
         ave_distance = sum(progression_of_differences) / length(progression_of_differences)
-        if ave_distance * 2 < abs(_ganma[1,1] - _ganma[length(_ganma[:,1]),1])
+        if ave_distance * 2 < abs(_gamma[1,1] - _gamma[length(_gamma[:,1]),1])
             return true
         else
             return false
@@ -50,7 +50,7 @@ module Sdistance
                 return_value[i * 2, :] = (array[i, :] .+ array[i + 1, :]) ./ 2
             end
             return_value[x * 2 - 1, :] = array[x, :]
-            return_value[x * 2, :] = array[1, :] # Note: _ganma += _ganma's head line coz boundary condition. size: (N+1,2)
+            return_value[x * 2, :] = array[1, :] # Note: _gamma += _gamma's head line coz boundary condition. size: (N+1,2)
         end
         return return_value
     end
@@ -72,19 +72,19 @@ module Sdistance
     precompile(interpolation, (Array, Int, Bool))
     
     # Multi processing, multi jordan curves.
-    function makeSignedDistance(_x::Array, _y::Array, _ganma::Array, multi_or_normal=1)
+    function makeSignedDistance(_x::Array, _y::Array, _gamma::Array, multi_or_normal=1)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         if multi_or_normal==1
             Threads.@threads for indexI = 1:length(_y)
                 for indexJ = 1:length(_x)
-                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
                 end
             end
         else
             for indexI = 1:length(_y)
                 for indexJ = 1:length(_x)
-                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _ganma)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
                 end
             end
         end
@@ -92,8 +92,8 @@ module Sdistance
     end
     precompile(makeSignedDistance, (Array, Array, Array, Int))
 
-    function P(_phi, _x, _y, N, L, _ganma, para_or_serialize_process)
-        _phi = makeSignedDistance(_x, _y, _ganma, para_or_serialize_process)
+    function P(_phi, _x, _y, N, L, _gamma, para_or_serialize_process)
+        _phi = makeSignedDistance(_x, _y, _gamma, para_or_serialize_process)
         signining_field(_phi, N+1, L, para_or_serialize_process)
         return _phi
     end
@@ -117,33 +117,34 @@ module Sdistance
             # println("\nThe number of threads started: ", Threads.nthreads())
             
             # ganma曲線 のデータの読み込み
-            _ganma = readdlm(_csv_datafile, ',', Float64)
-            _ganma = interpolation(_ganma, 2 + round(Int,N/100), true)
+            _gamma = readdlm(_csv_datafile, ',', Float64)
+            _gamma = interpolation(_gamma, 2 + round(Int,N/100), true)
 
-            # scatter(_ganma[:,1], _ganma[:,2],markersize = 2)
+            # scatter(_gamma[:,1], _gamma[:,2],markersize = 2)
             # savefig("test/image/the_data.png")
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
-            # println("csv data size: ", size(_ganma))
+            # println("csv data size: ", size(_gamma))
             runtime = 0
             exetimes = 3
 
             # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
-            for i = 1:exetimes
-                # _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _ganma, para_or_serialize_process)
+            # for i = 1:exetimes
+                # _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _gamma, para_or_serialize_process)
                 # @timeit tmr "signining_field" signining_field(_phi, N+1, L, para_or_serialize_process)
-                _phi, time = @timed P(_phi, _x, _y, N, L, _ganma, para_or_serialize_process)
+                _phi, time = @timed P(_phi, _x, _y, N, L, _gamma, para_or_serialize_process)
                 runtime += time
-            end
-            # show(tmr) # the @timeit information on CLI
-            # tmpname = csvfile_name[1]
-            # if para_or_serialize_process ==1
-            #     filename = "$tmpname"*"_multicurves_multiprocess_"*"$(N)"
-            #     draw(_x, _y, _phi,filename)
-            # else
-            #     _filename = "$tmpname"*"_multicurves_normalprocess_"*"$(N)"
-            #     draw(_x, _y, _phi,_filename)
             # end
+            # show(tmr) # the @timeit information on CLI
+            
+            tmpname = csvfile_name[1]
+            if para_or_serialize_process ==1
+                filename = "$tmpname"*"_multicurves_multiprocess_"*"$(N)"
+                draw(_x, _y, _phi,filename)
+            else
+                _filename = "$tmpname"*"_multicurves_normalprocess_"*"$(N)"
+                draw(_x, _y, _phi,_filename)
+            end
 
             return (runtime / exetimes)
             # DataFrame(_phi, :auto) |> CSV.write("./test/result/hoge.csv", header=false)
@@ -157,42 +158,42 @@ module Sdistance
             # println("\nThe number of threads started: ", Threads.nthreads())
             
             # ganma曲線 のデータの読み込み
-            _ganma = readdlm(_csv_datafile, ',', Float64)
+            _gamma = readdlm(_csv_datafile, ',', Float64)
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             
-            is_jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
+            is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
 
-            _ganma = interpolation(_ganma, 2, false)
-            # println("csv data size: ", size(_ganma))
-            # scatter(_ganma[:,1], _ganma[:,2], markersize = 2)
+            _gamma = interpolation(_gamma, 2, false)
+            # println("csv data size: ", size(_gamma))
+            # scatter(_gamma[:,1], _gamma[:,2], markersize = 2)
             # savefig("test/image/the_data.png")
 
             runtime = 0
             exetimes = 3
 
-            for i = 1:exetimes
+            # for i = 1:exetimes
                 if para_or_serialize_process == 1
-                    # _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
-                    _phi,time = @timed create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+                    # _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
+                    _phi,time = @timed create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
                     runtime += time
                 else
-                    # _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _ganma) # serialize processing
-                    _phi,time = @timed create_signed_distance(_x, _y, _ganma) # serialize processing
+                    # _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _gamma) # serialize processing
+                    _phi,time = @timed create_signed_distance(_x, _y, _gamma) # serialize processing
                     runtime += time
                 end
-            end
+            # end
             # show(tmr) # the @timeit information on CLI
             
-                # tmpname = csvfile_name[1]
-            # if para_or_serialize_process ==1
-            #     filename = "$tmpname"*"_jordancurve_multiprocess_"*"$(N)"
-            #     draw(_x, _y, _phi,filename)
-            # else
-            #     _filename = "$tmpname"*"_jordancurve_normalprocess_"*"$(N)"
-            #     draw(_x, _y, _phi,_filename)
-            # end
-            # return _phi
+            tmpname = csvfile_name[1]
+            if para_or_serialize_process ==1
+                filename = "$tmpname"*"_jordancurve_multiprocess_"*"$(N)"
+                draw(_x, _y, _phi,filename)
+            else
+                _filename = "$tmpname"*"_jordancurve_normalprocess_"*"$(N)"
+                draw(_x, _y, _phi,_filename)
+            end
+            return _phi
 
             return (runtime / exetimes)
         end
@@ -209,34 +210,34 @@ module Sdistance
         if curves=="multi"
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
             # create the computational domain
-            L = 1.0
+            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
-            _ganma = readdlm(csv_datafile, ',', Float64)
-            _ganma = interpolation(_ganma, 3, true)
-            println("multi curves\ncsv data size: ", size(_ganma))
+            _gamma = readdlm(csv_datafile, ',', Float64)
+            _gamma = interpolation(_gamma, 3, true)
+            println("multi curves\ncsv data size: ", size(_gamma))
 
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
 
-            _phi = makeSignedDistance(_x, _y, _ganma)
+            _phi = makeSignedDistance(_x, _y, _gamma)
             signining_field(_phi, N+1, L)
             return _phi
         
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.0
+            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
-            _ganma = readdlm(csv_datafile, ',', Float64)
+            _gamma = readdlm(csv_datafile, ',', Float64)
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             
-            is_jordan_curve(_ganma) # TODO: 丁寧なError messageを付与
-            _ganma = interpolation(_ganma, 2, false)
-            println("the jordan curve\ncsv data size: ", size(_ganma))
-            _phi = create_signed_distance_multiprocess(_x, _y, _ganma) # parallel processing
+            is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
+            _gamma = interpolation(_gamma, 2, false)
+            println("the jordan curve\ncsv data size: ", size(_gamma))
+            _phi = create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
             return _phi
         end
     end
