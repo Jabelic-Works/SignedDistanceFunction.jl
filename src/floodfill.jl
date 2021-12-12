@@ -44,7 +44,7 @@ module Floodfill
             end
             # 左
             if bounse_min_y < _y-STEP < bounse_y && !((_x, _y-STEP) in filled) && abs(_phi[_x, _y-STEP]) > closed_zero
-                if !((_x, _y-STEP) in point_que )
+                if !((_x, _y-STEP) in point_que)
                     append!(point_que,[(_x, _y-STEP)]) # 左側の格子点をqueueに積む
                 end
             end
@@ -65,7 +65,7 @@ module Floodfill
             # append!(filled, [point_que[1]])
             filled[filled_index] = point_que[1]
             if _phi[_x, _y] < 0
-                _phi[_x, _y]　*= (-1)
+                _phi[_x, _y] *= (-1)
             end
             popfirst!(point_que)
             filled_index += 1
