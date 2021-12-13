@@ -2,9 +2,11 @@ using DataFrames, CSV
 include("../src/sdistance.jl") # 必ずダブルクオーテーション
 include("../src/draw.jl") 
 include("../src/LevelSet.jl") 
-import .Sdistance:computing_bench #,signedDistance2D
+import .Sdistance:computing_bench,benchmark_multicurves_floodfill #,signedDistance2D
  using .LevelSet
 import .Draw:parformance_graphs
+
+@enum ExecuteKinds _multicurves _singlecurve _singlecurve_floodfill
 
 function _exe()
     # _execute_times = ARGS[1] ? parse(Int, ARGS[1]) : 3
@@ -19,8 +21,10 @@ function _exe()
         # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv")
         # _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/interface.csv", "multi")
         # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv", "multi")
-        _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/multiple_curves.csv", "multi")
-        _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/multiple_curves.csv", "multi")
+        # _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv", "multi")
+        runtime[i+1,1] = benchmark_multicurves_floodfill(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv")
+        runtime[i+1,2] = benchmark_multicurves_floodfill(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv",false)
+        # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv", "multi", multiprocess=false)
         
         # _phi, runtime[i+1,1] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i)
         # _phi, runtime[i+1,2] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i, "multi")
@@ -32,6 +36,7 @@ function _exe()
     parformance_graphs(N, runtime, "multiple_curves", ["Parallel processing","Normal processing"])
     # parformance_graphs(N, runtime, "interface", ["the jordan curve","multi curves"])
 end
+
 
 _exe()
 
@@ -63,5 +68,9 @@ signedDistance2D, 300+200i, ARG = 3, interface, multi-thread only. jordan_curve(
 1-3-500, multi_curves, Floodfill
 [100, 300, 500][2.400877896 2.741995989; 38.038218511 92.339324457; 476.64809553 833.91326708]
 32
+
+1-3-500, multi_curves, Floodfill
+[100, 300, 500]
+[0.5009443733333333 0.891537955; 12.114947880666668 28.633708910333336; 133.44351538533337 261.82990826500003]
 
  ==#
