@@ -4,7 +4,7 @@ module Sdistance
     include("./floodfill.jl")
     include("./utils/utils.jl")
     import .Draw:draw
-    import .Inpolygon:create_signed_distance_multiprocess,create_signed_distance,distanceToCurve
+    import .Inpolygon:create_signed_distance_function_multiprocess,create_signed_distance_function,distanceToCurve
     import .Floodfill:signining_field
     import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools,TimerOutputs
     import .Utils:is_jordan_curve,interpolation
@@ -39,13 +39,42 @@ module Sdistance
     end
     precompile(P, (Array, Array, Array, Int, Float64, Array, Int))
 
+
+
+    function benchmark_multi_floodfill(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing)
+        # create the computational domain
+        L = 1.1
+        _phi = zeros(Float64, N + 1, N + 1)
+        
+        # ganma曲線 のデータの読み込み
+        _gamma = readdlm(_csv_datafile, ',', Float64)
+        _gamma = interpolation(_gamma, 2 + round(Int,N/100), true)
+        _x = [i for i = -L:2 * L / N:L] # len:N+1 
+        _y = [i for i = -L:2 * L / N:L] # len:N+1
+        runtime = 0
+        exetimes = 3
+        _phi, time = @timed P(_phi, _x, _y, N, L, _gamma, para_or_serialize_process)
+        runtime += time
+        tmpname = csvfile_name[1]
+        if para_or_serialize_process ==1
+            filename = "$tmpname"*"_multicurves_multiprocess_"*"$(N)"
+            draw(_x, _y, _phi,filename)
+        else
+            _filename = "$tmpname"*"_multicurves_normalprocess_"*"$(N)"
+            draw(_x, _y, _phi,_filename)
+        end
+
+        return (runtime / exetimes)
+    end
+
+
     """
         N: field splits
         para_or_serialize_process: starting threads numeric
         _csv_datafile: CSV Data files
         完全に論文用、実行速度計測、描画
     """
-    function computing_bench(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing) # FIXME: types
+    function computing_bench(N::Int=1000, para_or_serialize_process::Int=1, _csv_datafile::String="./interface.csv", circle_n::Union{String, Nothing} = nothing)
         csvfile_name = match(r"\./test/mock_csv_data/(.*)",_csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
         if circle_n=="multi"
@@ -114,12 +143,12 @@ module Sdistance
 
             # for i = 1:exetimes
                 if para_or_serialize_process == 1
-                    # _phi = @timeit tmr "create_signed_distance_multiprocess" create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
-                    _phi,time = @timed create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
+                    # _phi = @timeit tmr "create_signed_distance_function_multiprocess" create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
+                    _phi,time = @timed create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
                     runtime += time
                 else
-                    # _phi = @timeit tmr "create_signed_distance" create_signed_distance(_x, _y, _gamma) # serialize processing
-                    _phi,time = @timed create_signed_distance(_x, _y, _gamma) # serialize processing
+                    # _phi = @timeit tmr "create_signed_distance_function" create_signed_distance_function(_x, _y, _gamma) # serialize processing
+                    _phi,time = @timed create_signed_distance_function(_x, _y, _gamma) # serialize processing
                     runtime += time
                 end
             # end
@@ -148,7 +177,7 @@ module Sdistance
     function signedDistance2D(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}=nothing)
         #===  case: double circle ===#
         if curves=="multi"
-            # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
+            # こちらの場合はfloodfillで符号をつけるのでNは250欲しい
             # create the computational domain
             L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
@@ -177,7 +206,7 @@ module Sdistance
             is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
             _gamma = interpolation(_gamma, 2, false)
             println("the jordan curve\ncsv data size: ", size(_gamma))
-            _phi = create_signed_distance_multiprocess(_x, _y, _gamma) # parallel processing
+            _phi = create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
             return _phi
         end
     end
