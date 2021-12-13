@@ -16,6 +16,28 @@ module Inpolygon
     end
     precompile(distanceToCurve, (Float64, Float64, Array))
 
+    # Multi processing, multi jordan curves.
+    function create_distance_function(_x::Array, _y::Array, _gamma::Array, multi_or_normal=1)
+        x_length = length(_x[:,1])
+        return_value = zeros(Float64, x_length, x_length)
+        if multi_or_normal==1
+            Threads.@threads for indexI = 1:length(_y)
+                for indexJ = 1:length(_x)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
+                end
+            end
+        else
+            for indexI = 1:length(_y)
+                for indexJ = 1:length(_x)
+                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
+                end
+            end
+        end
+        return return_value
+    end
+    precompile(create_distance_function, (Array, Array, Array, Int))
+
+
     # Normal processing, a jordan curve.
     function create_signed_distance_function(_x::Array, _y::Array, _gamma::Array)
         x_length = length(_x[:,1])
@@ -55,6 +77,7 @@ module Inpolygon
         return return_value
     end
     precompile(create_signed_distance_function_multiprocess, (Array, Array, Array))
+    
 
-    export create_signed_distance_function_multiprocess,create_signed_distance_function,distanceToCurve
+    export create_signed_distance_function_multiprocess,create_signed_distance_function,distanceToCurve, create_distance_function
 end
