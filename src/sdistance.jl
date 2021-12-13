@@ -12,7 +12,7 @@ module Sdistance
     const tmr = TimerOutput();
     
     # Multi processing, multi jordan curves.
-    function makeSignedDistance(_x::Array, _y::Array, _gamma::Array, multi_or_normal=1)
+    function create_distance_function(_x::Array, _y::Array, _gamma::Array, multi_or_normal=1)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
         if multi_or_normal==1
@@ -30,10 +30,10 @@ module Sdistance
         end
         return return_value
     end
-    precompile(makeSignedDistance, (Array, Array, Array, Int))
+    precompile(create_distance_function, (Array, Array, Array, Int))
 
     function P(_phi, _x, _y, N, L, _gamma, para_or_serialize_process)
-        _phi = makeSignedDistance(_x, _y, _gamma, para_or_serialize_process)
+        _phi = create_distance_function(_x, _y, _gamma, para_or_serialize_process)
         signining_field(_phi, N+1, L, para_or_serialize_process)
         return _phi
     end
@@ -99,7 +99,7 @@ module Sdistance
 
             # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
             # for i = 1:exetimes
-                # _phi = @timeit tmr "makeSignedDistance" makeSignedDistance(_x, _y, _gamma, para_or_serialize_process)
+                # _phi = @timeit tmr "create_distance_function" create_distance_function(_x, _y, _gamma, para_or_serialize_process)
                 # @timeit tmr "signining_field" signining_field(_phi, N+1, L, para_or_serialize_process)
                 _phi, time = @timed P(_phi, _x, _y, N, L, _gamma, para_or_serialize_process)
                 runtime += time
@@ -189,7 +189,7 @@ module Sdistance
             _x = [i for i = -L:2 * L / N:L] # len:N+1 
             _y = [i for i = -L:2 * L / N:L] # len:N+1
 
-            _phi = makeSignedDistance(_x, _y, _gamma)
+            _phi = create_distance_function(_x, _y, _gamma)
             signining_field(_phi, N+1, L)
             return _phi
         
