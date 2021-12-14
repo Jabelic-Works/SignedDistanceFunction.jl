@@ -22,9 +22,9 @@ module Sdistance
 
     """
         benchmark用のためのmethod
-        - multicurvesの時のmultiprocessとsingleprocessの比較
+        - floodfill使用時のmultiprocessとsingleprocessの比較
     """
-    function benchmark_multicurves_floodfill(N::Int=1000, _csv_datafile::String="./interface.csv", multiprocess::Bool = true)
+    function benchmark_floodfill(N::Int=1000, _csv_datafile::String="./interface.csv", multiprocess::Bool = true)
         exetimes = 3
         runtime = 0
         if multiprocess
@@ -43,6 +43,28 @@ module Sdistance
     end
 
 
+    """
+    benchmark用のためのmethod
+    - single curveの時のisinsideメソッド使用時ののmultiprocessとsingleprocessの比較
+    """
+    function benchmark_singlecurves_isinside(N::Int=1000, _csv_datafile::String="./interface.csv", multiprocess::Bool = true)
+        exetimes = 3
+        runtime = 0
+        if multiprocess
+            for i = 1:exetimes
+                _phi, time = @timed signedDistance2D(_csv_datafile,N,"single")
+                runtime += time
+            end
+        else
+            for i = 1:exetimes
+                _phi, time = @timed signedDistance2D_singleprocess(_csv_datafile,N,"single")
+                runtime += time
+            end
+        end
+
+        return (runtime / exetimes)
+    end
+    
 
     """
         N: field splits
@@ -217,10 +239,10 @@ module Sdistance
             is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
             _gamma = interpolation(_gamma, 2, false)
             println("the jordan curve\ncsv data size: ", size(_gamma))
-            _phi = create_signed_distance_function(_x, _y, _gamma) # parallel processing
+            _phi = create_signed_distance_function(_x, _y, _gamma) # single processing
             return _phi
         end
     end
     # precompile(signedDistance2D,(Union{String, DataFrame}, Int, Union{String, Nothing}))
-    export signedDistance2D ,computing_bench, benchmark_multicurves_floodfill
+    export signedDistance2D ,computing_bench, benchmark_floodfill,benchmark_singlecurves_isinside
 end

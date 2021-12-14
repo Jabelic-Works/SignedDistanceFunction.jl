@@ -28,7 +28,7 @@ module DistanceFunction
                 end
             end
         else
-            Threads.@threads for indexI = 1:length(_y)
+            for indexI = 1:length(_y)
                 for indexJ = 1:length(_x)
                     return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
                 end
@@ -41,17 +41,9 @@ module DistanceFunction
     function create_distance_function(_x::Array, _y::Array, _gamma::Array)
         x_length = length(_x[:,1])
         return_value = zeros(Float64, x_length, x_length)
-        if JULIA_MULTI_PROCESS
-            for indexI = 1:length(_y)
-                for indexJ = 1:length(_x)
-                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
-                end
-            end
-        else
-            for indexI = 1:length(_y)
-                for indexJ = 1:length(_x)
-                    return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
-                end
+        for indexI = 1:length(_y)
+            for indexJ = 1:length(_x)
+                return_value[indexI,indexJ] = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
             end
         end
         return return_value
