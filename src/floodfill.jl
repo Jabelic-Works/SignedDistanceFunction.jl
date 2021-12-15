@@ -1,4 +1,5 @@
 module Floodfill
+include("./environments.jl")
         #=== 
         Flood-fill (node):
             1. Set Q to the empty queue or stack.
@@ -15,7 +16,7 @@ module Floodfill
             7. Continue looping until Q is exhausted.
             8. Return.
         ===#
-    function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index,  multi_or_normal,indexI=nothing)
+    function floodfill(_phi::Array,N,L, filled, beginx, beginy,filled_index,indexI=nothing, multiprocess=true)
         # 始点は平面全体の縁を一周すべき
         # -> 閉曲線が2箇所で境界に接していたりすると、その領域のみで色塗り(符合つけ)が終わってしまうから。
         point_que = [(beginx, beginy)]
@@ -72,21 +73,22 @@ module Floodfill
         end
         # end
         if STEP == 2
-            _phi = assign_signs(_phi, STEP, N, L, multi_or_normal)
+            _phi = assign_signs(_phi, STEP, N, L,multiprocess)
         end
         return _phi, filled_index#, filled
     end
     precompile(floodfill, (Array, Int, Float64, Array, Int, Int, Int, Int, Int))
 
     ## 今のところSTEP=2の場合のみ対応
-    function assign_signs(_phi, STEP, N, L, multi_or_normal)
+    function assign_signs(_phi, STEP, N, L,multiprocess=true)
         # 閉曲線内部が「-」である。デフォが
         # Int((N-1)/100) # 再帰回数
         loops = Int(log2(STEP))
         println(loops)
         steps_signed_grid = STEP
         steps_unsigned_grid = Int(STEP/2)
-        if multi_or_normal==1
+        # if JULIA_MULTI_PROCESS
+        if multiprocess
             while loops > 0
                 if STEP == 1
                     println("assign_signs")
@@ -197,19 +199,14 @@ module Floodfill
 
 
 
-    function signining_field(_phi::Array,N,L ,multi_or_normal=1)
+    function signining_field(_phi::Array,N,L, multiprocess=true)
         println("floodfill")
         _phi .*= (-1)
         filled = Array{Tuple{Int64,Int64}}(undef,N*N) # N=100だと12倍速! N=200だと60倍速!
         filled_index = 1
-        # for i = 1:30:N-1
-            # beginx = 1;beginy = i
-            beginx = 1;beginy = 1
-            indexI = 1
-            # _phi = floodfill(_phi, N, L,filled,  beginx, beginy)
-            _phi = floodfill(_phi,N,L, filled, beginx, beginy,filled_index,multi_or_normal, indexI)
-            # println("filled_index : ",filled_index)
-        # end
+        beginx = 1;beginy = 1
+        indexI = 1
+        _phi = floodfill(_phi,N,L, filled, beginx, beginy,filled_index, indexI, multiprocess)
         return _phi
     end
     precompile(signining_field, (Array, Int, Float64))
