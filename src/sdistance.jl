@@ -112,9 +112,9 @@ module Sdistance
                 draw(_x, _y, _phi,_filename)
             end
 
-            return (runtime / exetimes)
-            # DataFrame(_phi, :auto) |> CSV.write("./test/result/hoge.csv", header=false)
-            # return _phi
+            # return (runtime / exetimes)
+            # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result.csv", header=false)
+            return _phi
         
         #=== case: simple circle ===#
         else
@@ -161,7 +161,7 @@ module Sdistance
             end
             return _phi
 
-            return (runtime / exetimes)
+            # return (runtime / exetimes)
         end
     end
 
