@@ -37,6 +37,13 @@ include("./environments.jl")
         while length(point_que)>0
             _x = copy(point_que[1][1])
             _y = copy(point_que[1][2])
+            # 現在の格子点の符合を反転させる
+            if _phi[_x, _y] < 0
+                _phi[_x, _y] *= (-1)
+            end
+            filled[filled_index] = point_que[1]
+            popfirst!(point_que)
+            filled_index += 1
             # 下
             if bounse_min_x < _x-STEP < bounse_x && !((_x-STEP, _y) in filled) && abs(_phi[_x-STEP, _y]) > closed_zero
                 if !((_x-STEP, _y) in point_que)
@@ -61,15 +68,6 @@ include("./environments.jl")
                     append!(point_que,[(_x, _y+STEP)]) # 右側の格子点をqueueに積む
                 end
             end
-
-            # 現在の格子点の符合を反転させる
-            # append!(filled, [point_que[1]])
-            filled[filled_index] = point_que[1]
-            if _phi[_x, _y] < 0
-                _phi[_x, _y] *= (-1)
-            end
-            popfirst!(point_que)
-            filled_index += 1
         end
         # end
         if STEP == 2
@@ -99,7 +97,7 @@ include("./environments.jl")
                             # if j != length(_phi[:, 1]) # ケツでない
                             if j+steps_signed_grid <= length(_phi[:, 1])&&j+steps_unsigned_grid <= length(_phi[:, 1])
                                 # 掛けたらマイナス->境界を示す. かつ 両方の距離を足したらgrid点の間の2倍の距離になる(数値誤差を考慮?できてる?)
-                                if _phi[i, j]*_phi[i, j+steps_signed_grid] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i, j+steps_signed_grid]) - 2*L/N) <= 0.01 # 境界
+                                if _phi[i, j]*_phi[i, j+steps_signed_grid] < 0
                                     if abs(_phi[i, j]) < abs(_phi[i, j+steps_signed_grid]) # jの方が近い
                                         if _phi[i, j] < 0 # jが内
                                             _phi[i, j+steps_unsigned_grid] *= (-1) # 外側にある
@@ -119,7 +117,7 @@ include("./environments.jl")
                         for i = 1:steps_signed_grid:length(_phi[:, 1])
                             # if i != length(_phi[:, 1]) # ケツでない
                             if i+steps_signed_grid <= length(_phi[:, 1]) && i+steps_unsigned_grid <= length(_phi[:, 1])
-                                if _phi[i, j]*_phi[i+steps_signed_grid, j] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i+steps_signed_grid, j]) - 2*L/N) <= 0.01 # 境界
+                                if _phi[i, j]*_phi[i+steps_signed_grid, j] < 0
                                     if abs(_phi[i, j]) < abs(_phi[i+steps_signed_grid, j]) # jの方が近い
                                         if _phi[i, j] < 0 # jが内
                                             _phi[i+steps_unsigned_grid, j] *= (-1)
@@ -151,7 +149,7 @@ include("./environments.jl")
                             # if j != length(_phi[:, 1]) # ケツでない
                             if j+steps_signed_grid <= length(_phi[:, 1])&&j+steps_unsigned_grid <= length(_phi[:, 1])
                                 # 掛けたらマイナス->境界を示す. かつ 両方の距離を足したらgrid点の間の2倍の距離になる(数値誤差を考慮?できてる?)
-                                if _phi[i, j]*_phi[i, j+steps_signed_grid] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i, j+steps_signed_grid]) - 2*L/N) <= 0.01 # 境界
+                                if _phi[i, j]*_phi[i, j+steps_signed_grid] < 0 
                                     if abs(_phi[i, j]) < abs(_phi[i, j+steps_signed_grid]) # jの方が近い
                                         if _phi[i, j] < 0 # jが内
                                             _phi[i, j+steps_unsigned_grid] *= (-1) # 外側にある
@@ -171,7 +169,7 @@ include("./environments.jl")
                         for i = 1:steps_signed_grid:length(_phi[:, 1])
                             # if i != length(_phi[:, 1]) # ケツでない
                             if i+steps_signed_grid <= length(_phi[:, 1]) && i+steps_unsigned_grid <= length(_phi[:, 1])
-                                if _phi[i, j]*_phi[i+steps_signed_grid, j] < 0 #&& abs(abs(_phi[i, j])+abs(_phi[i+steps_signed_grid, j]) - 2*L/N) <= 0.01 # 境界
+                                if _phi[i, j]*_phi[i+steps_signed_grid, j] < 0 
                                     if abs(_phi[i, j]) < abs(_phi[i+steps_signed_grid, j]) # jの方が近い
                                         if _phi[i, j] < 0 # jが内
                                             _phi[i+steps_unsigned_grid, j] *= (-1)
