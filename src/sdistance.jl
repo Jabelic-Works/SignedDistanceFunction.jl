@@ -210,7 +210,6 @@ module Sdistance
     function signedDistance2D_singleprocess(csv_datafile::Union{String, DataFrame}, N::Int=100, curves::Union{String, Nothing}=nothing)
         #===  case: double circle ===#
         if curves=="multi"
-            # こちらの場合はfloodfillで符号をつけるのでNは250欲しい
             # create the computational domain
             L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
