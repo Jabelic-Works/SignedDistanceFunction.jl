@@ -51,10 +51,6 @@ function _exe(kinds)
     # end
     # N = [init_N + increment_N*item for item = 0:_execute_times]
     println(N, runtime)
-    # parformance_graphs(N, runtime, "interface", ["Parallel processing","Normal processing"])
-    # parformance_graphs(N, runtime, "interface_floodfill", ["Parallel processing","Normal processing"])
-    # parformance_graphs(N, runtime, "multiple_curves", ["Parallel processing","Normal processing"])
-    # parformance_graphs(N, runtime, "interface", ["the jordan curve","multi curves"])
 end
 
 _exe(1)
