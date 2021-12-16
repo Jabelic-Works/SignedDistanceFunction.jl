@@ -64,8 +64,9 @@ module Sdistance
 
         return (runtime / exetimes)
     end
-    
 
+    
+    
     """
         N: field splits
         _csv_datafile: CSV Data files
@@ -78,7 +79,6 @@ module Sdistance
             # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
 
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # println("\nThe number of threads started: ", Threads.nthreads())
             
@@ -88,7 +88,7 @@ module Sdistance
 
             # scatter(_gamma[:,1], _gamma[:,2],markersize = 2)
             # savefig("test/image/the_data.png")
-            _x = [i for i = -L:2 * L / N:L] # len:N+1 
+            _x = [i for i = -L:2 * L / N:L] # len:N+1
             _y = [i for i = -L:2 * L / N:L] # len:N+1
             # println("csv data size: ", size(_gamma))
             runtime = 0
@@ -119,7 +119,6 @@ module Sdistance
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # println("\nThe number of threads started: ", Threads.nthreads())
             
@@ -175,7 +174,6 @@ module Sdistance
         if curves=="multi"
             # こちらの場合はfloodfillで符号をつけるのでNは250欲しい
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _gamma = readdlm(csv_datafile, ',', Float64)
@@ -192,7 +190,6 @@ module Sdistance
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _gamma = readdlm(csv_datafile, ',', Float64)
@@ -211,7 +208,6 @@ module Sdistance
         #===  case: double circle ===#
         if curves=="multi"
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _gamma = readdlm(csv_datafile, ',', Float64)
@@ -228,7 +224,6 @@ module Sdistance
         #=== case: simple circle ===#
         else
             # create the computational domain
-            L = 1.1
             _phi = zeros(Float64, N + 1, N + 1)
             # ganma曲線 のデータの読み込み
             _gamma = readdlm(csv_datafile, ',', Float64)
