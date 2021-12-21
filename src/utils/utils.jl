@@ -47,28 +47,17 @@ end
 # precompile()
 
 function remove_same_point(array::Matrix)
-    return_value = []
+
+    return_value = Array{Any}(undef, 0, 2)
     array_length = length(array[:, 1])
     for i = 1:array_length-1
+        println(array[i, :])
         if array[i, :] != array[i+1, :]
-            # append!(return_value, [array[i, :]])
-            cat(1, return_value, array[i, :])
-            # return_value = [return_value; array[i, :]]
+            return_value = vcat(return_value, array[i, :]')
         end
     end
-    # append!(return_value, [array[array_length, :]])
-    # return_value = [return_value; array[array_length, :]]
-    cat(1, return_value, array[array_length, :])
-    println(return_value)
-    # for (index, item) in enumerate(array)
-    #     # 最後の要素でなくて、
-    #     println(index, item)
-    #     if index != length(array) && item != array[index+1]
-    #         append!(return_value, [item])
-    #     elseif index == length(array)
-    #         append!(return_value, [item])
-    #     end
-    # end
+    return_value = vcat(return_value, array[array_length, :]')
+    # println(return_value)
     return return_value
 end
 
@@ -83,9 +72,9 @@ function interpolation(array::Array, times::Int, multiple = false)
         tmp = complement_p(array, multiple, point_space)
         array = tmp
     end
-    println(tmp)
+    # println(typeof(tmp))
     return remove_same_point(tmp)
-    return tmp
+    # return tmp
 end
 precompile(interpolation, (Array, Int, Bool))
 
