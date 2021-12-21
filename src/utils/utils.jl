@@ -50,7 +50,6 @@ function remove_same_point(array::Matrix)
     return_value = Array{Any}(undef, 0, 2)
     array_length = length(array[:, 1])
     for i = 1:array_length-1
-        println(array[i, :])
         if array[i, :] != array[i+1, :]
             return_value = vcat(return_value, array[i, :]')
         end
@@ -71,9 +70,7 @@ function interpolation(array::Array, times::Int, multiple = false)
         tmp = complement_p(array, multiple, point_space)
         array = tmp
     end
-    # println(typeof(tmp))
     return remove_same_point(tmp)
-    # return tmp
 end
 precompile(interpolation, (Array, Int, Bool))
 
