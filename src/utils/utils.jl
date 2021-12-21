@@ -46,18 +46,29 @@ function complement_p(array::Array, multiple::Bool, point_space::Float64)
 end
 # precompile()
 
-function remove_same_point(array::Array)
+function remove_same_point(array::Matrix)
     return_value = []
-    println(array, typeof(array))
-    for (index, item) in enumerate(array)
-        # 最後の要素でなくて、
-        # println(index, item)
-        if index != length(array) && item != array[index+1]
-            append!(return_value, [item])
-        elseif index == length(array)
-            append!(return_value, [item])
+    array_length = length(array[:, 1])
+    for i = 1:array_length-1
+        if array[i, :] != array[i+1, :]
+            # append!(return_value, [array[i, :]])
+            cat(1, return_value, array[i, :])
+            # return_value = [return_value; array[i, :]]
         end
     end
+    # append!(return_value, [array[array_length, :]])
+    # return_value = [return_value; array[array_length, :]]
+    cat(1, return_value, array[array_length, :])
+    println(return_value)
+    # for (index, item) in enumerate(array)
+    #     # 最後の要素でなくて、
+    #     println(index, item)
+    #     if index != length(array) && item != array[index+1]
+    #         append!(return_value, [item])
+    #     elseif index == length(array)
+    #         append!(return_value, [item])
+    #     end
+    # end
     return return_value
 end
 
