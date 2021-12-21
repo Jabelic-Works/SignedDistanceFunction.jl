@@ -14,8 +14,12 @@ module APT
             push!(plots, plot(_x, _y, _phi, title="N=$N",st=:contour))
         end
         println(plots)
-        plot(plots...)
-        savefig("test/image/NsPlots.png")
+        plot(plots..., size=(2300,2500), layout=(3,2))
+        if circle_n=="multi"
+            savefig("test/image/NsPlots_floodfill.png")
+        else
+            savefig("test/image/NsPlots_isinside.png")
+        end
     end
     export plots_contours
 end
