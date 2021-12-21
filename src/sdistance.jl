@@ -176,7 +176,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         _phi = zeros(Float64, N + 1, N + 1)
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        _gamma = interpolation(_gamma, 3 + round(Int, N / 100), true)
+        _gamma = interpolation(_gamma, 2 + round(Int, N / 100), true)
         println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
