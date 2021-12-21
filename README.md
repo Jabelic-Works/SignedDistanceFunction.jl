@@ -58,6 +58,7 @@ if u abandon the container and image when container is up.
 
 `$ make test`
 
+- usecase is in `src/main.jl` !
 <!-- Benchmarks both Parallel and normal processing -->
 
 `$ make bench ARG=YOUR_LOVE_NUM`
