@@ -109,40 +109,43 @@ function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv
         end
 
         # return (runtime / exetimes)
-        # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result.csv", header=false)
+        # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
         return _phi
 
         #=== case: simple circle ===#
     else
         # create the computational domain
-        _phi = zeros(Float64, N + 1, N + 1)
-        # println("\nThe number of threads started: ", Threads.nthreads())
+        # _phi = zeros(Float64, N + 1, N + 1)
+        # # println("\nThe number of threads started: ", Threads.nthreads())
 
-        # ganma曲線 のデータの読み込み
-        _gamma = readdlm(_csv_datafile, ',', Float64)
-        _x = [i for i = -L:2*L/N:L] # len:N+1 
-        _y = [i for i = -L:2*L/N:L] # len:N+1
+        # # ganma曲線 のデータの読み込み
+        # _gamma = readdlm(_csv_datafile, ',', Float64)
+        # _x = [i for i = -L:2*L/N:L] # len:N+1 
+        # _y = [i for i = -L:2*L/N:L] # len:N+1
 
-        is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
+        # is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
 
-        _gamma = interpolation(_gamma, 3, false)
+        # _gamma = interpolation(_gamma, 3, false)
         # println("csv data size: ", size(_gamma))
         # scatter(_gamma[:,1], _gamma[:,2], markersize = 2)
         # savefig("test/image/the_data.png")
-
-        runtime = 0
-        exetimes = 3
+        _x = [i for i = -L:2*L/N:L] # len:N+1
+        _y = [i for i = -L:2*L/N:L] # len:N+1
+        _phi = signedDistance2D(_csv_datafile, N, "single")
+        DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
+        # runtime = 0
+        # exetimes = 3
 
         # for i = 1:exetimes
-        if JULIA_MULTI_PROCESS
-            # _phi = @timeit tmr "create_signed_distance_function_multiprocess" create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
-            _phi, time = @timed create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
-            runtime += time
-        else
-            # _phi = @timeit tmr "create_signed_distance_function" create_signed_distance_function(_x, _y, _gamma) # serialize processing
-            _phi, time = @timed create_signed_distance_function(_x, _y, _gamma) # serialize processing
-            runtime += time
-        end
+        # if JULIA_MULTI_PROCESS
+        #     # _phi = @timeit tmr "create_signed_distance_function_multiprocess" create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
+        #     _phi, time = @timed create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
+        #     runtime += time
+        # else
+        #     # _phi = @timeit tmr "create_signed_distance_function" create_signed_distance_function(_x, _y, _gamma) # serialize processing
+        #     _phi, time = @timed create_signed_distance_function(_x, _y, _gamma) # serialize processing
+        #     runtime += time
+        # end
         # end
         # show(tmr) # the @timeit information on CLI
 
@@ -193,7 +196,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         _y = [i for i = -L:2*L/N:L] # len:N+1
 
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
-        _gamma = interpolation(_gamma, 3 + round(Int, N / 100), false)
+        _gamma = interpolation(_gamma, 1 + round(Int, N / 200), false)
         println("the jordan curve\ncsv data size: ", size(_gamma))
         _phi = create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
         return _phi
@@ -227,7 +230,7 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         _y = [i for i = -L:2*L/N:L] # len:N+1
 
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
-        _gamma = interpolation(_gamma, 3 + round(Int, N / 100), false)
+        _gamma = interpolation(_gamma, 1 + round(Int, N / 200), false)
         println("the jordan curve\ncsv data size: ", size(_gamma))
         _phi = create_signed_distance_function(_x, _y, _gamma) # single processing
         return _phi

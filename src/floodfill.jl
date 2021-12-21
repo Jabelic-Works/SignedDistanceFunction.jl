@@ -204,7 +204,7 @@ function signining_field(_phi::Array, N, L, multiprocess = true)
     filled = Array{Tuple{Int64,Int64}}(undef, N * N) # N=100だと12倍速! N=200だと60倍速!
     filled_index = 1
     beginx = 1
-    beginy = 1
+    beginy = N
     indexI = 1
     _phi = floodfill(_phi, N, L, filled, beginx, beginy, filled_index, indexI, multiprocess)
     return _phi
