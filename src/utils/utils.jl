@@ -47,7 +47,6 @@ end
 # precompile()
 
 function remove_same_point(array::Matrix)
-
     return_value = Array{Any}(undef, 0, 2)
     array_length = length(array[:, 1])
     for i = 1:array_length-1
