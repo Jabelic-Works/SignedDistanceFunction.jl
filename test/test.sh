@@ -36,10 +36,10 @@ assert(){
 }
 
 
-assert 90
+# assert 90
 assert 100
-assert 150
-assert 200
+# assert 150
+# assert 200
 # # assert 100
 # # assert 1000
 # # assert 1000
