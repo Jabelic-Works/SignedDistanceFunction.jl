@@ -74,8 +74,6 @@ precompile(create_signed_distance_function, (Array, Array, Array))
 
 # Multi processing, a jordan curve.
 function create_signed_distance_function_multiprocess(_x::Array, _y::Array, _gamma::Array)
-    println(_gamma[1:10, :])
-    println(_gamma[length(_gamma[:, 1])-10:length(_gamma[:, 1]), :])
     x_length = length(_x[:, 1])
     return_value = zeros(Float64, x_length, x_length)
     Threads.@threads for indexI = 1:length(_y)

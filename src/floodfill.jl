@@ -82,16 +82,12 @@ function assign_signs(_phi, STEP, N, L, multiprocess = true)
     # 閉曲線内部が「-」である。デフォが
     # Int((N-1)/100) # 再帰回数
     loops = Int(log2(STEP))
-    println(loops)
     steps_signed_grid = STEP
     steps_unsigned_grid = Int(STEP / 2)
     # if JULIA_MULTI_PROCESS
     if multiprocess
         while loops > 0
-            if STEP == 1
-                println("assign_signs")
-            else
-                println("assign_signs__")
+            if STEP != 1
                 Threads.@threads for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                     for j = 1:steps_signed_grid:length(_phi[:, 1])
                         # if j != length(_phi[:, 1]) # ケツでない
@@ -141,10 +137,7 @@ function assign_signs(_phi, STEP, N, L, multiprocess = true)
         end
     else
         while loops > 0
-            if STEP == 1
-                println("assign_signs")
-            else
-                println("assign_signs__")
+            if STEP != 1
                 for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                     for j = 1:steps_signed_grid:length(_phi[:, 1])
                         # if j != length(_phi[:, 1]) # ケツでない
@@ -199,7 +192,6 @@ end
 
 
 function signining_field(_phi::Array, N, L, multiprocess = true)
-    println("floodfill")
     _phi .*= (-1)
     filled = Array{Tuple{Int64,Int64}}(undef, N * N) # N=100だと12倍速! N=200だと60倍速!
     filled_index = 1

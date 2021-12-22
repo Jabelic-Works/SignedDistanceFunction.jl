@@ -35,9 +35,9 @@ assert(){
     fi
 }
 
-assert 100
+# assert 100
 assert 200
-assert 300
+# assert 300
 # # assert 100
 # # assert 1000
 # # assert 1000
