@@ -4,7 +4,7 @@ include("./distance_function.jl")
 include("./floodfill.jl")
 include("./utils/utils.jl")
 include("./environments.jl")
-import .Draw: draw
+import .Draw: draw, draw2x2
 import .DistanceFunction: create_signed_distance_function_multiprocess, create_signed_distance_function, distanceToCurve, create_distance_function, create_distance_function_multiprocess
 import .Floodfill: signining_field
 import .Utils: is_jordan_curve, interpolation
@@ -102,7 +102,8 @@ function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv
         tmpname = csvfile_name[1]
         if JULIA_MULTI_PROCESS
             filename = "$tmpname" * "_multicurves_multiprocess_" * "$(N)"
-            draw(_x, _y, _phi, filename)
+            # draw(_x, _y, _phi, filename)
+            draw2x2(_x, _y, _phi, filename)
         else
             _filename = "$tmpname" * "_multicurves_normalprocess_" * "$(N)"
             draw(_x, _y, _phi, _filename)
@@ -176,7 +177,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         _phi = zeros(Float64, N + 1, N + 1)
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        _gamma = interpolation(_gamma, 3 + floor(Int, N / 400), true)
+        _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
         println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
@@ -214,7 +215,7 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         _phi = zeros(Float64, N + 1, N + 1)
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        _gamma = interpolation(_gamma, 3 + floor(Int, N / 400), true)
+        _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
         println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
