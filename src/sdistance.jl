@@ -80,30 +80,11 @@ function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv
         _x = [i for i = -L:2*L/N:L] # len:N+1
         _y = [i for i = -L:2*L/N:L] # len:N+1
         _phi = signedDistance2D(_csv_datafile, N, "multi")
-        # # create the computational domain
-        # _phi = zeros(Float64, N + 1, N + 1)
-        # # println("\nThe number of threads started: ", Threads.nthreads())
-
-        # # ganma曲線 のデータの読み込み
-        # _gamma = readdlm(_csv_datafile, ',', Float64)
-        # _gamma = interpolation(_gamma, 3 + round(Int, N / 100), true)
-
-        # # scatter(_gamma[:,1], _gamma[:,2],markersize = 2)
-        # # savefig("test/image/the_data.png")
-
-        # about timeit: https://m3g.github.io/JuliaNotes.jl/stable/memory/
-        # for i = 1:exetimes
-        # _phi = @timeit tmr "create_distance_function" create_distance_function(_x, _y, _gamma)
-        # @timeit tmr "signining_field" signining_field(_phi, N+1, L)
-        # _phi, time = @timed P(_phi, _x, _y, N, L, _gamma)
-        # end
-        # show(tmr) # the @timeit information on CLI
-
         tmpname = csvfile_name[1]
         if JULIA_MULTI_PROCESS
             filename = "$tmpname" * "_multicurves_multiprocess_" * "$(N)"
-            # draw(_x, _y, _phi, filename)
-            draw2x2(_x, _y, _phi, filename)
+            draw(_x, _y, _phi, filename)
+            # draw2x2(_x, _y, _phi, filename)
         else
             _filename = "$tmpname" * "_multicurves_normalprocess_" * "$(N)"
             draw(_x, _y, _phi, _filename)
@@ -115,52 +96,22 @@ function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv
 
         #=== case: simple circle ===#
     else
-        # create the computational domain
-        # _phi = zeros(Float64, N + 1, N + 1)
-        # # println("\nThe number of threads started: ", Threads.nthreads())
-
-        # # ganma曲線 のデータの読み込み
-        # _gamma = readdlm(_csv_datafile, ',', Float64)
-        # _x = [i for i = -L:2*L/N:L] # len:N+1 
-        # _y = [i for i = -L:2*L/N:L] # len:N+1
-
-        # is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
-
-        # _gamma = interpolation(_gamma, 3, false)
-        # println("csv data size: ", size(_gamma))
         # scatter(_gamma[:,1], _gamma[:,2], markersize = 2)
         # savefig("test/image/the_data.png")
         _x = [i for i = -L:2*L/N:L] # len:N+1
         _y = [i for i = -L:2*L/N:L] # len:N+1
         _phi = signedDistance2D(_csv_datafile, N, "single")
         # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
-        # runtime = 0
-        # exetimes = 3
-
-        # for i = 1:exetimes
-        # if JULIA_MULTI_PROCESS
-        #     # _phi = @timeit tmr "create_signed_distance_function_multiprocess" create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
-        #     _phi, time = @timed create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
-        #     runtime += time
-        # else
-        #     # _phi = @timeit tmr "create_signed_distance_function" create_signed_distance_function(_x, _y, _gamma) # serialize processing
-        #     _phi, time = @timed create_signed_distance_function(_x, _y, _gamma) # serialize processing
-        #     runtime += time
-        # end
-        # end
-        # show(tmr) # the @timeit information on CLI
-
         tmpname = csvfile_name[1]
         if JULIA_MULTI_PROCESS
             filename = "$tmpname" * "_jordancurve_multiprocess_" * "$(N)"
             draw(_x, _y, _phi, filename)
+            # draw2x2(_x, _y, _phi, filename)
         else
             _filename = "$tmpname" * "_jordancurve_normalprocess_" * "$(N)"
             draw(_x, _y, _phi, _filename)
         end
         return _phi
-
-        # return (runtime / exetimes)
     end
 end
 
