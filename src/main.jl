@@ -22,8 +22,8 @@ using .APT
 # end
 
 # === memory size === 
-p = @allocated computing_bench(parse(Int, ARGS[1]), "./test/mock_csv_data/interface.csv")
-p = @allocated computing_bench(parse(Int, ARGS[1]), "./test/mock_csv_data/interface.csv", "multi")
+# p = @allocated computing_bench(parse(Int, ARGS[1]), "./test/mock_csv_data/interface.csv")
+# p = @allocated computing_bench(parse(Int, ARGS[1]), "./test/mock_csv_data/interface.csv", "multi")
 p = @allocated computing_bench(parse(Int, ARGS[1]), "./test/mock_csv_data/multiple_curves.csv", "multi")
 
 # p = @allocated signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]), "multi")

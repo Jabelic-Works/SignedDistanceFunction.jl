@@ -36,7 +36,7 @@ function create_distance_function_multiprocess(_x::Array, _y::Array, _gamma::Arr
     end
     return return_value
 end
-precompile(create_distance_function_multiprocess, (Array, Array, Array, Int))
+precompile(create_distance_function_multiprocess, (Array, Array, Array))
 
 function create_distance_function(_x::Array, _y::Array, _gamma::Array)
     x_length = length(_x[:, 1])
@@ -48,7 +48,7 @@ function create_distance_function(_x::Array, _y::Array, _gamma::Array)
     end
     return return_value
 end
-precompile(create_distance_function, (Array, Array, Array, Int))
+precompile(create_distance_function, (Array, Array, Array))
 
 
 # Normal processing, a jordan curve.

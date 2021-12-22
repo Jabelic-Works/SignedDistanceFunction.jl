@@ -126,10 +126,16 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         # こちらの場合はfloodfillで符号をつけるのでNは250欲しい
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
+        _gamma = Array{Any}(undef, 0, 2)
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
-        println("multi curves\ncsv data size: ", size(_gamma))
+        if length(_gamma) < 200
+            _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))) + 2, true)
+        elseif Int(floor(log(length(_gamma) / 2, N^1.5))) > 0
+            _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))), true)
+        end
+
+        # println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
@@ -148,11 +154,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         _y = [i for i = -L:2*L/N:L] # len:N+1
 
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
-        if length(_gamma) <= 50
-            _gamma = interpolation(_gamma, 1 + floor(Int, N / 200), false)
-        elseif length(_gamma) <= 100
-            _gamma = interpolation(_gamma, 1 + floor(Int, N / 400), false)
-        end
+        _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, 2 * N))) + 1, false)
         println("the jordan curve\ncsv data size: ", size(_gamma))
         _phi = create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
         return _phi
@@ -164,9 +166,18 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
     if curves == "multi"
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
+        _gamma = Array{Any}(undef, 0, 2)
+
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
+        # _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
+        if length(_gamma) < 200
+            _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))) + 2, true)
+        elseif Int(floor(log(length(_gamma) / 2, N^1.5))) > 0
+            _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))), true)
+        end
+
+
         println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
@@ -186,11 +197,8 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         _y = [i for i = -L:2*L/N:L] # len:N+1
 
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
-        if length(_gamma) <= 50
-            _gamma = interpolation(_gamma, 1 + floor(Int, N / 200), false)
-        elseif length(_gamma) <= 100
-            _gamma = interpolation(_gamma, 1 + floor(Int, N / 400), false)
-        end
+        _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, 2 * N))) + 1, false)
+
         println("the jordan curve\ncsv data size: ", size(_gamma))
         _phi = create_signed_distance_function(_x, _y, _gamma) # single processing
         return _phi

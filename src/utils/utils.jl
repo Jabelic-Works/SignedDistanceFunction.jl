@@ -46,7 +46,7 @@ function complement_p(array::Array, multiple::Bool, point_space::Float64)
 end
 # precompile()
 
-function remove_same_point(array::Matrix)
+function remove_same_point(array::Any)
     return_value = Array{Any}(undef, 0, 2)
     array_length = length(array[:, 1])
     for i = 1:array_length-1
@@ -63,14 +63,16 @@ end
     times回, 倍の数だけデータを補完する
 """
 function interpolation(array::Array, times::Int, multiple = false)
-    tmp = []
-    (x, y) = size(array)
-    point_space = sum([sqrt(sum((array[i, :] .- array[i+1, :]) .^ 2)) for i = 1:x-1]) / x
-    for _ = 1:times
-        tmp = complement_p(array, multiple, point_space)
-        array = tmp
+    if times > 0
+        tmp = []
+        (x, y) = size(array)
+        point_space = sum([sqrt(sum((array[i, :] .- array[i+1, :]) .^ 2)) for i = 1:x-1]) / x
+        for _ = 1:times
+            tmp = complement_p(array, multiple, point_space)
+            array = tmp
+        end
+        return remove_same_point(tmp)
     end
-    return remove_same_point(tmp)
 end
 precompile(interpolation, (Array, Int, Bool))
 

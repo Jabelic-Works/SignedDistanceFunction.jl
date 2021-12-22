@@ -54,8 +54,8 @@ function _exe(kinds)
 end
 
 _exe(1)
-_exe(2)
-_exe(3)
+# _exe(2)
+# _exe(3)
 
 #==
 N2300:  300+200i, ARG = 10
