@@ -1,5 +1,5 @@
-module SignedDiscance
-    include("./sdistance.jl")
-    using .Sdistance # exportされたmethodのみ使える
-    export signedDistance2D
+module SignedDistance
+include("./sdistance.jl")
+using .Sdistance # exportされたmethodのみ使える
+export signedDistance2D
 end
