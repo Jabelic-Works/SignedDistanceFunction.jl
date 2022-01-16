@@ -1,9 +1,9 @@
 using DataFrames, CSV
 include("../src/sdistance.jl") # 必ずダブルクオーテーション
 include("../src/draw.jl")
-include("../src/LevelSet.jl")
+include("../src/SignedDiscance.jl")
 import .Sdistance: computing_bench, benchmark_floodfill, benchmark_singlecurves_isinside #,signedDistance2D
-using .LevelSet
+using .SignedDiscance
 import .Draw: parformance_graphs
 
 @enum ExecuteKinds _multicurves _singlecurve _singlecurve_floodfill

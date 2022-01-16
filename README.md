@@ -1,13 +1,12 @@
-# The level set function
+# The Signed distance function
 
-[![Build Status](https://travis-ci.com/jabelic/LevelSet.jl.svg?branch=main)](https://travis-ci.com/jabelic/LevelSet.jl)
-[![Coverage](https://codecov.io/gh/jabelic/LevelSet.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/LevelSet.jl)
-[![Coverage](https://coveralls.io/repos/github/jabelic/LevelSet.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/LevelSet.jl?branch=main)
+[![Build Status](https://travis-ci.com/jabelic/SignedDiscance.jl.svg?branch=main)](https://travis-ci.com/jabelic/SignedDiscance.jl)
+[![Coverage](https://codecov.io/gh/jabelic/SignedDiscance.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDiscance.jl)
+[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDiscance.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDiscance.jl?branch=main)
 
-<!-- TODO: set Package Name : LevelSet.jl-->
-<!--  LevelSet.jlはレベルセット関数に関する機能を提供するpackageである -->
+<!-- TODO: set Package Name : SignedDiscance.jl-->
 
-LevelSet.jl is a package to compute level set function.
+SignedDiscance.jl is a package to compute level set function.
 
 Main features are:
 

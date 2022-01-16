@@ -2,12 +2,12 @@ using DataFrames, CSV
 using Profile
 include("./sdistance.jl") # 必ずダブルクオーテーション
 include("./draw.jl")
-include("./LevelSet.jl")
+include("./SignedDiscance.jl")
 include("./environments.jl")
 include("../test/APT.jl")
 import .Sdistance: computing_bench
 import .Draw: parformance_graphs
-using .LevelSet
+using .SignedDiscance
 using .APT
 
 # This script run by test.sh

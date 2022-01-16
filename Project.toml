@@ -1,4 +1,4 @@
-name = "LevelSet"
+name = "SignedDiscance"
 uuid = "b0860ef3-f78d-49a5-98b3-8176f82dbb49"
 authors = ["Jabelic"]
 version = "0.1.0"
