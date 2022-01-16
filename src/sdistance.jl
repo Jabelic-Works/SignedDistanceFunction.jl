@@ -136,7 +136,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
-
+        println("Data format: Multi curves\nThe CSV data size: ", size(_gamma))
         _phi = create_distance_function_multiprocess(_x, _y, _gamma)
         signining_field(_phi, N + 1, L)
         return _phi
@@ -152,7 +152,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
 
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
         _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, 2 * N))) + 1, false)
-        println("the jordan curve\ncsv data size: ", size(_gamma))
+        println("Data format: The jordan curve\nThe CSV data size: ", size(_gamma))
         _phi = create_signed_distance_function_multiprocess(_x, _y, _gamma) # parallel processing
         return _phi
     end
@@ -175,7 +175,7 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         end
 
 
-        println("multi curves\ncsv data size: ", size(_gamma))
+        println("Data format: Multi curves\nThe CSV data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
@@ -196,7 +196,7 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         is_jordan_curve(_gamma) # TODO: 丁寧なError messageを付与
         _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, 2 * N))) + 1, false)
 
-        println("the jordan curve\ncsv data size: ", size(_gamma))
+        println("Data format: The jordan curve\nThe CSV data size: ", size(_gamma))
         _phi = create_signed_distance_function(_x, _y, _gamma) # single processing
         return _phi
     end
