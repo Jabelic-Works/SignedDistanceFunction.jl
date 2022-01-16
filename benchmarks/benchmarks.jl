@@ -53,8 +53,8 @@ function _exe(kinds)
     println(N, runtime)
 end
 
-_exe(1)
-# _exe(2)
+# _exe(1)
+_exe(2)
 # _exe(3)
 
 #==
