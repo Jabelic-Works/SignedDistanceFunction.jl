@@ -2,6 +2,6 @@
 
 assert(){
     # input1="$1"
-    julia -JSysimage.so benchmarks/benchmarks.jl $1 -t auto
+    julia -JSysimage.so benchmarks/benchmarks.jl -t auto
 }
-assert $1
+assert

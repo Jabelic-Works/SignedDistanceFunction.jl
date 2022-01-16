@@ -6,24 +6,12 @@
     # terminalを新たに起動して
     # $ julia hogehuga.jl
 
-# WSLでのこのPJの実行方法
-    # make initial
-    # make test
 
-# docker-composeを使うなら
-    # docker-compose up -d
-    # docker-compose exec lab bash
-    # make initial
-    # make test
-
-
-# # main.jlの呼び出し. For Debuging!
+# main.jlの呼び出し. For Debuging.
 assert(){
     input1="$1"
     input2="$2"
     input3="$3"
-    # julia sdistance.jl $input1 $input2 --thread `sysctl -n hw.logicalcpu`
-    
     # 実行
     julia -JSysimage.so src/main.jl $input1 $input2 -t auto
     actual="$?"
@@ -36,24 +24,11 @@ assert(){
 }
 
 
-assert 50
-assert 100
-assert 150
-assert 200
-assert 250
+# assert 50
+# assert 100
+# assert 150
+# assert 200
+# assert 250
 assert 300
-# # assert 100
-# # assert 1000
 # # assert 1000
 
-
-# # Unit Test
-# runtest(){
-#     # painting boardのtest
-#     cd painting-board; npm ci; cd ..
-#     # UnitTest
-#     julia -JSysimage.so --project -e 'using Pkg;Pkg.test()'
-#     actual="$?"
-# }
-
-# runtest

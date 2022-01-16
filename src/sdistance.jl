@@ -13,7 +13,6 @@ using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools, TimerOutput
 const tmr = TimerOutput()
 
 function P(_phi, _x, _y, N, L, _gamma)
-    # _phi = create_distance_function(_x, _y, _gamma)
     _phi = create_distance_function_multiprocess(_x, _y, _gamma)
     signining_field(_phi, N + 1, L)
     return _phi
@@ -121,11 +120,11 @@ end
     curves::Union{String, Nothing}
 """
 function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, curves::Union{String,Nothing} = nothing)
-    #===  case: double circle ===#
+    #===  case: multiple circles ===#
     if curves == "multi"
-        # こちらの場合はfloodfillで符号をつけるのでNは250欲しい
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
+        # loading the csv file(the circle data)
         _gamma = Array{Any}(undef, 0, 2)
         # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
@@ -134,8 +133,6 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         elseif Int(floor(log(length(_gamma) / 2, N^1.5))) > 0
             _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))), true)
         end
-
-        # println("multi curves\ncsv data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
@@ -148,7 +145,7 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
     else
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
-        # ganma曲線 のデータの読み込み
+        # loading the csv file(the circle data)
         _gamma = readdlm(csv_datafile, ',', Float64)
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
@@ -204,6 +201,7 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         return _phi
     end
 end
-# precompile(signedDistance2D,(Union{String, DataFrame}, Int, Union{String, Nothing}))
+precompile(signedDistance2D, (Union{String,DataFrame}, Int, Union{String,Nothing}))
+
 export signedDistance2D, computing_bench, benchmark_floodfill, benchmark_singlecurves_isinside
 end

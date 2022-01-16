@@ -9,8 +9,6 @@ import .Draw: parformance_graphs
 @enum ExecuteKinds _multicurves _singlecurve _singlecurve_floodfill
 
 function _exe(kinds)
-    # _execute_times = ARGS[1] ? parse(Int, ARGS[1]) : 3
-    # _execute_times = parse(Int, ARGS[1])
     _execute_times = 2
     _phi = []
     init_N = 100
@@ -36,21 +34,6 @@ function _exe(kinds)
         end
         parformance_graphs(N, runtime, "the jordan curve", ["Parallel processing", "Normal processing"])
     end
-    # for i = 0:_execute_times
-    #     # _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/interface.csv")
-    #     # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv")
-    #     # _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, 1, "./test/mock_csv_data/interface.csv", "multi")
-    #     # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, 2, "./test/mock_csv_data/interface.csv", "multi")
-    #     # _phi, runtime[i+1,1] = @timed computing_bench(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv", "multi")
-    #     runtime[i+1,1] = benchmark_multicurves_floodfill(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv")
-    #     runtime[i+1,2] = benchmark_multicurves_floodfill(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv",false)
-    #     # _phi, runtime[i+1,2] = @timed computing_bench(init_N + increment_N*i, "./test/mock_csv_data/multiple_curves.csv", "multi", multiprocess=false)
-
-    #     # _phi, runtime[i+1,1] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i)
-    #     # _phi, runtime[i+1,2] = @timed signedDistance2D("./test/mock_csv_data/interface.csv",init_N + increment_N*i, "multi")
-    # end
-    # N = [init_N + increment_N*item for item = 0:_execute_times]
-    println(N, runtime)
 end
 
 # _exe(1)
@@ -58,6 +41,8 @@ _exe(2)
 # _exe(3)
 
 #==
+Jabelic test it and get it as below.
+
 N2300:  300+200i, ARG = 10
  [300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900, 2100, 2300]
  [2.727736517 1.549037993; 2.430711433 4.540753791; 

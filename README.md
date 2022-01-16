@@ -31,25 +31,6 @@ The closed curve data must be
 
 `$ make initial`
 
-<!-- #### docker
-
-`$ docker-compose up -d`
-
-`$ docker-compose exec lab bash`
-
-
-when u leave
-
-`$ docker-compose stop`
-
-and restart.
-
-`$ docker-compose start`
-
-
-if u abandon the container and image when container is up.
-
-`$ docker-compose down --rmi local --volumes --remove-orphans` -->
 
 ### debug
 
@@ -60,16 +41,16 @@ if u abandon the container and image when container is up.
 - usecase is in `src/main.jl` !
 <!-- Benchmarks both Parallel and normal processing -->
 
-`$ make bench ARG=YOUR_LOVE_NUM`
+`$ make bench`
 
-<!-- ### Plots sample data
+### Plots sample data
 
-If you check the mock data(e.g. interface.csv in root)
+If you check the mock data(e.g. data.csv in root)
 
 `$ julia `
 
-`> _gamma = readdlm("src/infinity_shaped.csv", ',', Float64)`
+`> gamma = readdlm("data.csv", ',', Float64)`
 
 `> using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools`
 
-`> plot(_gamma[:, 1], _gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)` -->
+`> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)`
