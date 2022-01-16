@@ -45,12 +45,24 @@ The closed curve data must be
 
 ### Plots sample data
 
-If you check the mock data(e.g. data.csv in root)
+If you check the mock data(e.g. data.csv in root):
 
-`$ julia `
+`$julia>`
 
-`> gamma = readdlm("data.csv", ',', Float64)`
+enter the Pgk mode(`]`)
 
-`> using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools`
+`$ pkg>`
 
-`> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)`
+`$ pkg> activate .`
+
+`(SignedDistance) pkg>`
+
+return the REPL(`Delete/Backspace`)
+
+`julia> `
+
+`julia> using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools`
+
+`julia> gamma = readdlm("data.csv", ',', Float64)`
+
+`julia> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)`
