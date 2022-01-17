@@ -6,12 +6,12 @@
 
 <!-- TODO: set Package Name : SignedDistance.jl-->
 
-SignedDistance.jl is a package to compute level set function.
+SignedDistance.jl is a package to compute signed distance function.
 
 Main features are:
 
-- Creating a signed distance to compute the level set function of the jordan closed curve data set(2D).
-- Creating a signed distance to compute the level set function of the multiple closed curve data set(2D).
+- Creating a signed distance to compute the signed distance function of the jordan closed curve data set(2D).
+- Creating a signed distance to compute the signed distance function of the multiple closed curve data set(2D).
 
 <!-- レベルセット法のためのレベルセット関数を計算する際に初期値として必要な付合付き距離関数を閉曲線データから提供する。 -->
 
