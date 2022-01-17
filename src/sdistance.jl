@@ -67,54 +67,6 @@ end
 
 
 """
-    N: field splits
-    _csv_datafile: CSV Data files
-    完全に論文用、実行速度計測、描画
-"""
-function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv", circle_n::Union{String,Nothing} = nothing)
-    csvfile_name = match(r"\./test/mock_csv_data/(.*)", _csv_datafile[1:end-4]).captures
-    #===  case: double circle ===#
-    if circle_n == "multi"
-        # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
-        _x = [i for i = -L:2*L/N:L] # len:N+1
-        _y = [i for i = -L:2*L/N:L] # len:N+1
-        _phi = signedDistance2D(_csv_datafile, N, "multi")
-        tmpname = csvfile_name[1]
-        if JULIA_MULTI_PROCESS
-            filename = "$tmpname" * "_multicurves_multiprocess_" * "$(N)"
-            draw(_x, _y, _phi, filename)
-            # draw2x2(_x, _y, _phi, filename)
-        else
-            _filename = "$tmpname" * "_multicurves_normalprocess_" * "$(N)"
-            draw(_x, _y, _phi, _filename)
-        end
-
-        # return (runtime / exetimes)
-        # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
-        return _phi
-
-        #=== case: simple circle ===#
-    else
-        # scatter(_gamma[:,1], _gamma[:,2], markersize = 2)
-        # savefig("test/image/the_data.png")
-        _x = [i for i = -L:2*L/N:L] # len:N+1
-        _y = [i for i = -L:2*L/N:L] # len:N+1
-        _phi = signedDistance2D(_csv_datafile, N, "single")
-        # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
-        tmpname = csvfile_name[1]
-        if JULIA_MULTI_PROCESS
-            filename = "$tmpname" * "_jordancurve_multiprocess_" * "$(N)"
-            draw(_x, _y, _phi, filename)
-            # draw2x2(_x, _y, _phi, filename)
-        else
-            _filename = "$tmpname" * "_jordancurve_normalprocess_" * "$(N)"
-            draw(_x, _y, _phi, _filename)
-        end
-        return _phi
-    end
-end
-
-"""
     csv_datafile::Union{String, DataFrame}
     N::Int
     curves::Union{String, Nothing}
@@ -203,5 +155,5 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
 end
 precompile(signedDistance2D, (Union{String,DataFrame}, Int, Union{String,Nothing}))
 
-export signedDistance2D, computing_bench, benchmark_floodfill, benchmark_singlecurves_isinside
+export signedDistance2D, benchmark_floodfill, benchmark_singlecurves_isinside
 end

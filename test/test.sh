@@ -13,7 +13,7 @@ assert(){
     input2="$2"
     input3="$3"
     # 実行
-    julia -JSysimage.so src/main.jl $input1 $input2 -t auto
+    julia -JSysimage.so test/main.jl $input1 $input2 -t auto
     actual="$?"
 
     if [ "$input2" = 1 ]; then
