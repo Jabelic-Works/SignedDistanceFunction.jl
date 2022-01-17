@@ -1,7 +1,7 @@
 using DataFrames, CSV
 using Profile
 include("../src/sdistance.jl") # 必ずダブルクオーテーション
-include("../src/draw.jl")
+include("../test/draw.jl")
 include("../src/SignedDistance.jl")
 include("../src/environments.jl")
 include("../test/APT.jl")
@@ -22,12 +22,13 @@ using .APT
 
 
 # ====== Debug ======
-# p = signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]))
+p = signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]))
 # DataFrame(p, :auto) |> CSV.write("./test/result/interface_result_n"*ARGS[1]*".csv", header=false)
 # p = signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]), "multi")
 # DataFrame(p, :auto) |> CSV.write("./test/result/interface_floodfill_result_n"*ARGS[1]*".csv", header=false)
 # p = signedDistance2D("./test/mock_csv_data/multiple_curves.csv", parse(Int, ARGS[1]), "multi")
 # DataFrame(p, :auto) |> CSV.write("./test/result/multiple_curves_result_n"*ARGS[1]*".csv", header=false)
+
 
 # ====== profiling =======
 

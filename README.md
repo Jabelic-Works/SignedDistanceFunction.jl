@@ -49,15 +49,14 @@ or
 
 ### debug
 
-<!-- Test both Parallel and normal processing -->
-
 `$ make test`
-  - usecase is in `src/main.jl` !
-<!-- Benchmarks both Parallel and normal processing -->
+  - usecase is in `test/main.jl` !
 
 `$ make bench`
+- see `benchmarks.jl`.
 
-
+`$ make runtest`
+- unit test on `unittest.sh`.
 
 #### Debug in REPL
 

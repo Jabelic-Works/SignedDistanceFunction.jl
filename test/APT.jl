@@ -2,7 +2,7 @@
 module APT
     include("../src/sdistance.jl")
     include("../src/environments.jl")
-    include("../src/draw.jl")
+    include("../test/draw.jl")
     include("../src/SignedDistance.jl")
     # import .Sdistance: signedDistance2D
     using .SignedDistance

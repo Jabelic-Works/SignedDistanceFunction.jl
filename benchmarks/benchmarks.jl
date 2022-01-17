@@ -1,6 +1,6 @@
 using DataFrames, CSV
 include("../src/sdistance.jl") # 必ずダブルクオーテーション
-include("../src/draw.jl")
+include("../test/draw.jl")
 include("../src/SignedDistance.jl")
 import .Sdistance: benchmark_floodfill, benchmark_singlecurves_isinside #,signedDistance2D
 using .SignedDistance
