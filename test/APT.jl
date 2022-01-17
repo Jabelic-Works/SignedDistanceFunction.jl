@@ -5,6 +5,16 @@ include("../src/environments.jl")
 import .Sdistance: computing_bench, signedDistance2D
 import Plots
 using Plots
+
+"""
+    Ns: 分割数の入った配列
+    _csv_datafiles: CSV Data
+    circle_n: 閉曲線データの種類 {"multi", others}
+
+    Ns[start]からNs[end]の分割数でsubdomainを分割し、
+    signedDistance2D()で_csv_datafilesで与えられた閉曲線の符合付距離函数を生成、
+    それらをcontoursでplot.
+"""
 function plots_contours(Ns::Array, _csv_datafiles, circle_n::Union{String,Nothing} = nothing)
     plots = []
     for (i, N) in enumerate(Ns)
@@ -21,6 +31,16 @@ function plots_contours(Ns::Array, _csv_datafiles, circle_n::Union{String,Nothin
         savefig("test/image/NsPlots_isinside.png")
     end
 end
+
+"""
+    Ns: 分割数の入った配列
+    _csv_datafiles: CSV Data
+    circle_n: 閉曲線データの種類 {"multi", others}
+
+    Ns[start]からNs[end]の分割数でsubdomainを分割し、
+    signedDistance2D()で_csv_datafilesで与えられた閉曲線の符合付距離函数を生成、
+    それらをwireframeでplot.
+"""
 function plots_wireframe(Ns::Array, _csv_datafiles, circle_n::Union{String,Nothing} = nothing)
     plots = []
     for (i, N) in enumerate(Ns)

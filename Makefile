@@ -1,4 +1,4 @@
-ARG = 3
+
 test: 
 	./test/test.sh
 runtest: 
@@ -6,6 +6,6 @@ runtest:
 initial:
 	./init.sh
 bench:
-	./benchmarks/benchmarks.sh ${ARG}
+	./benchmarks/benchmarks.sh
 
 .PHONY: test clean

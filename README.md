@@ -1,12 +1,12 @@
 # The Signed distance function
 
-[![Build Status](https://travis-ci.com/jabelic/LevelSet.jl.svg?branch=main)](https://travis-ci.com/jabelic/LevelSet.jl)
-[![Coverage](https://codecov.io/gh/jabelic/LevelSet.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/LevelSet.jl)
-[![Coverage](https://coveralls.io/repos/github/jabelic/LevelSet.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/LevelSet.jl?branch=main)
+[![Build Status](https://travis-ci.com/jabelic/SignedDistance.jl.svg?branch=main)](https://travis-ci.com/jabelic/SignedDistance.jl)
+[![Coverage](https://codecov.io/gh/jabelic/SignedDistance.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistance.jl)
+[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistance.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistance.jl?branch=main)
 
-<!-- TODO: set Package Name : LevelSet.jl-->
+<!-- TODO: set Package Name : SignedDistance.jl-->
 
-LevelSet.jl is a package to compute level set function.
+SignedDistance.jl is a package to compute level set function.
 
 Main features are:
 
@@ -42,8 +42,8 @@ or
 `$ julia> using PackageCompiler`  
 `$ julia> PackageCompiler.create_sysimage([:CSV, :DataFrames, :Plots, :Luxor, :BenchmarkTools, :TimerOutputs, :Test]; sysimage_path="Sysimage.so")`  
 `$ Pkg(1.5)> activate .`  
-`$ (LevelSet)>`  
-`$ julia> using LevelSet`  
+`$ (SignedDistance)>`  
+`$ julia> using SignedDistance`  
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
 
 
@@ -68,13 +68,13 @@ enter the Pgk mode(`]`)
 
 `$ pkg> activate .`
 
-`(LevelSet) pkg>`
+`(SignedDistance) pkg>`
 
 return the REPL(`Delete/Backspace`)
 
 `julia> `
 
-`julia> using LevelSet`
+`julia> using SignedDistance`
 
 `julia> signedDistance2D("XXXXXX.csv", N)`
 
