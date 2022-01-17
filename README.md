@@ -52,13 +52,14 @@ or
 <!-- Test both Parallel and normal processing -->
 
 `$ make test`
-
-- usecase is in `src/main.jl` !
+  - usecase is in `src/main.jl` !
 <!-- Benchmarks both Parallel and normal processing -->
 
 `$ make bench`
 
 
+
+#### Debug in REPL
 
 `$julia>`
 
