@@ -84,4 +84,6 @@ return the REPL(`Delete/Backspace`)
 
 `julia> gamma = readdlm("data.csv", ',', Float64)`
 
-`julia> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2)` -->
+`julia> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2, grid=false)` 
+
+`julia>  savefig("interface.png") -->

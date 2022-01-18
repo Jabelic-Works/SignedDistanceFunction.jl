@@ -37,8 +37,8 @@ function _exe(kinds)
 end
 
 _exe(1)
-# _exe(2)
-# _exe(3)
+_exe(2)
+_exe(3)
 
 #==
 Jabelic test it and get it as below.

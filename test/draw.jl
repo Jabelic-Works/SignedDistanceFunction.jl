@@ -42,10 +42,10 @@ precompile(draw2x2, (Array, Array, Array, Union{SubString{String},Nothing}))
 function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String,Nothing} = nothing, label_name::Union{Array,Nothing} = nothing)
     (row, col) = size(exe_num)
     println(row, col)
-    plot(N, exe_num[:, 1], title = "Benchmarks", label = label_name[1], legend = :topleft)
+    plot(N, exe_num[:, 1], title = "Benchmarks", label = label_name[1], legend = :topleft, grid=false)
     for i = 2:col
         # plot(N, exe_num[:,i],title = "Benchmarks", label = label_name[1], legend = :topleft)
-        plot!(N, exe_num[:, i], label = label_name[i])
+        plot!(N, exe_num[:, i], label = label_name[i], grid=false)
     end
     xlabel!("Splits of fields")
     ylabel!("Processing time(sec.)")
