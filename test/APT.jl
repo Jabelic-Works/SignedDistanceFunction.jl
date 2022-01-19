@@ -3,9 +3,9 @@ module APT
     include("../src/sdistance.jl")
     include("../src/environments.jl")
     include("../test/draw.jl")
-    include("../src/SignedDistance.jl")
+    include("../src/SignedDistanceFunction.jl")
     # import .Sdistance: signedDistance2D
-    using .SignedDistance
+    using .SignedDistanceFunction
     import .Draw: draw, draw2x2
     import Plots
     using Plots
