@@ -4,7 +4,6 @@
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistance.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistance.jl)
 [![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistance.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistance.jl?branch=main)
 
-<!-- TODO: set Package Name : SignedDistance.jl-->
 
 SignedDistance.jl is a package to compute signed distance function.
 
