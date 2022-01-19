@@ -50,13 +50,16 @@ or
 ### debug
 
 `$ make test`
-  - usecase is in `test/main.jl` !
+- Usecases is in `test/main.jl` !
+
+`$ make test ARG=plot`
+- Usecases is in `test/plot_for_debug.jl` !
 
 `$ make bench`
-- see `benchmarks.jl`.
+- See `benchmarks.jl`.
 
 `$ make runtest`
-- unit test on `unittest.sh`.
+- Unit test on `unittest.sh`. TestCases is in `runtests.jl`.
 
 #### Debug in REPL
 
