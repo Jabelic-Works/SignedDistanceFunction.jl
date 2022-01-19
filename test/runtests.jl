@@ -1,10 +1,10 @@
-using SignedDistance
+using SignedDistanceFunction
 using Test
 using DelimitedFiles
 include("../src/utils/utils.jl")
 using .Utils
 
-@testset "SignedDistance.jl" begin
+@testset "SignedDistanceFunction.jl" begin
     @test signedDistance2D("mock_csv_data/interface.csv", 100) == readdlm("result/interface_result_n100.csv", ',', Float64)
     @test signedDistance2D("mock_csv_data/interface.csv", 300) == readdlm("result/interface_result_n300.csv", ',', Float64)
     @test signedDistance2D("mock_csv_data/interface.csv", 300, "multi") == readdlm("result/interface_floodfill_result_n300.csv", ',', Float64)

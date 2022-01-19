@@ -3,9 +3,10 @@ language: julia
 notifications:
   email: false
 julia:
-  - 1.0
   - 1.5
   - nightly
+only:
+  - release*
 os:
   - linux
 arch:

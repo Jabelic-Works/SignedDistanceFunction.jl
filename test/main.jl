@@ -2,11 +2,11 @@ using DataFrames, CSV
 using Profile
 include("../src/sdistance.jl") # 必ずダブルクオーテーション
 include("../test/draw.jl")
-include("../src/SignedDistance.jl")
+include("../src/SignedDistanceFunction.jl")
 include("../src/environments.jl")
 include("../test/APT.jl")
 import .Draw: parformance_graphs
-using .SignedDistance
+using .SignedDistanceFunction
 using .APT
 
 # This script run by test.sh
