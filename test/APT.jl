@@ -69,7 +69,7 @@ module APT
     circle_n: Kinds of circle data{"multi" or "single"}
     描画
     """
-    function computing_bench(N::Int = 1000, _csv_datafile::String = "./interface.csv", circle_n::Union{String,Nothing} = nothing)
+    function plot_for_debug(N::Int = 1000, _csv_datafile::String = "./interface.csv", circle_n::Union{String,Nothing} = nothing)
         csvfile_name = match(r"\./test/mock_csv_data/(.*)", _csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
         if circle_n == "multi"
@@ -111,5 +111,5 @@ module APT
             return _phi
         end
     end
-    export plots_contours, plots_wireframe, computing_bench
+    export plots_contours, plots_wireframe, plot_for_debug
 end

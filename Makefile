@@ -1,6 +1,5 @@
-
 test: 
-	./test/test.sh
+	./test/test.sh ${ARG}
 runtest: 
 	./test/unittest.sh
 initial:

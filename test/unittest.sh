@@ -9,4 +9,4 @@ runtest(){
     actual="$?"
 }
 
-runtest 
+runtest
