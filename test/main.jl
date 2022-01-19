@@ -5,7 +5,6 @@ include("../test/draw.jl")
 include("../src/SignedDistance.jl")
 include("../src/environments.jl")
 include("../test/APT.jl")
-# include("../test/testPlots.jl")
 import .Draw: parformance_graphs
 using .SignedDistance
 using .APT

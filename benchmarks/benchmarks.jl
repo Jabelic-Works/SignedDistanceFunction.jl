@@ -36,8 +36,8 @@ function _exe(kinds)
     end
 end
 
-_exe(1)
-_exe(2)
+# _exe(1)
+# _exe(2)
 _exe(3)
 
 #==
