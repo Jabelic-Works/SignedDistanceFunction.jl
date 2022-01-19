@@ -22,4 +22,4 @@ assert(){
 
 }
 
-assert $1 100
+assert $1 300

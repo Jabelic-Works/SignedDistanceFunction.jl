@@ -80,8 +80,8 @@ module APT
             tmpname = csvfile_name[1]
             if JULIA_MULTI_PROCESS
                 filename = "$tmpname" * "_multicurves_multiprocess_" * "$(N)"
-                draw(_x, _y, _phi, filename)
-                # draw2x2(_x, _y, _phi, filename)
+                # draw(_x, _y, _phi, filename)
+                draw2x2(_x, _y, _phi, filename)
             else
                 _filename = "$tmpname" * "_multicurves_normalprocess_" * "$(N)"
                 draw(_x, _y, _phi, _filename)
