@@ -1,11 +1,11 @@
 # The Signed distance function
 
-[![Build Status](https://travis-ci.com/jabelic/SignedDistance.jl.svg?branch=main)](https://travis-ci.com/jabelic/SignedDistance.jl)
-[![Coverage](https://codecov.io/gh/jabelic/SignedDistance.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistance.jl)
-[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistance.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistance.jl?branch=main)
+[![Build Status](https://travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=main)](https://travis-ci.com/jabelic/SignedDistanceFunction.jl)
+[![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
+[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
 
 
-SignedDistance.jl is a package to compute signed distance function.
+SignedDistanceFunction.jl is a package to compute signed distance function.
 
 Main features are:
 
@@ -46,8 +46,8 @@ or
 `$ julia> using PackageCompiler`  
 `$ julia> PackageCompiler.create_sysimage([:CSV, :DataFrames, :Plots, :Luxor, :BenchmarkTools, :TimerOutputs, :Test]; sysimage_path="Sysimage.so")`  
 `$ Pkg(1.5)> activate .`  
-`$ (SignedDistance)>`  
-`$ julia> using SignedDistance`  
+`$ (SignedDistanceFunction)>`  
+`$ julia> using SignedDistanceFunction`  
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
 
 
@@ -62,13 +62,13 @@ enter the Pgk mode(`]`)
 
 `$ pkg> activate .`
 
-`(SignedDistance) pkg>`
+`(SignedDistanceFunction) pkg>`
 
 return the REPL(`Delete/Backspace`)
 
 `julia> `
 
-`julia> using SignedDistance`
+`julia> using SignedDistanceFunction`
 
 `julia> signedDistance2D("XXXXXX.csv", N)`
 
