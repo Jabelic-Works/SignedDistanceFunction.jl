@@ -22,6 +22,11 @@ The closed curve data must be
 
 `signedDistance2D("XXXXXX.csv", N, "multi")`
 
+
+## images
+
+<img src="./test/image/2x2interface_multicurves_multiprocess_300.png" width=50%><img src="./test/image/2x2multiple_curves_multicurves_multiprocess_300.png" width=50%>
+
 ## Contribution
 
 ### Setup
@@ -46,21 +51,8 @@ or
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
 
 
-### debug
 
-`$ make test`
-- Usecases is in `test/main.jl` !
-
-`$ make test ARG=plot`
-- Usecases is in `test/plot_for_debug.jl` !
-
-`$ make bench`
-- See `benchmarks.jl`.
-
-`$ make runtest`
-- Unit test on `unittest.sh`. TestCases is in `runtests.jl`.
-
-#### Debug in REPL
+### Debug in REPL
 
 `$julia>`
 
