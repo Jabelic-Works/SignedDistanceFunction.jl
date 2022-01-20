@@ -16,7 +16,7 @@ Main features are:
 
 ## Usage
 
-The closed curve data must be
+The closed curve data must be `.csv` file.
 
 `signedDistance2D("XXXXXX.csv", N)`
 
