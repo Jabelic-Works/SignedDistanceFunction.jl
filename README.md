@@ -1,6 +1,6 @@
 # The Signed distance function
 
-[![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://travis-ci.com/jabelic/SignedDistanceFunction.jl)
+[![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
 
@@ -16,7 +16,7 @@ Main features are:
 
 ## Usage
 
-The closed curve data must be
+The closed curve data must be `.csv` file.
 
 `signedDistance2D("XXXXXX.csv", N)`
 
