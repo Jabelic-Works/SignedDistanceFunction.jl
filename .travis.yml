@@ -9,25 +9,26 @@ os:
   - linux
 arch:
   - x64
-before_install:
-  - export TRAVIS_COMMIT_MESSAGE=""
 cache:
   directories:
     - ~/.julia/artifacts
+before_install:
+  - export TRAVIS_COMMIT_MESSAGE=""
+  - echo "$TRAVIS_COMMIT_MESSAGE"
 jobs:
   fast_finish: true
   allow_failures:
     - julia: nightly
-after_success:
-  - |
-    julia -e '
-      using Pkg
-      Pkg.add("Coverage")
-      using Coverage
-      Codecov.submit(process_folder())'
-  - |
-    julia -e '
-      using Pkg
-      Pkg.add("Coverage")
-      using Coverage
-      Coveralls.submit(process_folder())'
+# after_success:
+#   - |
+#     julia -e '
+#       using Pkg
+#       Pkg.add("Coverage")
+#       using Coverage
+#       Codecov.submit(process_folder())'
+#   - |
+#     julia -e '
+#       using Pkg
+#       Pkg.add("Coverage")
+#       using Coverage
+#       Coveralls.submit(process_folder())'
