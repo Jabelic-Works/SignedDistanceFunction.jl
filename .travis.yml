@@ -3,15 +3,15 @@ language: julia
 notifications:
   email: false
 julia:
-  - 1.5
+  - 1.6
   - nightly
 os:
   - linux
 arch:
   - x64
-cache:
-  directories:
-    - ~/.julia/artifacts
+# cache:
+#   directories:
+#     - ~/.julia/artifacts
 before_install:
   - export TRAVIS_COMMIT_MESSAGE=""
   - echo "$TRAVIS_COMMIT_MESSAGE"
