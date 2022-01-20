@@ -12,6 +12,9 @@ arch:
 cache:
   directories:
     - ~/.julia/artifacts
+before_install:
+  - export TRAVIS_COMMIT_MESSAGE=""
+  - echo "$TRAVIS_COMMIT_MESSAGE"
 jobs:
   fast_finish: true
   allow_failures:
