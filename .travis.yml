@@ -9,6 +9,8 @@ os:
   - linux
 arch:
   - x64
+before_install:
+  - export TRAVIS_COMMIT_MESSAGE=""
 cache:
   directories:
     - ~/.julia/artifacts
