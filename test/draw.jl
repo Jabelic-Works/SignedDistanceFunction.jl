@@ -3,9 +3,9 @@ import Plots
 using Plots
 
 function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String},String,Nothing} = nothing)
-    s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe")
-    p = contour(_x, _y, _phi, title = "contour")
-    q = surface(_x, _y, _phi, title = "surface")
+    s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe",grid=false)
+    p = contour(_x, _y, _phi, title = "contour",grid=false)
+    q = surface(_x, _y, _phi, title = "surface",grid=false)
     r = plot(_x, _y, _phi, st = :heatmap, title = "heatmap")
     plot(s, p, q, r, layout = (4, 1), size = (500, 1200))
     if fig_name !== nothing
@@ -18,9 +18,9 @@ precompile(draw, (Array, Array, Array, Union{SubString{String},Nothing}))
 
 
 function draw2x2(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String},String,Nothing} = nothing)
-    s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe")
-    p = contour(_x, _y, _phi, title = "contour")
-    q = surface(_x, _y, _phi, title = "surface")
+    s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe",grid=false)
+    p = contour(_x, _y, _phi, title = "contour",grid=false)
+    q = surface(_x, _y, _phi, title = "surface",grid=false)
     r = plot(_x, _y, _phi, st = :heatmap, title = "heatmap")
     plot(s, p, q, r, layout = (2, 2), size = (1100, 800))
     if fig_name !== nothing
