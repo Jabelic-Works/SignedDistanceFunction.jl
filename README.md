@@ -1,8 +1,8 @@
 # SignedDistanceFunction.jl
 
-[![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl)
+[![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://travis-ci.com/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
-[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
+[![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=release)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
 
 
 SignedDistanceFunction.jl is a package to compute signed distance function.
