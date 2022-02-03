@@ -48,19 +48,6 @@ or
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
 
 
-### debug
-
-`$ make test`
-- Usecases is in `test/main.jl` !
-
-`$ make test ARG=plot`
-- Usecases is in `test/plot_for_debug.jl` !
-
-`$ make bench`
-- See `benchmarks.jl`.
-
-`$ make runtest`
-- Unit test on `unittest.sh`. TestCases is in `runtests.jl`.
 
 #### Debug in REPL
 
