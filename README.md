@@ -22,7 +22,8 @@ The closed curve data must be `.csv` file. N is an `Int`, representing the numbe
 
 `signedDistance2D("XXXXXX.csv", N, "multi")`
 
-<img src="./test/image/2x2interface_multicurves_multiprocess_300.png" width=50%><img src="./test/image/2x2multiple_curves_multicurves_multiprocess_300.png" width=50%>
+<img src="./test/image/ForREADME/2x2interface_multicurves_multiprocess_300.png" width=50%><img src="./test/image/ForREADME/2x2multiple_curves_multicurves_multiprocess_300.png" width=50%>
+
 ## Contribution
 
 ### Setup
