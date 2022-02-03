@@ -1,4 +1,4 @@
-# The Signed distance function
+# SignedDistanceFunction.jl
 
 [![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
@@ -16,7 +16,7 @@ Main features are:
 
 ## Usage
 
-The closed curve data must be `.csv` file.
+The closed curve data must be `.csv` file. N is an `Int`, representing the number of subdomain divisions, and returns the SignedDistanceFunction(SDF) of NxN.
 
 `signedDistance2D("XXXXXX.csv", N)`
 
