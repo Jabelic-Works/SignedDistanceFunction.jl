@@ -1,4 +1,4 @@
-# The Signed distance function
+# SignedDistanceFunction.jl
 
 [![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://travis-ci.com/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
@@ -12,20 +12,17 @@ Main features are:
 - Creating a signed distance to compute the signed distance function of the jordan closed curve data set(2D).
 - Creating a signed distance to compute the signed distance function of the multiple closed curve data set(2D).
 
-<!-- レベルセット法のためのレベルセット関数を計算する際に初期値として必要な付合付き距離関数を閉曲線データから提供する。 -->
+<!-- レベルセット法のためのレベルセット関数を計算する際に初期値として必要な付合付き距離関数を閉曲線データから提供する。■ -->
 
 ## Usage
 
-The closed curve data must be `.csv` file.
+The closed curve data must be `.csv` file. N is an `Int`, representing the number of subdomain divisions, and returns the SignedDistanceFunction(SDF) of NxN.
 
 `signedDistance2D("XXXXXX.csv", N)`
 
 `signedDistance2D("XXXXXX.csv", N, "multi")`
 
-
-## images
-
-<img src="./test/image/2x2interface_multicurves_multiprocess_300.png" width=50%><img src="./test/image/2x2multiple_curves_multicurves_multiprocess_300.png" width=50%>
+<img src="./test/image/ForREADME/2x2interface_multicurves_multiprocess_300.png" width=50%><img src="./test/image/ForREADME/2x2multiple_curves_multicurves_multiprocess_300.png" width=50%>
 
 ## Contribution
 
@@ -56,7 +53,7 @@ or
 
 `$julia>`
 
-enter the Pgk mode(`]`)
+enter the Pkg mode(`]`)
 
 `$ pkg>`
 

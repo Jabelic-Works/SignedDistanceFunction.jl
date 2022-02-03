@@ -5,16 +5,17 @@ notifications:
 julia:
   - 1.6
   - nightly
+only:
+  - release*
 os:
   - linux
 arch:
   - x64
-# cache:
-#   directories:
-#     - ~/.julia/artifacts
+
 before_install:
   - export TRAVIS_COMMIT_MESSAGE=""
   - echo "$TRAVIS_COMMIT_MESSAGE"
+
 jobs:
   fast_finish: true
   allow_failures:

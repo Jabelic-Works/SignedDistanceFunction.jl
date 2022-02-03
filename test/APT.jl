@@ -25,10 +25,11 @@ module APT
             _x = [i for i = -L:2*L/N:L] # len:N+1
             _y = [i for i = -L:2*L/N:L] # len:N+1
             _phi = signedDistance2D(_csv_datafiles, N, circle_n)
-            push!(plots, plot(_x, _y, _phi, title = "N=$N", st = :contour))
+            push!(plots, plot(_x, _y, _phi, title = "N=$N", st = :contour,grid=false))
         end
         println(plots)
-        plot(plots..., size = (2300, 2500), layout = (3, 2))
+        # plot(plots..., size = (2300, 2500), layout = (3, 2))
+        plot(plots..., size = (3500, 1500), layout = (2, 3),titlefont=font(18),grid=false)
         if circle_n == "multi"
             savefig("test/image/NsPlots_floodfill.png")
         else
