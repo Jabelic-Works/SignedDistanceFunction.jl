@@ -70,11 +70,10 @@ module APT
     circle_n: Kinds of circle data{"multi" or "single"}
     描画
     """
-    function plot_for_debug(N::Int = 1000, _csv_datafile::String = "./interface.csv", circle_n::Union{String,Nothing} = nothing)
+    function plot_for_debug(N::Int = 1000, _csv_datafile::String = "../test/mock_csv_data/interface.csv", circle_n::Union{String,Nothing} = nothing)
         csvfile_name = match(r"\./test/mock_csv_data/(.*)", _csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
         if circle_n == "multi"
-            # こちらの場合はfloodfillで付合をつけるのでNは250欲しい
             _x = [i for i = -L:2*L/N:L] # len:N+1
             _y = [i for i = -L:2*L/N:L] # len:N+1
             _phi = signedDistance2D(_csv_datafile, N, "multi")
@@ -88,8 +87,6 @@ module APT
                 draw(_x, _y, _phi, _filename)
             end
 
-            # return (runtime / exetimes)
-            # DataFrame(_phi, :auto) |> CSV.write("./test/result/interface_result_tmp.csv", header = false)
             return _phi
 
             #=== case: simple circle ===#

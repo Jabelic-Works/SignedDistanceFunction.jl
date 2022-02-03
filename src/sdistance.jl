@@ -21,7 +21,7 @@ precompile(P, (Array, Array, Array, Int, Float64, Array))
     benchmark用のためのmethod
     - floodfill使用時のmultiprocessとsingleprocessの比較
 """
-function benchmark_floodfill(N::Int = 1000, _csv_datafile::String = "./interface.csv", multiprocess::Bool = true)
+function benchmark_floodfill(N::Int = 1000, _csv_datafile::String = "../test/mock_csv_data/interface.csv", multiprocess::Bool = true)
     exetimes = 3
     runtime = 0
     if multiprocess
@@ -44,7 +44,7 @@ end
 benchmark用のためのmethod
 - single curveの時のisinsideメソッド使用時ののmultiprocessとsingleprocessの比較
 """
-function benchmark_singlecurves_isinside(N::Int = 1000, _csv_datafile::String = "./interface.csv", multiprocess::Bool = true)
+function benchmark_singlecurves_isinside(N::Int = 1000, _csv_datafile::String = "../test/mock_csv_data/interface.csv", multiprocess::Bool = true)
     exetimes = 3
     runtime = 0
     if multiprocess
