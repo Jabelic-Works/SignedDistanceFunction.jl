@@ -5,8 +5,9 @@ notifications:
 julia:
   - 1.6
   - nightly
-only:
-  - release*
+branches:
+  only:
+    - release*
 os:
   - linux
 arch:
