@@ -1,6 +1,7 @@
 # SignedDistanceFunction.jl
 
-[![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl)
+<!-- [![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl) -->
+[![CI](https://github.com/jabelic/SignedDistanceFunction.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/jabelic/SignedDistanceFunction.jl/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=main)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
 
