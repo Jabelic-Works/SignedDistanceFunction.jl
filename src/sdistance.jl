@@ -10,15 +10,8 @@ import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools, TimerOutpu
 using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools, TimerOutputs
 const tmr = TimerOutput()
 
-function P(_phi, _x, _y, N, L, _gamma)
-    _phi = create_distance_function_multiprocess(_x, _y, _gamma)
-    signining_field(_phi, N + 1, L)
-    return _phi
-end
-precompile(P, (Array, Array, Array, Int, Float64, Array))
-
 """
-    benchmark用のためのmethod
+    benchmark用method
     - floodfill使用時のmultiprocessとsingleprocessの比較
 """
 function benchmark_floodfill(N::Int = 1000, _csv_datafile::String = "./interface.csv", multiprocess::Bool = true)
@@ -41,7 +34,7 @@ end
 
 
 """
-benchmark用のためのmethod
+benchmark用method
 - single curveの時のisinsideメソッド使用時ののmultiprocessとsingleprocessの比較
 """
 function benchmark_singlecurves_isinside(N::Int = 1000, _csv_datafile::String = "./interface.csv", multiprocess::Bool = true)
@@ -76,7 +69,6 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
         _phi = zeros(Float64, N + 1, N + 1)
         # loading the csv file(the circle data)
         _gamma = Array{Any}(undef, 0, 2)
-        # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
         if length(_gamma) < 200
             _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))) + 2, true)
@@ -95,7 +87,6 @@ function signedDistance2D(csv_datafile::Union{String,DataFrame}, N::Int = 100, c
     else
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
-        # loading the csv file(the circle data)
         _gamma = readdlm(csv_datafile, ',', Float64)
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
@@ -114,22 +105,17 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
         _gamma = Array{Any}(undef, 0, 2)
-
-        # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
-        # _gamma = interpolation(_gamma, 3 + floor(Int, N / 250), true)
         if length(_gamma) < 200
             _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))) + 2, true)
         elseif Int(floor(log(length(_gamma) / 2, N^1.5))) > 0
             _gamma = interpolation(_gamma, Int(floor(log(length(_gamma) / 2, N^1.5))), true)
         end
 
-
         println("Data format: Multi curves\nThe CSV data size: ", size(_gamma))
 
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
-
         _phi = create_distance_function(_x, _y, _gamma)
         signining_field(_phi, N + 1, L, false)
         return _phi
@@ -138,7 +124,6 @@ function signedDistance2D_singleprocess(csv_datafile::Union{String,DataFrame}, N
     else
         # create the computational domain
         _phi = zeros(Float64, N + 1, N + 1)
-        # ganma曲線 のデータの読み込み
         _gamma = readdlm(csv_datafile, ',', Float64)
         _x = [i for i = -L:2*L/N:L] # len:N+1 
         _y = [i for i = -L:2*L/N:L] # len:N+1
