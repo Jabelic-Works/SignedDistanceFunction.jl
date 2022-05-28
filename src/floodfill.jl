@@ -87,7 +87,7 @@ module Floodfill
                 if STEP != 1
                     Threads.@threads for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                         for j = 1:steps_signed_grid:length(_phi[:, 1])
-                            # if j != length(_phi[:, 1]) # ケツでない
+                            # ケツでない
                             if j + steps_signed_grid <= length(_phi[:, 1]) && j + steps_unsigned_grid <= length(_phi[:, 1])
                                 # 掛けたらマイナス->境界を示す. かつ 両方の距離を足したらgrid点の間の2倍の距離になる(数値誤差を考慮?できてる?)
                                 if _phi[i, j] * _phi[i, j+steps_signed_grid] <= 0
@@ -108,7 +108,7 @@ module Floodfill
                     end
                     Threads.@threads for j = 1:Int(steps_signed_grid / 2):length(_phi[:, 1])
                         for i = 1:steps_signed_grid:length(_phi[:, 1])
-                            # if i != length(_phi[:, 1]) # ケツでない
+                            # ケツでない
                             if i + steps_signed_grid <= length(_phi[:, 1]) && i + steps_unsigned_grid <= length(_phi[:, 1])
                                 if _phi[i, j] * _phi[i+steps_signed_grid, j] <= 0
                                     if abs(_phi[i, j]) <= abs(_phi[i+steps_signed_grid, j]) # iの方が近い
@@ -137,7 +137,7 @@ module Floodfill
                 if STEP != 1
                     for i = 1:steps_signed_grid:length(_phi[1, :]) # 各行を一つ飛ばしで。
                         for j = 1:steps_signed_grid:length(_phi[:, 1])
-                            # if j != length(_phi[:, 1]) # ケツでない
+                            # ケツでない
                             if j + steps_signed_grid <= length(_phi[:, 1]) && j + steps_unsigned_grid <= length(_phi[:, 1])
                                 # 掛けたらマイナス->境界を示す. かつ 両方の距離を足したらgrid点の間の2倍の距離になる(数値誤差を考慮?できてる?)
                                 if _phi[i, j] * _phi[i, j+steps_signed_grid] <= 0
@@ -158,7 +158,7 @@ module Floodfill
                     end
                     for j = 1:Int(steps_signed_grid / 2):length(_phi[:, 1])
                         for i = 1:steps_signed_grid:length(_phi[:, 1])
-                            # if i != length(_phi[:, 1]) # ケツでない
+                            # ケツでない
                             if i + steps_signed_grid <= length(_phi[:, 1]) && i + steps_unsigned_grid <= length(_phi[:, 1])
                                 if _phi[i, j] * _phi[i+steps_signed_grid, j] <= 0
                                     if abs(_phi[i, j]) < abs(_phi[i+steps_signed_grid, j]) # jの方が近い
