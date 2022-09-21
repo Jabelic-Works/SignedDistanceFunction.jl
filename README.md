@@ -1,10 +1,10 @@
 # SignedDistanceFunction.jl
 
 <!-- [![Build Status](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl.svg?branch=release)](https://app.travis-ci.com/jabelic/SignedDistanceFunction.jl) -->
+
 [![CI](https://github.com/jabelic/SignedDistanceFunction.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/jabelic/SignedDistanceFunction.jl/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/jabelic/SignedDistanceFunction.jl)
 [![Coverage](https://coveralls.io/repos/github/jabelic/SignedDistanceFunction.jl/badge.svg?branch=release)](https://coveralls.io/github/jabelic/SignedDistanceFunction.jl?branch=main)
-
 
 SignedDistanceFunction.jl is a package to compute signed distance function.
 
@@ -47,8 +47,25 @@ or
 `$ (SignedDistanceFunction)>`  
 `$ julia> using SignedDistanceFunction`  
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
+`$ echo "Sysimage.so" >> .gitignore`
 
+### debug
 
+`$ make test`
+
+- The use cases is in `test/main.jl` !
+
+`$ make test ARG=plot`
+
+- The use cases is in `test/plot_for_debug.jl` !
+
+`$ make bench`
+
+- See `benchmarks.jl`.
+
+`$ make runtest`
+
+- Unit test on `unittest.sh`. The test cases is in `runtests.jl`.
 
 #### Debug in REPL
 
@@ -70,12 +87,12 @@ return the REPL(`Delete/Backspace`)
 
 `julia> signedDistance2D("XXXXXX.csv", N)`
 
-<!-- Plots sample data: 
+<!-- Plots sample data:
 
 `julia> using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools`
 
 `julia> gamma = readdlm("data.csv", ',', Float64)`
 
-`julia> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2, grid=false)` 
+`julia> plot(gamma[:, 1], gamma[:, 2], st=:scatter, title="infty_shape", markersize=2, grid=false)`
 
 `julia>  savefig("interface.png") -->
