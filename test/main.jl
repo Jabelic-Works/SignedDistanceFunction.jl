@@ -29,8 +29,7 @@ using .APT
 # end
 
 # ====== memory size =======
-# p = @allocated signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]), "multi")
-# p = @allocated signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]), "multi")
-p = @allocated signedDistance2D("./test/mock_csv_data/multiple_curves.csv", parse(Int, ARGS[1]), "multi")
+p = @allocated signedDistance2D("./test/mock_csv_data/interface.csv", parse(Int, ARGS[1]), "multi")
+# p = @allocated signedDistance2D("./test/mock_csv_data/multiple_curves.csv", parse(Int, ARGS[1]), "multi")
 println("\nUsed memory size: ",p/(1024*1024), " MB")
 

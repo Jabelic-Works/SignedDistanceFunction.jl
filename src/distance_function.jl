@@ -4,9 +4,9 @@ import DataFrames, DelimitedFiles, Luxor, BenchmarkTools
 using DataFrames, DelimitedFiles, Luxor, BenchmarkTools
 
 
-# 定義上のある点に対して全てのganma曲線上との距離を算出
+# Calculate the distance between a point on all ganma curves for a given point in the definition.
 function distanceToCurve(px::Float64, py::Float64, gem::Array) # TODO: 型
-    min_distance = 10000.0 # 初期値は大きく
+    min_distance = 10000.0 
     for i = 1:length(gem[:, 1])
         distnow = sqrt((gem[i, 1] - px)^2 + (gem[i, 2] - py)^2)
         if (distnow < min_distance)
@@ -58,8 +58,8 @@ function create_signed_distance_function(_x::Array, _y::Array, _gamma::Array)
     for indexI = 1:length(_y)
         for indexJ = 1:length(_x)
             sdist = 1.0 * distanceToCurve(_x[indexJ], _y[indexI], _gamma)
-            # ganmaが閉曲線でないと成立しない。
-            # omegaとの境界線上はErrorになる
+            # ganma must be a closed curve.
+            # Error happened when the point is on the edge of subdomain.
             if Point(_x[indexJ], _y[indexI]) in [Point(_gamma[i, 1], _gamma[i, 2]) for i = 1:length(_gamma[:, 1])]
                 sdist = 0
             elseif isinside(Point(_x[indexJ], _y[indexI]), [Point(_gamma[i, 1], _gamma[i, 2]) for i = 1:length(_gamma[:, 1])])
