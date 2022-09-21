@@ -3,11 +3,16 @@ include("./distance_function.jl")
 include("./floodfill.jl")
 include("./utils/utils.jl")
 include("./environments.jl")
+
 import .DistanceFunction: create_signed_distance_function_multiprocess, create_signed_distance_function, distanceToCurve, create_distance_function, create_distance_function_multiprocess
 import .Floodfill: signining_field
 import .Utils: is_jordan_curve, interpolation
-import CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools, TimerOutputs
-using CSV, DataFrames, Plots, DelimitedFiles, Luxor, BenchmarkTools, TimerOutputs
+import CSV, DataFrames, DelimitedFiles, Luxor, BenchmarkTools
+using CSV, DataFrames, DelimitedFiles, Luxor, BenchmarkTools
+if STAGE == "dev"
+    import Plots, TimerOutputs
+    using Plots, TimerOutputs
+end
 const tmr = TimerOutput()
 
 """
