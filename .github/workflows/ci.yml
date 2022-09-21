@@ -5,7 +5,7 @@ on:
       - master
       - staging
       - release
-    tags: '*'
+    tags: "*"
   pull_request:
 concurrency:
   # Skip intermediate builds: always.
@@ -20,8 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.5'
-          # - 'nightly'
+          - "1.5"
         os:
           - ubuntu-latest
         arch:

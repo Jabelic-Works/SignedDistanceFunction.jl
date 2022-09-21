@@ -46,17 +46,18 @@ or
 `$ Pkg(1.5)> activate .`  
 `$ (SignedDistanceFunction)>`  
 `$ julia> using SignedDistanceFunction`  
-`$ julia> signedDistance2D("xxxxxx.csv", N)`
+`$ julia> signedDistance2D("xxxxxx.csv", N)`  
+`$ echo "Sysimage.so" >> .gitignore`
 
 ### debug
 
 `$ make test`
 
-- Usecases is in `test/main.jl` !
+- The use cases is in `test/main.jl` !
 
 `$ make test ARG=plot`
 
-- Usecases is in `test/plot_for_debug.jl` !
+- The use cases is in `test/plot_for_debug.jl` !
 
 `$ make bench`
 
@@ -64,7 +65,7 @@ or
 
 `$ make runtest`
 
-- Unit test on `unittest.sh`. TestCases is in `runtests.jl`.
+- Unit test on `unittest.sh`. The test cases is in `runtests.jl`.
 
 #### Debug in REPL
 
