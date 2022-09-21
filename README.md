@@ -31,10 +31,6 @@ The closed curve data must be `.csv` file. N is an `Int`, representing the numbe
 
 #### macOS
 
-`$ make initial`
-
-or
-
 `$ julia>`  
 `$ Pkg(1.5)> add PackageCompiler`  
 `$ Pkg(1.5)> add DelimitedFiles`  
@@ -48,24 +44,6 @@ or
 `$ julia> using SignedDistanceFunction`  
 `$ julia> signedDistance2D("xxxxxx.csv", N)`  
 `$ echo "Sysimage.so" >> .gitignore`
-
-### debug
-
-`$ make test`
-
-- The use cases is in `test/main.jl` !
-
-`$ make test ARG=plot`
-
-- The use cases is in `test/plot_for_debug.jl` !
-
-`$ make bench`
-
-- See `benchmarks.jl`.
-
-`$ make runtest`
-
-- Unit test on `unittest.sh`. The test cases is in `runtests.jl`.
 
 #### Debug in REPL
 
