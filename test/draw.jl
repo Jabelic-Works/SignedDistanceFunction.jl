@@ -1,8 +1,14 @@
 module Draw
-import Plots
-using Plots
+
+if STAGE == "dev"
+    import Plots
+    using Plots
+end
 
 function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String},String,Nothing} = nothing)
+    if STAGE != "dev"
+        return
+    end
     s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe",grid=false)
     p = contour(_x, _y, _phi, title = "contour",grid=false)
     q = surface(_x, _y, _phi, title = "surface",grid=false)
@@ -14,10 +20,12 @@ function draw(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{Strin
         savefig("image/tmp_signed_distance.png")
     end
 end
-precompile(draw, (Array, Array, Array, Union{SubString{String},Nothing}))
 
 
 function draw2x2(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{String},String,Nothing} = nothing)
+    if STAGE != "dev"
+        return
+    end
     s = plot(_x, _y, _phi, st = :wireframe, title = "wireframe",grid=false)
     p = contour(_x, _y, _phi, title = "contour",grid=false)
     q = surface(_x, _y, _phi, title = "surface",grid=false)
@@ -29,12 +37,14 @@ function draw2x2(_x::Array, _y::Array, _phi::Array, fig_name::Union{SubString{St
         savefig("image/2x2tmp_signed_distance.png")
     end
 end
-precompile(draw2x2, (Array, Array, Array, Union{SubString{String},Nothing}))
 
 
 """
 """
 function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String,Nothing} = nothing, label_name::Union{Array,Nothing} = nothing)
+    if STAGE != "dev"
+        return
+    end
     (row, col) = size(exe_num)
     println(row, col)
     plot(N, exe_num[:, 1], title = "Benchmarks", label = label_name[1], legend = :topleft, grid=false)
@@ -49,6 +59,10 @@ function parformance_graphs(N::Array, exe_num::Array, fig_name::Union{String,Not
         savefig("test/image/performance.png")
     end
 end
-precompile(parformance_graphs, (Array, Array))
+if STAGE == "dev"
+    precompile(draw, (Array, Array, Array, Union{SubString{String},Nothing}))
+    precompile(draw2x2, (Array, Array, Array, Union{SubString{String},Nothing}))
+    precompile(parformance_graphs, (Array, Array))
+end
 export draw, draw2x2, parformance_graphs
 end

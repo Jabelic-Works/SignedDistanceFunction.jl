@@ -7,9 +7,10 @@ module APT
     # import .Sdistance: signedDistance2D
     using .SignedDistanceFunction
     import .Draw: draw, draw2x2
-    import Plots
-    using Plots
-
+    if STAGE == "dev"
+        import Plots
+        using Plots
+    end
     """
         Ns: 分割数の入った配列
         _csv_datafiles: CSV Data
@@ -20,6 +21,9 @@ module APT
         それらをcontoursでplot.
     """
     function plots_contours(Ns::Array, _csv_datafiles, circle_n::Union{String,Nothing} = nothing)
+        if STAGE != "dev"
+            return
+        end
         plots = []
         for (i, N) in enumerate(Ns)
             _x = [i for i = -L:2*L/N:L] # len:N+1
@@ -47,6 +51,9 @@ module APT
         それらをwireframeでplot.
     """
     function plots_wireframe(Ns::Array, _csv_datafiles, circle_n::Union{String,Nothing} = nothing)
+        if STAGE != "dev"
+            return
+        end
         plots = []
         for (i, N) in enumerate(Ns)
             _x = [i for i = -L:2*L/N:L] # len:N+1
@@ -71,6 +78,9 @@ module APT
     描画
     """
     function plot_for_debug(N::Int = 1000, _csv_datafile::String = "./interface.csv", circle_n::Union{String,Nothing} = nothing)
+        if STAGE != "dev"
+            return
+        end
         csvfile_name = match(r"\./test/mock_csv_data/(.*)", _csv_datafile[1:end-4]).captures
         #===  case: double circle ===#
         if circle_n == "multi"
