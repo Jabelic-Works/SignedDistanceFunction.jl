@@ -12,8 +12,8 @@ using CSV, DataFrames, DelimitedFiles, Luxor, BenchmarkTools
 if STAGE == "dev"
     import Plots, TimerOutputs
     using Plots, TimerOutputs
+    const tmr = TimerOutput()
 end
-const tmr = TimerOutput()
 
 """
     benchmark用method
